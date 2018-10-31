@@ -13,29 +13,28 @@
         <v-app>
             <template>
                 <v-toolbar fixed>
-                    <v-toolbar-title>Sebastian Cavada</v-toolbar-title>
-                    <v-toolbar-items class="hidden-sm-and-down" class="center">                        
-                            <v-btn flat>Link One</v-btn>
-                            <v-btn flat>Link Two</v-btn>
-                            <v-btn flat>Link Three</v-btn>                        
+                    <v-toolbar-items class="hidden-sm-and-down" class="center">
+                        <v-btn href="/files/pages/programming/programmingCSharp.html" flat>Programming</v-btn>
+                        <v-btn flat>Projects</v-btn>
+                        <v-btn flat>Portfolio</v-btn>
                     </v-toolbar-items>
                 </v-toolbar>
-                <v-parallax dark src="/files/photos/new/DSC08539.jpg" heigth="1000">
+                        <v-parallax dark src="/files/photos/new/1.jpg" :height="getHeight()">
                     <v-layout align-center column justify-center>
                         <h1 class="display-2 font-weight-thin mb-3">Sebastian Cavada</h1>
-                        <h4 class="subheading">Build the future, join me!</h4>
+                        <h4 class="subheading">Building the future, join me!</h4>
                     </v-layout>
                 </v-parallax>
-                <v-parallax dark src="/files/photos/new/DSC08451.jpg" heigth="1000">
+                <v-parallax dark src="/files/photos/new/2.jpg" :height="getHeight()">
                     <v-layout align-center column justify-center>
-                        <h1 class="display-2 font-weight-thin mb-3">Sebastian Cavada</h1>
-                        <h4 class="subheading">Build the future, join me!</h4>
+                        <h1 class="display-2 font-weight-thin mb-3">Projects</h1>
+                        <h4 class="subheading">Many things going on! <a-href link="/files/pages/programming/programmingCSharp.htm">discover more!</a>></h4>
                     </v-layout>
-                </v-parallax>                
-                <v-parallax dark src="/files/photos/new/DSC08488.jpg" heigth="1000">
+                </v-parallax>
+                <v-parallax dark src="/files/photos/new/3.jpg" :height="getHeight()">
                     <v-layout align-center column justify-center>
-                        <h1 class="display-2 font-weight-thin mb-3">Sebastian Cavada</h1>
-                        <h4 class="subheading">Build the future, join me!</h4>
+                        <h1 class="display-2 font-weight-thin mb-3">My Portfolio</h1>
+                        <h4 class="subheading">See some good stuff!</h4>
                     </v-layout>
                 </v-parallax>
             </template>
