@@ -11,9 +11,9 @@
     <div id="app">
         <v-app>
             <v-flex xs0 md2>
-                <v-list>
-                    <v-list-group v-for="item in items" v-model="item.active" :key="item.title" :prepend-icon="item.action"
-                        no-action>
+                <v-list v-for="item in items" v-model="item.active" :key="item.title" :prepend-icon="item.action"
+                no-action>
+                    <v-list-group>
                         <v-list-tile slot="activator">
                             <v-list-tile-content>
                                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
