@@ -10,7 +10,7 @@ obj = new Vue({
     },
     created() {
         window.addEventListener('resize', this.handleResize)
-        document.location.href = "https://www.sebastiancavada.it";
+        document.location.href = 'https://www.sebastiancavada.it';
         this.handleResize();        
     },
     destroyed() {
