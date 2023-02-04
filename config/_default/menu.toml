@@ -10,7 +10,7 @@
 [[social]]
 identifier = "github"
 name = "GitHub"
-url = "https://github.com/CaiJimmy/hugo-theme-stack"
+url = "https://github.com/Sebo-the-tramp"
 
 [social.params]
 icon = "brand-github"
@@ -18,7 +18,23 @@ icon = "brand-github"
 [[social]]
 identifier = "twitter"
 name = "Twitter"
-url = "https://twitter.com"
+url = "https://mobile.twitter.com/_cavada"
 
 [social.params]
 icon = "brand-twitter"
+
+[[social]]
+identifier = "instagram"
+name = "Instagram"
+url = "https://www.instagram.com/sebo_the_tramp/"
+
+[social.params]
+icon = "brand-instagram"
+
+[[social]]
+identifier = "youtube"
+name = "Youtube"
+url = "https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw"
+
+[social.params]
+icon = "brand-youtube"
