@@ -18,7 +18,7 @@ subtitle = " I am a pragmatic and creative person with a passion for new technol
 [sidebar.avatar]
 enabled = true
 local = true
-src = "img/avatar.png"
+src = "img/big.png"
 
 [article]
 math = false
