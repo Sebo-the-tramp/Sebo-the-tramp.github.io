@@ -6,7 +6,7 @@ date: 2023-01-21T14:31:13+02:00
 image: cover.jpg
 draft: false
 categories:
-    - Projects
+    - Thoughts
 tags:
     - Startup
     - Life lesson

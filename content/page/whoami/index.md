@@ -1,20 +1,18 @@
 ---
-title: "Whoami"
-description: "A brief overview of myself"
-slug: "me"
-layout: "profile"
-outputs:
-    - html
-    - json
+title: Whoami
+description: Just me, a simple human being wondering around the universe, trying to understand a small bit of the whole
+comments: false
+readingTime: false
+license: false
+aliases:
+  - about  
+  - contact
 menu:
-    main:
-        weight: 1
-        params: 
-            icon: terminal-2
+    main: 
+        weight: 2
+        params:
+            icon: user
 ---
-
-
-# Hello world! 
 
 I am a Junior Developer and Innovation Enthusiast with experience in the technology industry. I worked last year as the CTO of RealverseVR, a start-up focused on creating educational experiences through virtual and augmented reality. I also previously worked as a sales staff for La Sportiva, a company that produces and develops mountaineering equipment, and completed internships as a Junior Developer for Suggesto and as an IT-component repair technician for RepairMy. 
 
