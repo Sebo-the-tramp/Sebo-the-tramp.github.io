@@ -38,3 +38,11 @@ url = "https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw"
 
 [social.params]
 icon = "brand-youtube"
+
+[[social]]
+identifier = "twitch"
+name = "Twitch"
+url = "https://www.twitch.tv/dark_harlock"
+
+[social.params]
+icon = "twitch"

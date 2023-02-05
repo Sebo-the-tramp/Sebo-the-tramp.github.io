@@ -5,7 +5,7 @@ layout: "poems"
 slug: "test"
 licence: false
 comment: false
-draft: true
+draft: false
 menu:
     main:
         weight: 3

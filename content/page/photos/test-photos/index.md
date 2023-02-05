@@ -4,7 +4,7 @@ description: The story of my first startup experience
 slug: test
 date: 2022-10-20T20:21:13+02:00
 image: cover.jpg
-draft: true
+draft: false
 categories:
     - Photos
 tags:

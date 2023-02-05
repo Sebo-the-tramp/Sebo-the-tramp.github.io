@@ -4,7 +4,6 @@ description:
 slug: forgetting
 date: 2023-01-09T14:31:13+02:00
 draft: false
-
 readTime: false
 categories:
     - Poems

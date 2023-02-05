@@ -12,7 +12,22 @@ menu:
         weight: 3
         params:
             icon: user
+links:
+  - title: Curriculum
+    description: Click on the link to download my curriculum
+    website: ./Sebastian_Cavada_CV_2023.pdf
+    image: ./avatar.png
+  - title: Project iRefill
+    description: A blog and a year long journey trying to understand the fragile balance of our ecosystem
+    website: irefill.it
+    image: ./irefill.png
+  - title: RealverseVR
+    description: A startup that I cofounded and worked at for a year
+    website: https://realversevr.it
+    image: ./logo.png
+
 ---
+
 
 I am a Junior Developer and Innovation Enthusiast with experience in the technology industry. I worked last year as the CTO of RealverseVR, a start-up focused on creating educational experiences through virtual and augmented reality. I also previously worked as a sales staff for La Sportiva, a company that produces and develops mountaineering equipment, and completed internships as a Junior Developer for Suggesto and as an IT-component repair technician for RepairMy. 
 
