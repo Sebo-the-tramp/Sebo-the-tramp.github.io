@@ -1,8 +1,8 @@
 ---
-title: "Forgetting"
+title: "What is"
 description: 
-slug: forgetting
-date: 2023-01-09T14:31:13+02:00
+slug: what-is
+date: 2023-02-07T14:31:13+02:00
 draft: false
 readTime: false
 comments: false
@@ -13,8 +13,8 @@ tags:
 
 ---
 
-# Forgetting
+# What is
 
-There is no way to forget a person\
-It will just slowly be replaced\
-By someone else
+What is it when you think about her\
+all day long?
+
