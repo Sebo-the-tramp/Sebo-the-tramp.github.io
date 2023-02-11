@@ -1,5 +1,5 @@
 # Change baseurl before deploy
-baseurl = "sebo-the-tramp.github.io"
+baseurl = "https://sebo-the-tramp.github.io"
 languageCode = "en-us"
 paginate = 5
 title = "Sebastian Cavada"
