@@ -2,7 +2,7 @@
 title: "Climathon"
 description: Climathon 2021
 slug: climathon-2021
-date: 2022-02-13T20:21:13+02:00
+date: 2021-11-20T20:21:13+02:00
 image: cover.jpg
 draft: false
     

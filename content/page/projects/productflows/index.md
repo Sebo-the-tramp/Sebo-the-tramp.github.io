@@ -2,7 +2,7 @@
 title: "Productflow 2021"
 description: Product management challenge by bending spoon 2021
 slug: productflow-2021
-date: 2022-02-13T20:21:13+02:00
+date: 2022-03-20T20:21:13+02:00
 image: cover.jpg
 draft: false
     
