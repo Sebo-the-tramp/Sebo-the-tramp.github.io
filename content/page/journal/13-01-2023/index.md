@@ -1,13 +1,12 @@
 ---
 title: "13-01-2023"
 slug: 13-01-2023
-date: 2023-01-13T14:31:13+02:00
+date: 202-01-13T14:31:13+02:00
 draft: false
 readTime: false
 comments: false
 tags:
     - Mental health
-    - Climate change    
 
 ---
 
