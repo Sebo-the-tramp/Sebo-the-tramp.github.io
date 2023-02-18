@@ -21,6 +21,9 @@ links:
   - title: Our presentation
     description: Click on the link to find out more
     website: https://youtu.be/NFcjOHbGjsE?t=3359
+  - title: Our presentation
+    description: Click on the link to find out more
+    website: ./TheBagel.pdf
 ---
 
 While I was in Erasmus I had the pleasure to work with brilliant people, Sing, Pravir and Giulia, in an hackathon in the city I was doing my Erasmus in. It was a great experience when I think back. We didn't win or anything, but we had so much fun and I personally learned a lot afterwards, overanalysing the experience and how it
