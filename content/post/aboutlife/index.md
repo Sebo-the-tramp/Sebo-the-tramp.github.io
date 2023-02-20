@@ -39,3 +39,7 @@ At the second point I would like to outline my thought of not being enough. At t
 {{< quote author="Sebastian Cavada" source="Notes">}}
 Sometimes it is better to let go and, if it is meant to be, it will come back.
 {{< /quote >}}
+
+{{< quote author="Sebastian Cavada" source="Notes">}}
+What is going through life without posing questions, taking positions and act according to some ethics? Madness?
+{{< /quote >}}
