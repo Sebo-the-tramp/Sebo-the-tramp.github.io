@@ -28,6 +28,7 @@ a message
 then who's life are you living?
 {{< /quote >}}
 
+
 That really struck me.
 
 I was reading the [blog post](https://irefill.it/viaggio-per-cambiare/) that my sister wrote on the 17th of July 2022. It is deep. It makes sense and it is very personal but it touches everyone.
