@@ -2,7 +2,7 @@
 title: "About Life"
 description: About Life that is using me up
 slug: about life
-date: 2023-01-25T10:21:13+02:00
+date: 2023-02-23T10:21:13+02:00
 image: cover.jpg
 draft: false
 categories:
