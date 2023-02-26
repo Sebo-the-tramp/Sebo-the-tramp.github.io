@@ -12,7 +12,7 @@ tags:
     - Poems
 
 
-comments: false
+comments: true
 ---
 
 I just came across a video from Lex Fridman about this poem. He was reciting it with a lot of emphasis and emotions. I remembered I wrote a thought about it long ago,
