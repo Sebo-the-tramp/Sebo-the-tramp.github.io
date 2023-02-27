@@ -33,6 +33,3 @@ I learned a lot and I was also able to give my small contribution, but without t
 There we are:
 
 ![](1.jpg)
-
-![](cover.png)
-
