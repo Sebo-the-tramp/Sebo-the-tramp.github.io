@@ -4,7 +4,7 @@ description: A thought on what I do really care in this world now
 slug: what-i-care
 date: 2023-03-11T10:21:13+02:00
 image: cover.jpg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:
