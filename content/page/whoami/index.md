@@ -19,7 +19,7 @@ links:
     image: ./avatar.png
   - title: Project iRefill
     description: A blog and a year long journey trying to understand the fragile balance of our ecosystem
-    website: irefill.it
+    website: https://blog.irefill.it
     image: ./irefill.png
   - title: RealverseVR
     description: A startup that I cofounded and worked at for a year
