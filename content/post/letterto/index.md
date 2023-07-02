@@ -56,7 +56,7 @@ E adesso chissà
 
 {{< /quote >}}
 
-It's end of February 2023. We spend nearly 4 beautiful (is very far to reality though) years together. We had our highs and lows, we had our good times and we had our difficult times. I feel we are having such moment now. We nearly left this precious glimpse of spacetime be forever ruined. We somehow managed to save it, and we are still working on it. I'm sorry, deeply sorry, so deeply that this sorrow I never experienced before. 
+It's end of February 2023. We spent nearly 4 beautiful (is very far to reality though) years together. We had our highs and lows, we had our good times and we had our difficult times. I feel we are having such moment now. We nearly left this precious glimpse of spacetime be forever ruined. We somehow managed to save it, and we are still working on it. I'm sorry, deeply sorry, so deeply that this sorrow I never experienced before. 
 
 ### Draft 1 - 20/02/2023
 
