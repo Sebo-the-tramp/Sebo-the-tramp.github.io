@@ -35,6 +35,5 @@ Many times and over again, I note things that my parents do or say that I much d
 ## Meditation
 It is not easy to understand the context. Shift prospectives. Walk in somebody else's shoes. It takes courage, energy, willpower and a strong mind to do so. I am still at my first steps in this. I succeded at beginning, I am hopeful that this is going to be the beginning of a nice journey of help and understanding.
 
-
 ## Conclusion
 I think this is only the beginning of a wider stream of thoughts. I keep updating this and making improvements.
