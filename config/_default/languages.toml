@@ -1,24 +1,7 @@
-defaultContentLanguage = 'en'
-[languages]
-  [languages.ar]
-    languagedirection = 'rtl'
-    title = 'مدونتي'
-    weight = 2
-  [languages.en]
-    title = 'My blog'
-    weight = 1
-    [languages.en.params]
-      linkedin = 'https://linkedin.com/whoever'
-  [languages.fr]
-    title = 'Mon blogue'
-    weight = 2
-    [languages.fr.params]
-      linkedin = 'https://linkedin.com/fr/whoever'
-      [languages.fr.params.navigation]
-        help = 'Aide'
-  [languages.pt-pt]
-    title = 'O meu blog'
-    weight = 3
-[params]
-  [params.navigation]
-    help = 'Help'
+# Uncomment this file to enable multilanguage site support
+
+[en]
+languageName = "English"
+languagedirection = "ltr"
+title = "Sebastian Cavada"
+weight = 1
