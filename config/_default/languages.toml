@@ -1,4 +1,4 @@
-defaultContentLanguage: en
+defaultContentLanguage = 'en'
 # Uncomment this file to enable multilanguage site support
 
 #[en]
