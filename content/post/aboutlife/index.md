@@ -4,7 +4,7 @@ description: About Life that is using me up
 slug: about life
 date: 2023-02-23T10:21:13+02:00
 image: cover.jpg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:

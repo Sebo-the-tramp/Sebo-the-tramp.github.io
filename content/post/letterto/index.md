@@ -62,8 +62,8 @@ It's end of February 2023. We spent nearly 4 beautiful (is very far to reality t
 
 We talked so much during this days and some of the result were that we still have to work on, but that you also want and have the curiosity to try new experiences with other persons. I had so much difficulty in understanding this, but somehow I was able to get my head around it. I feel that I am so deeply connected to you and I see so much potential in this relationship, that I am willing to accept such condition. Even if it hurts. Even if it is something I wouldn't do. I feel that is the only way to see you one day, besides me when we wake up for the rest of our days.
 
-At this point in time, I feel I wasted much of an opportunity that was to spend my life with you. It was easy when we were together. It was peaceful, my mind was at ease, or at least is what I think it would have been. But I know that all these moments are going to eventually shape our relationship. And whatever is going to happen is going to be the product of all this ups and downs, combined with what we learn out of this and how we respond and act upon these answers. 
+At this point in time, I feel I wasted much of an opportunity that was to spend my life with you. It was easy when we were together. It was peaceful, my mind was at ease, or at least is what I think it would have been. But I know that all these moments are going to eventually shape our relationship. And whatever is going to happen is going to be the product of all this ups and downs, combined with what we learn out of this and how we respond and act upon these answers.
 
-I am hopeful that this is also part of our journey and that we will create amazing stuff together and do crazy shit together. 
+I am hopeful that this is also part of our journey and that we will create amazing stuff together and do crazy shit together.
 
 The photo in the cover has been taken the 10th of march 2018. The first day that I ever seen your face and I would never forget your beautiful smile.

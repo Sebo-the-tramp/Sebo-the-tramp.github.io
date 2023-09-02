@@ -4,7 +4,7 @@ description: The old fashioned values that are hidden in the modern world
 slug: about-lost-values
 date: 2023-03-06T10:21:13+02:00
 image: cover.jpg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:

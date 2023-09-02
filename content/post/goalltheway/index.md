@@ -4,7 +4,7 @@ description: A thought of 3 years ago
 slug: go-all-the-way
 date: 2023-02-11T10:21:13+02:00
 image: cover.jpg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:

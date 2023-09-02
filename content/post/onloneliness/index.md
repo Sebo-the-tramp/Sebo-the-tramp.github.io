@@ -4,7 +4,7 @@ description: What a season of loneliness thought me
 slug: on_loneliness
 date: 2023-02-27T10:21:13+02:00
 image: cover.jpg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:

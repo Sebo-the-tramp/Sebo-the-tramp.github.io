@@ -4,7 +4,7 @@ description: Some thoughts that I had during the show
 slug: sanremo
 date: 2023-02-07T10:21:13+02:00
 image: cover.jpg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:
