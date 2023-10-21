@@ -1,17 +1,16 @@
 ---
 title: "Blob detection with Laplacian of Gaussian"
-slug: "assignment01"
+slug: "assignment02"
 date: 2023-10-10T14:31:13+02:00
 draft: false
 readTime: false
 comments: false
-tags:        
+math: true
 
 links:
   - title: Complete PDF report
     description: Click on the link to download the full report
     website: ./Assignment_2_CV.pdf
-
 ---
 
 The following tutorial and notebook is about:
