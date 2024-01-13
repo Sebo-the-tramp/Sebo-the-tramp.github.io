@@ -5,7 +5,7 @@ date: 2023-09-10T14:31:13+02:00
 draft: false
 readTime: false
 comments: false
-tags:        
+math: true
 
 links:
   - title: Complete PDF report
