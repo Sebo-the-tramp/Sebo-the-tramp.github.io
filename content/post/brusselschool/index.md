@@ -6,7 +6,8 @@ date: 2023-04-08T10:21:13+02:00
 image: cover.jpeg
 draft: false
 categories:
-    - Thoughts
+    - Projects
+    - People
 tags:
     - Life
 author: Sebastian Cavada

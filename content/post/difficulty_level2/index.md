@@ -2,20 +2,25 @@
 title: "Second order difficulties"
 description: A thought on what does difficulty mean to me now
 slug: difficulty-level2
-date: 2024-02-09T10:21:13+02:00
+date: 2024-02-08T10:21:13+02:00
 image: cover.jpg
 draft: false
 categories:
     - Thoughts
 tags:
     - Life
-
+author: Sebastian Cavada
 
 comments: true
 
 links:
-    
+  - title: Pitch deck of Wellround
+    description: Click on the link to download my curriculum
+    website: ./Wellround_pitch_deck.pdf
+    image: ./avatar.png
+
 ---
+
 
 # Why difficult stuff?
 
