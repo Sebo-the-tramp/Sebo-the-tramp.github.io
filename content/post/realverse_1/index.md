@@ -1,5 +1,5 @@
 ---
-title: "Realverse - Part 1"
+title: "Realverse"
 description: The story of my first startup experience
 slug: realverse
 date: 2023-01-21T14:31:13+02:00
