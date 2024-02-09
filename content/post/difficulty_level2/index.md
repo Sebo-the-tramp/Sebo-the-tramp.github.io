@@ -14,11 +14,6 @@ author: Sebastian Cavada
 comments: true
 
 links:
-  - title: Pitch deck of Wellround
-    description: Click on the link to download my curriculum
-    website: ./Wellround_pitch_deck.pdf
-    image: ./avatar.png
-
 ---
 
 
