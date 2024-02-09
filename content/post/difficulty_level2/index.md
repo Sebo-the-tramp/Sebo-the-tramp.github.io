@@ -4,7 +4,7 @@ description: A thought on what does difficulty mean to me now
 slug: difficulty-level2
 date: 2024-02-09T10:21:13+02:00
 image: cover.jpg
-draft: true
+draft: false
 categories:
     - Thoughts
 tags:
