@@ -1,5 +1,5 @@
 ---
-title: "Hackathon NOI - November 2023"
+title: "Hackathon NOI - November 2022"
 description: Hackathon hosted by the NOI techpark, team texwiller
 slug: hackathonnoi-2023
 date: 2022-11-11T20:21:13+02:00

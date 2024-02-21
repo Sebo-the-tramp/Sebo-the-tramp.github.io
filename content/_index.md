@@ -2,7 +2,7 @@
 menu:
     main:
         name: Blog
-        weight: 1
+        weight: 3
         params:
             icon: book
 
