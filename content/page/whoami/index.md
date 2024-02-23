@@ -14,7 +14,7 @@ menu:
             icon: user
 links:
   - title: Curriculum
-    description: Click on the link to download my curriculum
+    description: Click on the link to do∂wnload my curriculum
     website: ./Sebastian_Cavada_CV_2023.pdf
     image: ./avatar.png
   - title: Project iRefill
