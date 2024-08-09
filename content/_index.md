@@ -14,6 +14,10 @@ menu:
             icon: user
 
 links:
+  - title: Youtube
+    description: You can find my travels, adventures, hackathons, and life anecdotes here!
+    website: https://www.youtube.com/@sebastiancavada
+    image: ./youtube.png
   - title: Curriculum
     description: Click on the link to download my curriculum
     website: ./cv_2024.pdf
@@ -32,7 +36,7 @@ links:
     image: ./e3da.png
   - title: CVI2
     description: Computer vision reserch group where I did my internship in the Summer 2024 on Computer Aided Design, LLMs and Visual Language Models
-    website: https://e3da.fbk.eu/
+    website: https://cvi2.uni.lu/
     image: ./uni.svg
 
 ---
