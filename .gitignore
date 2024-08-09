@@ -1,0 +1,8 @@
+public
+resources
+assets/jsconfig.json
+.hugo_build.lock
+
+.vscode
+
+/content/06_photos
