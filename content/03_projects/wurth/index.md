@@ -3,7 +3,7 @@ title: "Wurth 2022"
 description: Cyber security challenge in Bolzano
 slug: wurth-2022
 date: 2022-11-20T20:21:13+02:00
-image: cover.png
+image: cover.jpeg
 draft: false
     
 tags:

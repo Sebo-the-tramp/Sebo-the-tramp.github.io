@@ -17,12 +17,12 @@ links:
   - title: Youtube
     description: You can find my travels, adventures, hackathons, and life anecdotes here!
     website: https://www.youtube.com/@sebastiancavada
-    image: ./youtube.png
+    image: ./youtube.gif
     alt: youtube link to my personal channel
   - title: Curriculum
     description: Click on the link to download my curriculum
     website: ./cv_2024.pdf
-    image: ./big.png
+    image: ./big.gif
     alt: my photo 
   - title: Project iRefill
     description: A blog and a year long journey trying to understand the fragile balance of our ecosystem
@@ -32,7 +32,7 @@ links:
   - title: RealverseVR
     description: A startup that I co-founded and worked at for a year
     website: https://realversevr.it
-    image: ./logo.png
+    image: ./logo.gif
     alt: first startup realverse
   - title: E3DA
     description: Energy Efficient Embedded Digital Architectures unit at Fondazione Bruno Kessler researches, where I did my first Internship in AI and TinyML in the summer 2023
