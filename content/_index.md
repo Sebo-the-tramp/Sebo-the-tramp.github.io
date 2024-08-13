@@ -37,7 +37,7 @@ links:
   - title: E3DA
     description: Energy Efficient Embedded Digital Architectures unit at Fondazione Bruno Kessler researches, where I did my first Internship in AI and TinyML in the summer 2023
     website: https://e3da.fbk.eu/
-    image: ./e3da.png
+    image: ./e3da.gif
     alt: internship_2023 FBK - E3DA group
   - title: CVI2
     description: Computer vision reserch group where I did my internship in the Summer 2024 on Computer Aided Design, LLMs and Visual Language Models
