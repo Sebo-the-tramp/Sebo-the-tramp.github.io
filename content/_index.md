@@ -56,11 +56,17 @@ Hello! I’m Sebastian Cavada, a pragmatic and creative individual driven by my 
 ### Hackathons and Competitions:
 I thrive in collaborative environments, which is why I frequently participate in hackathons. One highlight was HackZurich, Europe’s largest hackathon, where my team developed “Out of the Blue,” a tool transforming 2D blueprints into detailed 4D models. This project not only showcased our technical skills but also emphasized our ability to innovate under pressure. Another significant event was the Pioneers 4.0 Hackathon in the UAE, where my team created an optimization solution for tea production, winning first place and securing an internship with LIPTON tea. 🌍✨
 
+#### Checkout more [here](sebo-the-tramp.github.io/03_projects/)
+
 ### Academic and Professional Experience:
 At MBZUAI, I delve into the intricacies of computer vision and tiny machine learning (tinyML). My academic work is complemented by an internship at CVI2, a research group at the University of Luxembourg, where I focus on developing cutting-edge solutions in computer vision. Previously, I co-founded RealverseVR, a startup dedicated to creating educational experiences through virtual and augmented reality. 🎓👨‍💻
 
+#### Checkout more [here](sebo-the-tramp.github.io/04_notebook/)
+
 ### Projects and Interests:
 I am deeply invested in creating content around fitness and exploring the potential of 3D worlds and virtual reality. My GitHub profile, Sebo-the-tramp, features a variety of projects that reflect my diverse interests and technical prowess. I also share my thoughts and projects on my blog. 📚💡
+
+#### Checkout more [here](sebo-the-tramp.github.io/posts/)
 
 ## Connect with Me
 
