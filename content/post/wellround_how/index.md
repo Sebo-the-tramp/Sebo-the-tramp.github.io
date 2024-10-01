@@ -2,7 +2,7 @@
 title: "Discover Wellround"
 description: How to use wellround app.
 slug: wellround-how
-date: 2024-02-16T10:21:13+02:00
+date: 2024-10-01T10:21:13+02:00
 image: meditation.jpeg
 draft: false
 categories:
