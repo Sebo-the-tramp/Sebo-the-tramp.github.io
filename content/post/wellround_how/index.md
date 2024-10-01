@@ -65,4 +65,16 @@ Your date are now our data.
 Just joking of course, our priority is to preserve your privacy.
 If you don't trust us, check out our open source code on GitHub.
 
+### Step 4: Select the device you want to connect
+
+Just click on that setting
+
+![alt text](settings_watch.png)
+
+### Step 5: Select the device you want to connect
+
+Select one and only one!
+
+![alt text](image.png)
+
 ## Boom you can now see your data in the app
