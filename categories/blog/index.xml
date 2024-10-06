@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on Sebastian Cavada</title><link>https://sebo-the-tramp.github.io/categories/blog/</link><description>Recent content in Blog on Sebastian Cavada</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 01 Oct 2024 10:21:13 +0200</lastBuildDate><atom:link href="https://sebo-the-tramp.github.io/categories/blog/index.xml" rel="self" type="application/rss+xml"/><item><title>Discover Wellround</title><link>https://sebo-the-tramp.github.io/p/wellround-how/</link><pubDate>Tue, 01 Oct 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/wellround-how/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/wellround-how/meditation.jpeg" alt="Featured image of post Discover Wellround" />&lt;h1 id="wellround---how-to-use-it">Wellround - How to use it
+&lt;/h1>&lt;p>This is the guide for the full alpha version of Wellround.&lt;/p>
+&lt;p>If you are here and wanted to be involved in the closed alpha version of wellround email me at [sebastian.cavada@mbzuai.ac.ae](mailto:sebastian. &lt;a class="link" href="mailto:cavada@mbzuai.ac.ae" >cavada@mbzuai.ac.ae&lt;/a>)&lt;/p>
+&lt;p>The supported smartwatches are:&lt;/p>
+&lt;ul>
+&lt;li>Apple Watch&lt;/li>
+&lt;li>Whoop&lt;/li>
+&lt;li>Amazfit&lt;/li>
+&lt;li>Garmin (?)&lt;/li>
+&lt;/ul>
+&lt;p>Also it is fully supported on iOS. Android coming soon.&lt;/p>
+&lt;p>If you want to know more about the app, please visit the (SOON AVAILABLE) webpage.&lt;/p>
+&lt;h2 id="ok-now-the-interesting-part">Ok now the interesting part
+&lt;/h2>&lt;p>I know is not very intuitive, but hey this is the alpha version.&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>Install the app, through TestFlight.&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Allow the app to access your health data&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>Boom you can now see your data in the app.&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h2 id="allow-the-app-to-access-your-health-data">Allow the app to access your health data
+&lt;/h2>&lt;h3 id="step-1-go-to-settings">Step 1: go to settings
+&lt;/h3>&lt;p>&lt;img src="https://sebo-the-tramp.github.io/settings_home.png"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;h3 id="step-2-locate-the-toggle-for-health-data">Step 2: locate the toggle for health data
+&lt;/h3>&lt;p>&lt;img src="https://sebo-the-tramp.github.io/toggle.png"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;h3 id="step-3-allow-the-app-to-access-your-health-data">Step 3: Allow the app to access your health data
+&lt;/h3>&lt;p>A pop up will appear, click allow to EVERYTHING.&lt;/p>
+&lt;p>Your date are now our data.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/our.png"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;p>Just joking of course, our priority is to preserve your privacy.
+If you don&amp;rsquo;t trust us, check out our open source code on GitHub.&lt;/p>
+&lt;h3 id="step-4-select-the-device-you-want-to-connect">Step 4: Select the device you want to connect
+&lt;/h3>&lt;p>Just click on that setting&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/settings_watch.png"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;h3 id="step-5-select-the-device-you-want-to-connect">Step 5: Select the device you want to connect
+&lt;/h3>&lt;p>Select one and only one!&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/image.png"
+loading="lazy"
+alt="alt text"
+>&lt;/p>
+&lt;h2 id="boom-you-can-now-see-your-data-in-the-app">Boom you can now see your data in the app
+&lt;/h2></description></item></channel></rss>
