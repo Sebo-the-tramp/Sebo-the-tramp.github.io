@@ -16,20 +16,21 @@ url = "https://github.com/Sebo-the-tramp"
 icon = "brand-github"
 
 [[social]]
+identifier = "linkedin"
+name = "Linkedin"
+url = "https://github.com/Sebo-the-tramp"
+
+[social.params]
+icon = "brand-linkedin"
+
+
+[[social]]
 identifier = "twitter"
 name = "Twitter"
 url = "https://mobile.twitter.com/_cavada"
 
 [social.params]
 icon = "brand-twitter"
-
-[[social]]
-identifier = "instagram"
-name = "Instagram"
-url = "https://www.instagram.com/sebo_the_tramp/"
-
-[social.params]
-icon = "brand-instagram"
 
 [[social]]
 identifier = "youtube"
@@ -39,10 +40,4 @@ url = "https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw"
 [social.params]
 icon = "brand-youtube"
 
-[[social]]
-identifier = "twitch"
-name = "Twitch"
-url = "https://www.twitch.tv/dark_harlock"
 
-[social.params]
-icon = "twitch"
