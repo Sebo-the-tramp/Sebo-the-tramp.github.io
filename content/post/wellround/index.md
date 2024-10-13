@@ -4,7 +4,7 @@ description: How to use wellround app.
 slug: wellround-how
 date: 2024-10-01T10:21:13+02:00
 image: meditation.jpeg
-draft: false
+draft: true
 categories:
     - Blog
 tags:

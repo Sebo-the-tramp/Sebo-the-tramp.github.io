@@ -114,11 +114,6 @@ $$
 (1 - \lambda) * \text{f1\_loss(img1, img2)} + \lambda * \text{SSIM(img1, img2)}
 $$
 
-$$
-LoG(x,y) = -\frac{1}{\pi \sigma^4} \left [1 - \frac{x^2 + y^2}{2 \sigma^2} \right] \exp^{- \frac{x^2 + y^2}{2 \sigma^2}}
-$$
-
-
 In this way iterating over the many images in the dataset, batch by batch, we can optimize the parameters of the whole number of Gaussians by backpropagating the error back to each gaussian based on the (sum) of the error(s) from every pixel in each image.
 By optimizing these parameters after some epochs a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.
 
