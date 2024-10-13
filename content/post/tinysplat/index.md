@@ -118,8 +118,7 @@ In this way iterating over the many images in the dataset, batch by batch, we ca
 By optimizing these parameters after some epochs a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.
 
 <!-- {{< src=sebo-the-tramp.github.io/p/tiny-splat/video.mp4 >}} -->
-{{< video src="https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4" autoplay="true" poster="./flower.jpeg" >}}
-
+https://github.com/OutofAi/2D-Gaussian-Splatting/assets/145302363/8a48f340-4ccc-48bb-b299-14fd0373f878
 
 
 ### Final thoughts 
