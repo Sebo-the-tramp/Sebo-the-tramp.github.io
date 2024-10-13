@@ -117,7 +117,7 @@ $$
 In this way iterating over the many images in the dataset, batch by batch, we can optimize the parameters of the whole number of Gaussians by backpropagating the error back to each gaussian based on the (sum) of the error(s) from every pixel in each image.
 By optimizing these parameters after some epochs a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.
 
-{{< video https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4 >}}
+{{< video sebo-the-tramp.github.io/p/tiny-splat/video.mp4 >}}
 
 
 ### Final thoughts 
