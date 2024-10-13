@@ -14,9 +14,27 @@ author: Sebastian Cavada
 comments: true
 
 links:
-     -  title: TinySplat
-        description: Github Repository of TinySplat
-        website: https://github.com/Sebo-the-tramp/tinysplat        
+    
+    - title: GSplat by Nerfstudio
+      description: One of the best open-source implementations of Gaussian splatting
+      website: https://github.com/nerfstudio-project/gsplat
+      
+    - title: GSplat Technical Paper
+      description: Technical paper on Gaussian splatting from the Nerfstudio team
+      website: https://arxiv.org/pdf/2409.06765
+      
+    - title: Hugging Face Introduction to Gaussian Splatting
+      description: A great introduction to Gaussian splatting by Hugging Face
+      website: https://huggingface.co/blog/gaussian-splatting    
+    
+    - title: 2D Gaussian Splatting (OutofAi)
+      description: Original repository to learn 2D Gaussian Splatting
+      website: https://github.com/OutofAi/2D-Gaussian-Splatting
+      
+    - title: TinySplat
+      description: Github repository of TinySplat, an implementation with added explanations and a low-level framework
+      website: https://github.com/Sebo-the-tramp/tinysplat    
+
 
 ---
 
@@ -80,6 +98,32 @@ Here you can have a look of what that means. The red "things" (camera frustums),
 Once this rough initialization has been created is time to go to next step.
 
 
-### Fitting of the Gaussians
+### Fitting of the Gaussians (more technical)
 
 This part is the most mindblowing and difficult, so take a deep breath and let's dive into cold waters.
+
+Now that we have some images, the position and rotation of the cameras, where the image was taken and the priors point cloud, the real training begins.
+
+It works very similar as in neural networks, where we have a set of parameters that needs to optimized using some gradient descent algorithm such as SGD. In this case all gaussians are initialized with the color and point in 3D space provided by the SfM algorithm. The scale and rotations are initialized as standard values such as 1 or similar. 
+
+During training we use these values to create and project these images onto the screen in a **differentiable manner**. This will produce some strange images at first, by projecting all the gaussians to the screen that is orientated and positioned in the same way as the way the image was taken. 
+
+This way we have a reference of what the image should be at that position, and what we actually get from the "splatting" process. Now you might have understood already, we can calculate a **loss** or **difference** in similarity between the two images. There are 2 ways this difference is computed, and usually is a combination of different losses such as f1 loss, and SSIM loss, where $\lambda$ is a parameter used to balance the two accuracies.
+
+$$
+(1 - \lambda) * \text{f1\_loss(img1, img2)} + \lambda * \text{SSIM(img1, img2)}
+$$
+
+In this way iterating over the many images in the dataset, batch by batch, we can optimize the parameters of the whole number of Gaussians by backpropagating the error back to each gaussian based on the (sum) of the error(s) from every pixel in each image.
+By optimizing these parameters after some epochs a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.
+
+{{< video https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4 >}}
+
+
+### Final thoughts 
+
+This is a good introductory article to Gaussian splatting in a non-technical way. If you would like to dig deeper into the topics I am compiling a series of blog post where I show the implementation of Gaussian Splatting in 2D [here]() and in the future also in 3D. 
+
+I will leave another list of good material that helped me understand better the topic. Let me know if this was helpful, and especially how I can improve!
+
+

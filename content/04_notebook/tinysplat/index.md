@@ -1,5 +1,5 @@
 ---
-title: "Gaussian Splatting with Tinygrad"
+title: "2D Gaussian Splatting with Tinygrad"
 slug: "tinysplat"
 date: 2024-09-27T14:31:13+02:00
 draft: false
@@ -855,3 +855,5 @@ with Tensor.train():
 Thank you for reading, this was part 1 of the series on Gaussian splatting. Let me know if you find any errors or have any suggestions. I will be happy to hear from you, just create a pull request or an issue on the github repository.
 
 Stay tuned for the next part where we will densify the Gaussians and make the training faster and more efficient.
+
+Also 3D Gaussians is coming soon hopefully!

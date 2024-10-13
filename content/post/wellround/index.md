@@ -24,7 +24,6 @@ If you are here and wanted to be involved in the closed alpha version of wellrou
 
 The supported smartwatches are:
 - Apple Watch
-- Whoop
 - Amazfit
 - Garmin (?)
 
