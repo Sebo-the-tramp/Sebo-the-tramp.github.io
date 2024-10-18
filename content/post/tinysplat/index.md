@@ -119,6 +119,8 @@ By optimizing these parameters after some epochs a clear image can be seen. A 2D
 
 {{< video src="https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4" autoplay="true" poster="./flower.jpeg" >}}
 
+(*Video courtesy of* [OutOfAI](https://github.com/OutofAi/2D-Gaussian-Splatting))
+
 ### Final thoughts 
 
 This is a good introductory article to Gaussian splatting in a non-technical way. If you would like to dig deeper into the topics I am compiling a series of blog post where I show the implementation of Gaussian Splatting in 2D [here]() and in the future also in 3D. 
