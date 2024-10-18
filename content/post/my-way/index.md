@@ -76,3 +76,11 @@ I will always love the art of writing in the language of the machines, and I wil
 ### My wife
 The person I will be living the most of my time. It is very interesting question. Definitely I would like her to be very similar to me. Match my energy, have a passion for discover new things learn, but more than everything help and give value with ones life.
 It has to be beautiful, not smoker, having a passion for sport and most of all self improvement.
+
+
+## I can only add now - 2024
+Reading back at the years from now it's crazy. It really shows me how far I have become. It shows my character my passion and my grit. This moment is a span of time where my grit is a bit loose. Everything seems to be with me one day, and the other day seems against me. I tend to focus on the negative side rather than what positive I have. Reading such thoughts of long ago gave me shiver and I think will help me to go trough now. 
+
+If I would write this in 1 year I think is going to be very difficult as I am a bit pessimistic as of now, and still confused a lot.
+
+1 Thing for sure is that I want to do an internship at NVIDIA or at some bigtech company and then enroll to a PhD in Zurich hopefully ETH. As I write this things I am aware of how much difficult this things are, therefore I want to underline that is mostly the moment, not the lack of security. It will change and I hope it will happen. I have a plan but I need again a pristine execution. Also the startup that we are building "Wellround" I don't know how much I will be able to carry on for as the CEO., that's what I feel I am now anyway. But I hope it will be striving and be something helpful to people. Exactly today we got vert good feedback from a professional which is big into this field which was really amazing to feel.
