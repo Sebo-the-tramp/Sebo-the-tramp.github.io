@@ -1,10 +1,10 @@
 ---
-title: "Discover Wellround"
+title: "Wellround - Start with Wellbeing"
 description: How to use wellround app.
-slug: wellround-how
-date: 2024-10-01T10:21:13+02:00
+slug: wellround
+date: 2024-10-14T10:21:13+02:00
 image: meditation.jpeg
-draft: true
+draft: false
 categories:
     - Thoughts
 tags:
