@@ -112,7 +112,7 @@ During training we use these values to create and project the Gaussians onto the
 This way we have a reference of what the image should be at that position, and what we actually get from the "splatting" process. Now you might have understood already, we can calculate a **loss** or **difference** in similarity between the two images. There are 2 ways this difference is computed, and usually is a combination of different losses such as f1 loss, and SSIM loss, where $\lambda$ is a parameter used to balance the two accuracies.
 
 $$
-(1 - \lambda) * \text{f1\_loss(img1, img2)} + \lambda * \text{SSIM(img1, img2)}
+(1 - \lambda) * \text{F1-loss(img1, img2)} + \lambda * \text{SSIM(img1, img2)}
 $$
 
 In this way iterating over the many images in the dataset, batch by batch, we can optimize the parameters of the whole number of Gaussians by backpropagating the error back to each gaussian based on the (sum) of the error(s) from every pixel in each image.
@@ -127,5 +127,3 @@ By optimizing these parameters, after some epochs, a clear image can be seen. A 
 This is a good introductory article to Gaussian splatting in a non-technical way. If you would like to dig deeper into the topics I am compiling a series of blog post where I show the implementation of Gaussian Splatting in 2D [here](https://sebo-the-tramp.github.io/04_notebook/tinysplat/) and in the future also in 3D. 
 
 I will leave another list of good material that helped me understand better the topic. Let me know if this was helpful, and especially how I can improve!
-
-
