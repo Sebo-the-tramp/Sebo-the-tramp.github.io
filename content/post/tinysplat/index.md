@@ -5,6 +5,7 @@ slug: tiny-splat
 date: 2024-10-01T10:21:13+02:00
 image: tinysplat_small.jpg
 draft: false
+math: true
 categories:
     - Projects
 tags:
@@ -78,7 +79,7 @@ In conclusion this technique is called explicit neural radiance Field. The expli
 
 ## Okay, balloons and communication, now what?
 
-This question is damn right. How do we even generate these Gaussians, and even how do we position them? We don't have a human in the computer, let alone 2 people communicating!
+This is a legit question. How do we even generate these Gaussians, and even how do we position them? We don't have a human in the computer, let alone 2 people communicating!
 
 The journey of creating a realistic scene is split into 2 parts:
 
@@ -87,11 +88,11 @@ The journey of creating a realistic scene is split into 2 parts:
 
 ### Priors initialization
 
-Gaussian splatting works better if we have already a rough idea of what the scene looks like. Imagine having some rough sketch of what you want, it is going to be easier to realize you masterpiece. In the same way Gaussian Splatting works best when our initial sketch is a Point Cloud. A point cloud is exactly a way to define a rough estimate of the scene.
+Gaussian splatting works better if we have already a rough idea of what the scene looks like. Imagine having some rough sketch of what you want, it is going to be easier to realize your masterpiece. In the same way, Gaussian Splatting works best when our initial sketch is a Point Cloud. A point cloud is exactly a way to define a rough sketch of the scene.
 
 The most common way to obtain is to run an algorithm called Structure from Motion. In other words given images of the scene from different positions it will triangulate the points and create a 3D representation which is close enough to reality. These methods are still improving and there is no best approach but it depends on many factors such as dimensions, motions etc. In the end this is still an open research question, therefore many more options (hopefully) are coming every month.
 
-Here you can have a look of what that means. The red "things" (camera frustums), represent the rotation and position of the cameras in space, where the points (which should be colored), they represent the 3D space that was reconstructed. It is called "sparse" reconstruction because as you might have noticed, it is missing a lot of points, but the 3D high level idea can be interpreted by a human at least.
+Here you can have a look of what that means. The red "things" (camera frustums), represent the rotation and position of the cameras in space, whilst the points (which should be colored), they represent the 3D space that was reconstructed. It is called "sparse" reconstruction because as you might have noticed, it is missing a lot of points, but the 3D high level idea can be interpreted by a human at least.
 
 ![Structure from motion from the Abu Dhabi F1 circuit](sfm_example.png)
 
@@ -104,9 +105,9 @@ This part is the most mindblowing and difficult, so take a deep breath and let's
 
 Now that we have some images, the position and rotation of the cameras, where the image was taken and the priors point cloud, the real training begins.
 
-It works very similar as in neural networks, where we have a set of parameters that needs to optimized using some gradient descent algorithm such as SGD. In this case all gaussians are initialized with the color and point in 3D space provided by the SfM algorithm. The scale and rotations are initialized as standard values such as 1 or similar. 
+It works very similar as in neural networks, where we have a set of parameters that needs to optimized using some gradient descent algorithm such as SGD. In this case all gaussians are initialized with the color and point in 3D space provided by the SfM algorithm. The scale and rotations are initialized as standard values such as 1. 
 
-During training we use these values to create and project these images onto the screen in a **differentiable manner**. This will produce some strange images at first, by projecting all the gaussians to the screen that is orientated and positioned in the same way as the way the image was taken. 
+During training we use these values to create and project the Gaussians onto the screen in a **differentiable manner**. This will produce some strange images at first, by projecting all the gaussians to the screen that is orientated and positioned in the same way as the way the image was taken. 
 
 This way we have a reference of what the image should be at that position, and what we actually get from the "splatting" process. Now you might have understood already, we can calculate a **loss** or **difference** in similarity between the two images. There are 2 ways this difference is computed, and usually is a combination of different losses such as f1 loss, and SSIM loss, where $\lambda$ is a parameter used to balance the two accuracies.
 
@@ -115,7 +116,7 @@ $$
 $$
 
 In this way iterating over the many images in the dataset, batch by batch, we can optimize the parameters of the whole number of Gaussians by backpropagating the error back to each gaussian based on the (sum) of the error(s) from every pixel in each image.
-By optimizing these parameters after some epochs a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.
+By optimizing these parameters, after some epochs, a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.
 
 {{< video src="https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4" autoplay="true" poster="./flower.jpeg" >}}
 
@@ -123,7 +124,7 @@ By optimizing these parameters after some epochs a clear image can be seen. A 2D
 
 ### Final thoughts 
 
-This is a good introductory article to Gaussian splatting in a non-technical way. If you would like to dig deeper into the topics I am compiling a series of blog post where I show the implementation of Gaussian Splatting in 2D [here]() and in the future also in 3D. 
+This is a good introductory article to Gaussian splatting in a non-technical way. If you would like to dig deeper into the topics I am compiling a series of blog post where I show the implementation of Gaussian Splatting in 2D [here](https://sebo-the-tramp.github.io/04_notebook/tinysplat/) and in the future also in 3D. 
 
 I will leave another list of good material that helped me understand better the topic. Let me know if this was helpful, and especially how I can improve!
 
