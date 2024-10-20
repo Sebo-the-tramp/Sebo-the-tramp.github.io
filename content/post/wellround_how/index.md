@@ -41,4 +41,4 @@ This is the simplest of the three points. Again it will be like magic. You will 
 
 ## Action, action, so what do I do?
 If you read so far, you have done the first step to achieve your full potential, congratulations 🎉. If are already embarked in your journey, I wish you all the best, 
-might you achieve it in the end. If you are curious to try out our roadmap and copilot for the journey, download our app, is FREE at [wellround.me](wellround.me)
+might you achieve it in the end. If you are curious to try out our roadmap and copilot for the journey, download our app, is FREE at [www.wellround.me](www.wellround.me)
