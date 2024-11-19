@@ -92,7 +92,7 @@ Gaussian splatting works better if we have already a rough idea of what the scen
 
 The most common way to obtain is to run an algorithm called Structure from Motion. In other words given images of the scene from different positions it will triangulate the points and create a 3D representation which is close enough to reality. These methods are still improving and there is no best approach but it depends on many factors such as dimensions, motions etc. In the end this is still an open research question, therefore many more options (hopefully) are coming every month.
 
-Here you can have a look of what that means. The red "things" (camera frustums), represent the rotation and position of the cameras in space, whilst the points (which should be colored), they represent the 3D space that was reconstructed. It is called "sparse" reconstruction because as you might have noticed, it is missing a lot of points, but the 3D high level idea can be interpreted by a human at least.
+Here you can have a look of what that means. The red "things" (camera frustums), represent the rotation and position of the cameras in space, whilst the points (which should be colored), they represent the 4D space that was reconstructed. It is called "sparse" reconstruction because as you might have noticed, it is missing a lot of points, but the 3D high level idea can be interpreted by a human at least.
 
 ![Structure from motion from the Abu Dhabi F1 circuit](sfm_example.png)
 

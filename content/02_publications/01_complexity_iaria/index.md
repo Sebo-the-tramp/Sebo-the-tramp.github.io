@@ -12,7 +12,7 @@ comments: false
 links:
   - title: Link to the paper
     description: Arxiv link of the paper
-    website: https://arxiv.org/
+    website: https://www.thinkmind.org/articles/healthinfo_2024_2_60_90043.pdf
 
 ---
 
