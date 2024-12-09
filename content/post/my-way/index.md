@@ -40,13 +40,13 @@ I would have liked to have found the person I will spend the rest of my life wit
 I will have done my master. Maybe also a PhD, in some sort of AI part. 
 
 I will have founded my first company, probably not in Italy. Either in AbuDabhi or Germany, or Ireland. I don't think I will move as far as America evn though there are good moneys there for AI startups. 
-I would put forward the argument that I would have like to have made my first 100k. 
+I would put forward the argument that I would have like to have made my first 100k. (as of today 9/12/2024 2 years -> we are about 30k net-worth) 
 
 My physique should be as its peak and my knowledge and connections has to be the broader they are going to ever be.
 
 The climathon should already at its 4-5 edition and the impact I brought into the climate change bereits has to be tangible and I would have to be confident in my actions and my potential. 
 
-If I ever moved to AEU, I would like to have learned the arab language. And have visited the desert at least one. 
+If I ever moved to AEU, I would like to have learned the arab language. And have visited the desert at least one. (desert done, language not yet as it is to hard - 09/12/2024)
 
 I also want to create a big network of people, that might enable me to make big things and with whom to do crazy stuff around the world.
 Other than the company I would like to have founded, I would have had some experiences around the world, experiences of growth and to meet new friends and learn new stuff.

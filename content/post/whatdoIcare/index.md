@@ -35,4 +35,6 @@ It wasn't always like that, but also recently I valued how much I do care for my
 
 ## My friend Giulia
 
-She was my first girflriend. We grow a lot together. We went through a rough time, decisions and process. We are still kind of there. I have realized how much I cared about her, and now as (11/03/2023) we are still trying to figure out things. Nevertheless I
+She was my first girflriend. We grow a lot together. We went through a rough time, decisions and process. We are still kind of there. I have realized how much I cared about her, and now as (11/03/2023) we are still trying to figure out things. As of today (9/12/2024), after close to 1.5 years together she left me.
+Probably forever and for good. I was not the best boyfriend, distant, emotionally detach and trying to prove something to myself so much, I detached from reality. And she found a new person which might treat her better than I could. I am sorry, but I couldn't see this before. It might even be a fucking gift though.
+In the end life comes from within.
