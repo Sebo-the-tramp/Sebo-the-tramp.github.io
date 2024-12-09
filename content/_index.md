@@ -68,7 +68,7 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News 🎉
 
-- 1 Paper accepted at [HEALTHINFO 2024](https://www.iaria.org/conferences2024/HEALTHINFO24.html) Nice, France - [PAPER LINK](https://sebo-the-tramp.github.io/02_publications/complexity_iaria/)
+- 1 Paper accepted at [HEALTHINFO 2024](https://www.iaria.org/conferences2024/HEALTHINFO24.html) Nice, France - 🏆 Best Paper Award 🎉 - [PAPER LINK](https://sebo-the-tramp.github.io/02_publications/complexity_iaria/) 
 
 
 <!-- ## Connect with Me

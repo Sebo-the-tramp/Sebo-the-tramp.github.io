@@ -16,6 +16,8 @@ links:
 
 ---
 
+### 🏆 Best Paper Award 🎉
+
 **Does Complexity Pay Off? Applying Advanced Algorithms to Depression Detection on the GLOBEM Dataset**
 
 *Sebastian Cavada, Alvaro Berobide, Yevheniia Kryklyvets*
