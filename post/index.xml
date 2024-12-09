@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blog on Sebastian Cavada</title><link>https://sebo-the-tramp.github.io/post/</link><description>Recent content in Blog on Sebastian Cavada</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 02 Nov 2024 10:21:13 +0200</lastBuildDate><atom:link href="https://sebo-the-tramp.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>A guide to COLMAP</title><link>https://sebo-the-tramp.github.io/p/colmap-part1/</link><pubDate>Sat, 02 Nov 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/colmap-part1/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/colmap-part1/cover.png" alt="Featured image of post A guide to COLMAP" />&lt;h1 id="colmap---a-guide-for-optimal-results">COLMAP - a guide for optimal results
+&lt;/h1>&lt;h2 id="intro">Intro
+&lt;/h2>&lt;p>So I spent the last 2 months trying out how to properly use and optimize COLMAP. Unfortunately most informations are buried in github issues, pull requests. You can get 70% from the official deocumentation, but most of the remaining I had to get it from trial and error and countless hors of searching trough GitHub trying to figure out if people had the same problem as I did.&lt;/p>
+&lt;p>I found out so far that there are 2 main methods to improve results and can be directly impact the reconstruction without complicated tweaks in the code.&lt;/p>
+&lt;ol>
+&lt;li>Better input. (garbage in, garbage out)&lt;/li>
+&lt;li>Settings finetuning for reconstruction&lt;/li>
+&lt;/ol>
+&lt;p>I&amp;rsquo;ll mainly talk about this two and maybe with some BONUS.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/colmap-part1/meme1.png"
+width="608"
+height="684"
+srcset="https://sebo-the-tramp.github.io/p/colmap-part1/meme1_hu10654309975242616656.png 480w, https://sebo-the-tramp.github.io/p/colmap-part1/meme1_hu14567556585693798149.png 1024w"
+loading="lazy"
+alt="Yes that was me"
+class="gallery-image"
+data-flex-grow="88"
+data-flex-basis="213px"
+>&lt;/p>
+&lt;h3 id="context">Context
+&lt;/h3>&lt;p>I am particularly interested in Large scale reconstructions from only images and visual clues. I think I chose the hardest path, but that is what I like. COLMAP has impressive results on small scale reconstruction, but when the number of images increase, and the kms that the reconstruction spans, there is where the real trubles are. For context I want to reconstruct around 1KM of my CAMPUS, and that has some challenges, plus the campus is very similar and many people lose themselves because of similarities, so I imagine why COLMAP has some shortcomings.&lt;/p>
+&lt;h2 id="better-input">Better Input
+&lt;/h2>&lt;p>COLMAP relies on SIFT to extract features. During my countless tests, I found that to be quite reliable in standard settings, and using more sophisticated feature matchers, only increased complexity without a worthy reward. So I will stick to it.&lt;/p>
+&lt;p>What really mattered in the end, was to get the perfect time of the day and be able to capture with exactly the perfect lighting conditions. That improved the reconstruction drastically. Also I had to pick a time of the day where not many people are around because that will confuse the feature matching algorithm.&lt;/p>
+&lt;p>I ended up waking up at 6.30 AM and walk around with 2 gopros and an helmet to get the perfect results. A little bit later and the sun would create the flares that will mess up with the features and ruine all the process.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Fisrt advice:&lt;/strong> choose the best light conditions you possibly can get&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;strong>Second advice:&lt;/strong> avoid crowds and moving objects to avoid heavy postprocessing and iterate on the ideas faster&lt;/p>
+&lt;/blockquote>
+&lt;p>Another thing that probably I casually discovered, is that if I walk a straight
+line in front of me, the reconstruction is going to be suboptimal. Instead if I zig-zag, through the path, the result tend to be more accurate. At first the motivation for such a behaviour was unknown, but after carefully reading and understand the limitation of structure-from-motion, it was clearer that the problem becomes ill posed when following a co-linear motion.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Third advice:&lt;/strong> have a &amp;ldquo;zig-zag&amp;rdquo; movement while you capture the environment to avoid reconstruction &lt;strong>imprecisions&lt;/strong> or &lt;strong>failures&lt;/strong>&lt;/p>
+&lt;/blockquote>
+&lt;p>I&amp;rsquo;ll try to add more as I learn but for now this is it.&lt;/p>
+&lt;h2 id="finetuning-settings">Finetuning settings
+&lt;/h2>&lt;p>I really had to fight hard for this one. I tried to use the more robust and &lt;strong>slower&lt;/strong> method of more discriminative feature matching:&lt;/p>
+&lt;p>&lt;code>--SiftExtraction.estimate_affine_shape=true and --SiftExtraction.domain_size_pooling=true. In addition, you should enable guided feature matching using: --SiftMatching.guided_matching=true.&lt;/code> from &lt;a class="link" href="https://colmap.github.io/faq.html#:~:text=%2D%2DSiftExtraction.estimate_affine_shape%3Dtrue%20and%20%2D%2DSiftExtraction.domain_size_pooling%3Dtrue.%20In%20addition%2C%20you%20should%20enable%20guided%20feature%20matching%20using%3A%20%2D%2DSiftMatching.guided_matching%3Dtrue." target="_blank" rel="noopener"
+>here&lt;/a>&lt;/p>
+&lt;p>It works but on extreme cases and at an enormous price, as it doesn&amp;rsquo;t even use the GPU. So I ended up sticking with the &amp;ldquo;Standard&amp;rdquo; procedure. I also only use sequential matching as videos benefits a lot from such processing strategy.&lt;/p>
+&lt;p>An average reconstuction is done as following:&lt;/p>
+&lt;ol>
+&lt;li>Convert the video into a sequence of images&lt;/li>
+&lt;li>Run COLMAP&lt;/li>
+&lt;li>Enjoy (60% of the times)&lt;/li>
+&lt;/ol>
+&lt;p>My goal is to improve the likelyhood of success.&lt;/p>
+&lt;h3 id="1-image-processing">1. Image processing
+&lt;/h3>&lt;p>(Usually I deal with multiple cameras, that is why I heve the folder 00/ standing for the camera ID)&lt;/p>
+&lt;p>First I create a folder and then run the following command. You can choose the FPS, experimentally I saw that 3 is the best, sometimes 2 is also good if the movement pace is slow (e.g. human walk) otherwise you can try 4 if there are holes in the reconstruction or errors, most of the times that should fix. If it doesn&amp;rsquo;t try 5 but most likely you need to go to the previous step and reiterate there.
+(always talking for human walking velocity, if using bike or car, that is a whole differnt story)&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">mkdir -p ./00/images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ffmpeg -hwaccel auto -i ./video/GX010041.MP4 -vf &lt;span class="s2">&amp;#34;fps=4,scale=iw:ih&amp;#34;&lt;/span> -q:v &lt;span class="m">8&lt;/span> ./00/images/%06d.png
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="2-run-colmap">2. Run COLMAP
+&lt;/h2>&lt;p>After a lot of iteration the script I found to be the most succesfull is the following:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># RUN RECONSTRUCTION&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> &lt;span class="m">00&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Running Feature Extractor&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap feature_extractor --database_path ../database.db --image_path ../images --SiftExtraction.estimate_affine_shape 1 --SiftExtraction.domain_size_pooling 1 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap feature_extractor --database_path ./database.db --image_path ./images --ImageReader.single_camera_per_folder &lt;span class="m">1&lt;/span> --ImageReader.default_focal_length_factor 0.5 --ImageReader.camera_model OPENCV
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # echo &amp;#34;Running feature matching...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap exhaustive_matcher --database_path ./database.db --SiftMatching.max_distance 1 --SiftMatching.guided_matching 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap sequential_matcher --database_path ./database.db --SiftMatching.max_distance &lt;span class="m">1&lt;/span> --SiftMatching.guided_matching &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # echo &amp;#34;Reconstructing 3D model...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap mapper --database_path ./database.db --image_path ./images --output_path ./
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # glomap mapper --database_path ./database.db --image_path ../image_0 --output_path ./glo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Showing result&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap gui --import_path ./0 --database_path ./database.db --image_path ./images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap gui --import_path ./geo-registered-model --database_path ./database.db --image_path ./images&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>You basically CD into your folder, find already images folder and run:&lt;/p>
+&lt;ol>
+&lt;li>feature extraction -&amp;gt; standard&lt;/li>
+&lt;li>sequential matcher -&amp;gt; faster but only matching images that are close in &amp;ldquo;time&amp;rdquo;&lt;/li>
+&lt;li>reconstruct the model&lt;/li>
+&lt;li>Show the model. Usually is saved to 0. but if not, check how many other folder are created 0,1,2 etc&amp;hellip; based on how many reconstruction has been done.&lt;/li>
+&lt;/ol>
+&lt;p>Enjoy! now with a 90% chance of success!&lt;/p>
+&lt;p>Let me know if you have other questions, and in the future I might release some comparison between GLOMAP and COLMAP if you are interested.&lt;/p></description></item><item><title>Wellround</title><link>https://sebo-the-tramp.github.io/p/wellround/</link><pubDate>Mon, 14 Oct 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/wellround/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/wellround/meditation.jpeg" alt="Featured image of post Wellround" />&lt;h1 id="wellround">Wellround
+&lt;/h1>&lt;blockquote>
+&lt;p>Transforming the chaos of personal data into personalized, holistic health insights—to empower you to achieve your full potential!&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Wellround, &lt;/span>&lt;cite>Notes&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="why">WHY?
+&lt;/h2>&lt;p>I&amp;rsquo;ll tell you a story of Sebastian an ambitious student. He got accepted into a highly competitive university program. His family and friends even his girlfriend Giulia (who wont be able to see him for a while) were so proud and supportive as he was ready to embark in this new transformative and enriching journey.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/wellround/00.jpeg"
+width="1024"
+height="1024"
+srcset="https://sebo-the-tramp.github.io/p/wellround/00_hu7897840447287616046.jpeg 480w, https://sebo-the-tramp.github.io/p/wellround/00_hu14982347106427899296.jpeg 1024w"
+loading="lazy"
+alt="Happy Sebastian"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>Months passed, and the pressure kept building. He told himself he was ready, that he could handle it all. But the ambitious student, eager to prove himself, started taking on more and more—new projects, extra coursework, bigger goals. He wanted everything to be perfect.&lt;/p>
+&lt;p>But perfection never came. The scores weren’t what he hoped for, his peers seemed a step ahead, and strict professors scrutinised every small mistake. The harder he worked, the more things slipped out of control. Instead of slowing down, he doubled down. &lt;em>This is my one shot,&lt;/em> he thought.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/wellround/04.jpeg"
+width="1024"
+height="1024"
+srcset="https://sebo-the-tramp.github.io/p/wellround/04_hu309508073662387457.jpeg 480w, https://sebo-the-tramp.github.io/p/wellround/04_hu13597179694804832474.jpeg 1024w"
+loading="lazy"
+alt="Stressed Sebastian"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>But the cracks were showing. Friends stopped seeing him. His focus shattered, scattered in a hundred directions, yet nothing seemed to move forward. Giulia—his anchor, his cheerleader—tried to hold on, but he was slipping away. Anxious, angry, and burned out, he became someone she couldn’t recognise. One day, she left.&lt;/p>
+&lt;p>And that’s when Sebastian hit rock bottom. Burned out. Alone. His dreams felt meaningless. He stopped chasing all his dreams altogether.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/wellround/01.jpeg"
+width="1024"
+height="1024"
+srcset="https://sebo-the-tramp.github.io/p/wellround/01_hu6848693477357794632.jpeg 480w, https://sebo-the-tramp.github.io/p/wellround/01_hu16217548652443403688.jpeg 1024w"
+loading="lazy"
+alt="Burned out Sebastian"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>But that wasn’t the end of the story.&lt;/p>
+&lt;p>Sebastian is me. And this was my wake-up call. I realized something profound: success isn’t just about what you achieve—it’s about how you get there and who’s with you when you do.&lt;/p>
+&lt;p>Hitting rock bottom made me ask a question: How can we chase our dreams without losing ourselves or the people who matter most?&lt;/p>
+&lt;h2 id="how">HOW?
+&lt;/h2>&lt;p>That’s why we’re building Wellround.&lt;/p>
+&lt;p>Our system helps people manage their ambitions while protecting their mental and emotional well-being. Here’s how it works:&lt;/p>
+&lt;ol>
+&lt;li>We gather data from smartwatches, calendars, screen time, and more to give you a complete picture of your well-being.&lt;/li>
+&lt;li>Using LLMs—advanced AI models—we analyze this data to identify patterns and predict risks like burnout or stress.&lt;/li>
+&lt;li>Our platform provides actionable insights: notifications when your stress is climbing, suggestions for better work-life balance, and prompts to take breaks before it’s too late.&lt;/li>
+&lt;li>With your consent, real psychologists and coaches can access this data in a meaningful, context-rich way, enabling personalized support tailored to your unique journey.&lt;/li>
+&lt;/ol>
+&lt;p>This is more than an app; it’s a system to help you thrive, combining cutting-edge technology with genuine human care.&lt;/p>
+&lt;h2 id="what">WHAT?
+&lt;/h2>&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/wellround/02.jpeg"
+width="1024"
+height="1024"
+srcset="https://sebo-the-tramp.github.io/p/wellround/02_hu4809438054755314012.jpeg 480w, https://sebo-the-tramp.github.io/p/wellround/02_hu15880674071710166485.jpeg 1024w"
+loading="lazy"
+alt="Equanimous Anna"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>Imagine Anna, a young professional managing multiple projects. Her smartwatch detects elevated stress during her workday and sends her a notification:
+“Hey, Anna, your stress levels are climbing. Take a 5-minute break to breathe.”&lt;/p>
+&lt;p>Anna opens the app and sees a clear summary generated by the AI:
+“Your stress peaked at 3 PM due to back-to-back meetings. You’ve had no breaks today.”&lt;/p>
+&lt;p>It offers actionable tips:&lt;/p>
+&lt;ul>
+&lt;li>“Schedule focus blocks between meetings.”&lt;/li>
+&lt;li>“Increase hydration—your activity levels suggest you’re dehydrated.”&lt;/li>
+&lt;/ul>
+&lt;p>Anna’s coach also receives a weekly summary, generated by the system, highlighting her progress and suggesting ways to adjust her workload for balance. Together, Anna and her coach plan a healthier approach to her goals.&lt;/p>
+&lt;p>This isn’t just data—it’s transformation.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>We are here to support you in chasing your dreams—without losing your Giulia.&lt;/strong>&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Wellround, &lt;/span>&lt;cite>Notes&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;p>Check out more at &lt;a class="link" href="https://www.wellround.me" target="_blank" rel="noopener"
+>wellround.me&lt;/a>&lt;/p></description></item><item><title>TinySplat</title><link>https://sebo-the-tramp.github.io/p/tiny-splat/</link><pubDate>Tue, 01 Oct 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/tiny-splat/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/tiny-splat/tinysplat_small.jpg" alt="Featured image of post TinySplat" />&lt;h1 id="tinysplat">Tinysplat
+&lt;/h1>&lt;p>During my the journey to understand Gaussian Splatting, I created Tinysplat as a hands-on project to explore its foundational concepts. By breaking down the complex process into more manageable parts, I aimed to simplify and clarify the underlying mechanisms. In this post, I’ll share the insights and discoveries I’ve made along the way, shedding light on the essentials of Gaussian Splatting through the lens of my experience with Tinysplat.&lt;/p>
+&lt;h2 id="what-is-gaussian-splatting">What is Gaussian Splatting?
+&lt;/h2>&lt;p>Gaussian splatting is a novel explicit surface representation developed to represent the 3D structure of an object or an environment and then convert (rasterize) them into 2D images to be shown on our screens.&lt;/p>
+&lt;p>The 2 most important pieces of this concept are: Gaussian and Splatting.&lt;/p>
+&lt;h3 id="gaussians">Gaussians
+&lt;/h3>&lt;p>Gaussians is a shorthand for Gaussian distribution, which we are familiar from statistics in 1 dimension. Hold tight because in this process the dimensions of the Gaussian distribution will go up to 2 and 3. The most intuitive way to think of a Gaussian in 3 dimensions (with a lot of abuse in notation) is to think about it as a balloon. Of this balloon we can control different proprieties such as the rotation, the color, the size, by inflating it more or less etc.
+Turns out that in the Gaussian Splatting process, we build the environment by merging together many of these balloons of different dimensions and colors at different positions in the space. Take a look at the following image:&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/tiny-splat/flower.jpeg"
+width="1024"
+height="1024"
+srcset="https://sebo-the-tramp.github.io/p/tiny-splat/flower_hu3943403685022499734.jpeg 480w, https://sebo-the-tramp.github.io/p/tiny-splat/flower_hu2712116330969510316.jpeg 1024w"
+loading="lazy"
+alt="The first Gaussian flower - an abstract way of thinking about Gaussian splatting"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>You can think of a car being made of many balloons at different positions and different sizes and colors, but then you can observe this shape from many points and always understand that this is a car.
+And this brings us to the second key concept: splatting.&lt;/p>
+&lt;h3 id="splatting">Splatting
+&lt;/h3>&lt;p>Splatting is not a new concept and it refers to the technique of rendering each pixel on your monitor as the combination of many Gaussian-shaped &amp;ldquo;splats&amp;rdquo; (or balloons) by blending each contribution of each balloon given the camera position.
+You might wonder what is special about this technique. Well in a single words it is DIFFERENTIABLE. It means that we can run back-propagation to whatever loss we have and therefore manipulating the properties of every balloons in our scene. To some degree we can think of differentiability as being a human inside the room that can listen to our commands shouting from a small window telling him where he should move every balloon to create an object. Without differentiability we would not have a way to communicate to the person inside.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/tiny-splat/explanation.jpeg"
+width="1024"
+height="1024"
+srcset="https://sebo-the-tramp.github.io/p/tiny-splat/explanation_hu6562073399138009442.jpeg 480w, https://sebo-the-tramp.github.io/p/tiny-splat/explanation_hu14846136555838797151.jpeg 1024w"
+loading="lazy"
+alt="Communication between the Representation on the left and the Loss on the right"
+class="gallery-image"
+data-flex-grow="100"
+data-flex-basis="240px"
+>&lt;/p>
+&lt;p>Imagine there is no &amp;ldquo;open window&amp;rdquo; and no way for the two guys to communicate. Then the process will be NON differentiable. It is exactly the communication that was the key to enable many interesting applications of Gaussian splatting. Remember &amp;ldquo;Communication is key&amp;rdquo;.&lt;/p>
+&lt;h2 id="but-why">But why?
+&lt;/h2>&lt;p>Then you might ask why do we need to have a man inside a house inflating balloons and one guy outside observing and shouting?! Well that&amp;rsquo;s a fair question.&lt;/p>
+&lt;p>In proper terminology what this techniques enable is to learn from just a handful of images, on the order of the hundreds, a whole object or environment, so hopefully we can generate &amp;ldquo;novel views&amp;rdquo;. This fancy term refers basically that we can generate a rough 3D reconstruction from these images.
+Again in technical terms we are over-fitting a scene or also inferring from the images we have at our disposal, what would the image look like from a completely different point of view that we didn&amp;rsquo;t have before.&lt;/p>
+&lt;p>In conclusion this technique is called explicit neural radiance Field. The explicit term references the fact that the parameters of the Gaussians are stored as is, and in the weights as in the NeRF representation for example. Radiance field instead is just a fancy word that was chosen to describe the way that rays are captured by the camera coming from all the scene.&lt;/p>
+&lt;h2 id="okay-balloons-and-communication-now-what">Okay, balloons and communication, now what?
+&lt;/h2>&lt;p>This is a legit question. How do we even generate these Gaussians, and even how do we position them? We don&amp;rsquo;t have a human in the computer, let alone 2 people communicating!&lt;/p>
+&lt;p>The journey of creating a realistic scene is split into 2 parts:&lt;/p>
+&lt;ol>
+&lt;li>Initialization of the priors&lt;/li>
+&lt;li>Fitting of the priors onto the images&lt;/li>
+&lt;/ol>
+&lt;h3 id="priors-initialization">Priors initialization
+&lt;/h3>&lt;p>Gaussian splatting works better if we have already a rough idea of what the scene looks like. Imagine having some rough sketch of what you want, it is going to be easier to realize your masterpiece. In the same way, Gaussian Splatting works best when our initial sketch is a Point Cloud. A point cloud is exactly a way to define a rough sketch of the scene.&lt;/p>
+&lt;p>The most common way to obtain is to run an algorithm called Structure from Motion. In other words given images of the scene from different positions it will triangulate the points and create a 3D representation which is close enough to reality. These methods are still improving and there is no best approach but it depends on many factors such as dimensions, motions etc. In the end this is still an open research question, therefore many more options (hopefully) are coming every month.&lt;/p>
+&lt;p>Here you can have a look of what that means. The red &amp;ldquo;things&amp;rdquo; (camera frustums), represent the rotation and position of the cameras in space, whilst the points (which should be colored), they represent the 4D space that was reconstructed. It is called &amp;ldquo;sparse&amp;rdquo; reconstruction because as you might have noticed, it is missing a lot of points, but the 3D high level idea can be interpreted by a human at least.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/tiny-splat/sfm_example.png"
+width="1559"
+height="1028"
+srcset="https://sebo-the-tramp.github.io/p/tiny-splat/sfm_example_hu9886606328979335903.png 480w, https://sebo-the-tramp.github.io/p/tiny-splat/sfm_example_hu15624097298807457446.png 1024w"
+loading="lazy"
+alt="Structure from motion from the Abu Dhabi F1 circuit"
+class="gallery-image"
+data-flex-grow="151"
+data-flex-basis="363px"
+>&lt;/p>
+&lt;p>Once this rough initialization has been created is time to go to next step.&lt;/p>
+&lt;h3 id="fitting-of-the-gaussians-more-technical">Fitting of the Gaussians (more technical)
+&lt;/h3>&lt;p>This part is the most mindblowing and difficult, so take a deep breath and let&amp;rsquo;s dive into cold waters.&lt;/p>
+&lt;p>Now that we have some images, the position and rotation of the cameras, where the image was taken and the priors point cloud, the real training begins.&lt;/p>
+&lt;p>It works very similar as in neural networks, where we have a set of parameters that needs to optimized using some gradient descent algorithm such as SGD. In this case all gaussians are initialized with the color and point in 3D space provided by the SfM algorithm. The scale and rotations are initialized as standard values such as 1.&lt;/p>
+&lt;p>During training we use these values to create and project the Gaussians onto the screen in a &lt;strong>differentiable manner&lt;/strong>. This will produce some strange images at first, by projecting all the gaussians to the screen that is orientated and positioned in the same way as the way the image was taken.&lt;/p>
+&lt;p>This way we have a reference of what the image should be at that position, and what we actually get from the &amp;ldquo;splatting&amp;rdquo; process. Now you might have understood already, we can calculate a &lt;strong>loss&lt;/strong> or &lt;strong>difference&lt;/strong> in similarity between the two images. There are 2 ways this difference is computed, and usually is a combination of different losses such as f1 loss, and SSIM loss, where $\lambda$ is a parameter used to balance the two accuracies.&lt;/p>
+&lt;p>$$
+(1 - \lambda) * \text{F1-loss(img1, img2)} + \lambda * \text{SSIM(img1, img2)}
+$$&lt;/p>
+&lt;p>In this way iterating over the many images in the dataset, batch by batch, we can optimize the parameters of the whole number of Gaussians by backpropagating the error back to each gaussian based on the (sum) of the error(s) from every pixel in each image.
+By optimizing these parameters, after some epochs, a clear image can be seen. A 2D example is displayed below. What you see is a video of the training where the Gaussians gets progressively refined and the final result is a sharp and crisp image.&lt;/p>
+&lt;div class="video-wrapper">
+&lt;video
+controls
+src="https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4"
+poster="./flower.jpeg"
+autoplay
+>
+&lt;p>
+Your browser doesn't support HTML5 video. Here is a
+&lt;a href="https://sebo-the-tramp.github.io/p/tiny-splat/video.mp4">link to the video&lt;/a> instead.
+&lt;/p>
+&lt;/video>
+&lt;/div>
+&lt;p>(&lt;em>Video courtesy of&lt;/em> &lt;a class="link" href="https://github.com/OutofAi/2D-Gaussian-Splatting" target="_blank" rel="noopener"
+>OutOfAI&lt;/a>)&lt;/p>
+&lt;h3 id="final-thoughts">Final thoughts
+&lt;/h3>&lt;p>This is a good introductory article to Gaussian splatting in a non-technical way. If you would like to dig deeper into the topics I am compiling a series of blog post where I show the implementation of Gaussian Splatting in 2D &lt;a class="link" href="https://sebo-the-tramp.github.io/04_notebook/tinysplat/" target="_blank" rel="noopener"
+>here&lt;/a> and in the future also in 3D.&lt;/p>
+&lt;p>I will leave another list of good material that helped me understand better the topic. Let me know if this was helpful, and especially how I can improve!&lt;/p></description></item><item><title>A BIG day in AI</title><link>https://sebo-the-tramp.github.io/p/big-day-inai/</link><pubDate>Fri, 16 Feb 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/big-day-inai/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/big-day-inai/cover.jpg" alt="Featured image of post A BIG day in AI" />&lt;h1 id="a-big-day-in-ai">A BIG day in AI
+&lt;/h1>&lt;p>I woke up this morning and as usual, the fatigue to go running was there. I did and ran my 6.5k in around 33 minutes, a very good time and a bit unexpected. Days like this are a sign of a good day. Then while having breakfast with my favorite news platform namely x.com, I started seeing so many posts about Gemini 1.5. Then suddenly a lot of videos and tweets about some text-video model. I was confused. I was excited. OpenAI&amp;rsquo;s name was there, it must be something big I thought.&lt;/p>
+&lt;p>When I started watching the first video I was shocked. I thought this was light years away. And there I was with my cereal bowl and the best AI-generated videos I have ever seen. I was very excited.
+At the same time I was also doubtful: &amp;ldquo;What am I studying for then&amp;rdquo;. Many things have been solved in AI already and this was a big step toward AGI, or as I would discover later to something else.&lt;/p>
+&lt;p>So, as much excited and doubtful as I was I went back to my desk and started studying Gradient Descent and learning rates. It was the right thing to do, but still, it was weird, that I felt I knew so little yet so much had been done.
+After the session, I went to lunch with my dear friends Alvaro and Hassan. We discussed about random stuff and passports.&lt;/p>
+&lt;p>I started reading about this new model and the more video I was watching the more strange I was feeling. I saw some guy on the web doing already 3d reconstruction with such videos. I am working on the same topic. I had to try so I did.&lt;/p>
+&lt;p>But in the meanwhile the highlight of the day and surely of the year, was that the GOAT Yann Le Cun was visiting the campus here today. When I found that out the previous day, I was thrilled. I always looked up to him as an example and took so much inspiration from his talks and works.
+It was a unique moment of deep knowledge, critical thinking and first-principle reasoning. His insights were great and gave me hope for what I was thinking in the morning. My generation has the hope to still make an impact in the research field and hopefully as well for society and the world.
+The questions were not many as the time was limited, and only a handful stood out to me as new and thought-provoking.&lt;/p>
+&lt;ol>
+&lt;li>My supervisor asked the question (that many are wondering) if academia can still compete with the industry in terms of research. The answer wasn&amp;rsquo;t quite clear, but the main point is that academia should challenge the industry with new ideas and most importantly propose new paradigms to solve the problems.&lt;/li>
+&lt;li>The second clever question worth noting is about what are the pillars that are most likely unchanging in the future of AI. The answer comprised 4 main points: backpropagation, the gradient, the minimization of an objective and the GPU. The first three are needed for the learning itself, the latest is the bottleneck of the learning process.&lt;/li>
+&lt;/ol>
+&lt;p>Another worth mentioning concept was the way he mentioned that the Transformer can answer any question, but it will always answer questions using the same amount of computation. This is how it is trained, and what it is supposed to do. But we don&amp;rsquo;t behave like this. If a question is harder we spend more computational power/time to come up with the correct answer. I was enthusiastic about this concept and I feel it is worth exploring more.
+These are some photos I was able to take with Yann Le Cun. The whole community was trying to get some photos and this is the best I could get.&lt;/p>
+&lt;p>![A photo all together]A sneak peek of the talk](IMG_5686.jpg)![A closer selfie with the GOAT]I hope to see him in the future as he is a great scientist and engineer as he calls himself.&lt;/p>
+&lt;p>All in all the day went pretty well, I was able to finish the 3D Gaussian reconstruction I started earlier, which led me to do a video and post it on YouTube. I got also some comments from the video of the campus tour of the university and I was happy to see that people are interested in what we are doing here.&lt;/p>
+&lt;p>This is the result:&lt;/p>
+&lt;div class="video-wrapper">
+&lt;iframe loading="lazy"
+src="https://www.youtube.com/embed/YBUqiYNm-Rs"
+allowfullscreen
+title="YouTube Video"
+>
+&lt;/iframe>
+&lt;/div>
+&lt;p>I might do a video about how I did it, and it is just simple software used one after the other. The peculiarity here is that the video was generated by an AI model, with emergent 3D capabilities. In other words, the 3D information was consistent throughout the video, and this is a big step toward the future of AI-generated videos.
+This was also proved by the good even if not perfect results I got from the 3D reconstruction.&lt;/p></description></item><item><title>ChatGPT</title><link>https://sebo-the-tramp.github.io/p/chatgpt/</link><pubDate>Wed, 25 Jan 2023 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/chatgpt/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/chatgpt/cover.jpg" alt="Featured image of post ChatGPT" />&lt;h1 id="what-is-chatgpt">What is &amp;ldquo;chatGPT&amp;rdquo;
+&lt;/h1>&lt;p>I don&amp;rsquo;t think chatGPT needs much of an introduction. It entered in our lives in late November and it is not going to go away for a long while now. It allows user to write some prompts and get a Natural Language model to answer in any language an to pretty much any question that he get posed.&lt;/p>
+&lt;p>In one way or another, most of us has come into contact with this &amp;ldquo;AI&amp;rdquo; Fanta scientific technology coming from the future. This is the trajectory we are going to follow for the next years. If there are 20 &amp;ldquo;Megatrends&amp;rdquo; well AI is going to lead them all.&lt;/p>
+&lt;p>But enough with speculations, I wanted to share my thoughts on the ethic of using such tools in every day life and where might the boundaries be, from using it to sharpen our knowledge or to fake being smart and pretend to be someone else.&lt;/p>
+&lt;p>Therefore I asked to the direct interested one. ChatGPT.&lt;/p>
+&lt;h2 id="the-input">The input
+&lt;/h2>&lt;p>&amp;ldquo;Is it ethical for a student to use chatGPT, in order to write faster motivational letters, and draft of emails in order to save time to concentrate more on other creative stuff, research and in general other more interesting stuff, given that is not counterproductive? Another example would be to write a motivational letter to enter a course in which he has a lot of interest but too many things to do for preparing a well written and professional text&amp;rdquo;&lt;/p>
+&lt;h2 id="the-answer">The answer
+&lt;/h2>&lt;p>It is ultimately up to the individual to decide whether using a tool like ChatGPT to write motivational letters or emails is ethical. However, it is important to consider the potential consequences of using such a tool. If the student&amp;rsquo;s use of ChatGPT results in a letter or email that is not their own work and does not accurately reflect their own thoughts and writing abilities, it could be considered plagiarism and may lead to disciplinary action. Additionally, if the student relies too heavily on ChatGPT and does not put in the effort to improve their own writing skills, they may not be adequately prepared for future academic or professional writing tasks. Ultimately, it&amp;rsquo;s best to use these tools as a tool to help you and not a replacement of your own efforts and skills.&lt;/p>
+&lt;h2 id="well">Well
+&lt;/h2>&lt;p>The answer is sharp and concise.&lt;/p>
+&lt;blockquote>
+&lt;p>If the student&amp;rsquo;s use of ChatGPT results in a letter or email that is not their own work and does not accurately reflect their own thoughts and writing abilities, it could be considered plagiarism and may lead to disciplinary action.&lt;/p>&lt;/blockquote>
+&lt;p>This short phrase, collects all my thoughts and showcase them in the most brilliant form. The reflection of our own abilities can really be seen in a text, but mostly our actions and things we did and that we take as ours.&lt;/p>
+&lt;h2 id="what-my-grandmother-thinks">What my grandmother thinks
+&lt;/h2>&lt;p>I have talked about this tool with my grandmother and as always when I talk about technology she feels far away from this witchcrafts. She said something interesting thought that can be taken as a starting point of some thoughts flow.
+She said and I quote:&lt;/p>
+&lt;blockquote>
+&lt;p>Everything great is done by people, just like you and if you want to do something great it has to come from yourself.&lt;/p>&lt;/blockquote>
+&lt;p>She is literally afraid of what technology can do even if she acknowledges what good has been brought by innovations. Having said that she doesn&amp;rsquo;t want to have to do with such things, she is too old to learn.&lt;/p>
+&lt;h2 id="finally-me">Finally me
+&lt;/h2>&lt;p>In the end I don&amp;rsquo;t have any answer in this world, yet(?), but something I can tell for sure. If the goal is to go from A to B, you might decide to get by bike, by foot or even by car. I think is ultimately up to us to choose the method in which we reach any goal. Surely it has to be consistent to our thoughts, and just because we have a car and therefore we can visit all the places in a year that will take a lifetime to do by foot, means we are better off. We just had a different journey, maybe it was even worst then the second person&amp;rsquo;s one. I hope you can see the analogy here.&lt;/p>
+&lt;p>The goal and the end of a person has to stay the same, with time this tool will allow to get there, with less risks, maybe even faster and with some different path. Ultimately is the goal we reach that fulfil ourselves and the journey we took there, definitely not the tools used.&lt;/p>
+&lt;p>If we can learn during the process, always be integrity with ourselves and never faking our abilities and accomplishments, it will become irrelevant which tools are we using and why.&lt;/p>
+&lt;h2 id="i-am-no-oracle">I am no Oracle
+&lt;/h2>&lt;p>This is how I came to think now, but I am very curios about other&amp;rsquo;s prospective and ideas. Let&amp;rsquo;s create a healthy discussion in the comments.&lt;/p></description></item><item><title>Realverse</title><link>https://sebo-the-tramp.github.io/p/realverse/</link><pubDate>Sat, 21 Jan 2023 14:31:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/realverse/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/realverse/cover.jpg" alt="Featured image of post Realverse" />&lt;h1 id="for-a-biscuit">For a biscuit
+&lt;/h1>&lt;p>It was late October and during a lesson of entrepreneurship and innovation the class moved outside to take a picture with the guest lecturer from the company &amp;ldquo;Dr. Schär&amp;rdquo;. He told us about his personal story and his business.&lt;/p>
+&lt;p>I was walking out the building and I casually met a person, who offered me a biscuit and we just started chatting about how the seminar went and why we were there. We spent more than an hour chatting around in the cold and under the rain, so I had to take the later bus. But it was worth it all the way.&lt;/p>
+&lt;h2 id="why-a-hackathon">Why a hackathon
+&lt;/h2>&lt;p>Julian and I kept in touch, but it wasn&amp;rsquo;t until the hackathon of November that we met in person and went off with two different teams. In that occasion I brought what seemed to be some cutting edge technology: The oculus quest 2. My team won the hackathon and both me and Julian were thrilled by the prospective opportunities that this technology promised.&lt;/p>
+&lt;p>A couple week after he told to me about a long forgotten project about videogames for the world war 1 in the Dolomites. I was over the top: the technology hyped me, the victory from the hackathon gave me so much confidence and the fact that a good bunch of money was involved was all I could see at that time. So I accepted, and the rest is history.&lt;/p>
+&lt;h2 id="history">History?
+&lt;/h2>&lt;p>We proposed the project to the enterpreneur and he was more than stunned to see what this technology would enable and the (at the time) limitless possibilities of this piece of hardware. Off we went, after a couple weeks we got an offer and without esitations and no experience whatsoever we took the plunge. We were able to get all the burocracy done with the help of some friends and we were ready to show the world what we were capable of and to start a multi-billion euro company.&lt;/p>
+&lt;h2 id="well-not-exactly">Well not exactly
+&lt;/h2>&lt;p>That&amp;rsquo;s all about the heroic and cool part. We didn&amp;rsquo;t have any experience, no computing hardware that was capable of doing anything near what we promised. And our skills were limited to what I and him learned in the University.&lt;/p>
+&lt;p>We had to learn everything and do all from scratch. And that&amp;rsquo;s exactly what we did. I got a new Gaming computer, set up everything, and in doing so I asked a friend for advice and he ended up joining us. We were now 3 undergraduates just trying to pull off a mission.&lt;/p>
+&lt;h2 id="the-plan">The plan
+&lt;/h2>&lt;p>I came back from Erasmus around August and the plan was to start from the 1st September and work until December, every day for 8 hours, 4 days a week. How long did we last?
+Less than a song.&lt;/p>
+&lt;p>We started strong but in the end I felt overwehlmed by the work as I put everything from my health, people to my wellbeing aside. I wanted this to be the most important thing in the next 6 months. I didn&amp;rsquo;t study German, and eventually I failed on it. I didn&amp;rsquo;t persue anything else than just working tirelessly.
+I was heading directly towards the &lt;em>valley of burnout&lt;/em>. It was around October, nearly a year later, when most of us had resized the time allowed for this work that I found myself obsessing over something I shouldn&amp;rsquo;t have. I am used to work many hours a day. But when it is for something I really care and I see my team working as me as well it is when I am pushed to my best and even further. In such a way I do grow.&lt;/p>
+&lt;p>It was not about the team: we were having good interactions, I learned to work in a group project as I did not during my university years, I learned new skills, learned how to manage a big project and retarget the plan once in a while. It was indeed an experience that improved me, but I didn&amp;rsquo;t see myself growing in the right direction. And this insight was not clear from the beginning. I couldn&amp;rsquo;t see anything that made me grow as a person.&lt;/p>
+&lt;p>&lt;strong>It was clear that my head was clashing against my actions, actions made towards a project that I long searched and thrived for.&lt;/strong>&lt;/p>
+&lt;h2 id="the-pain">The pain
+&lt;/h2>&lt;p>The pain arrived from more sides. I was literally sorrounded. I started lifting weights and going to the gym regularly every day since mid October, that has been my saving. The pain was still there but I learned to manage the physical one. The worst was indeed the mental pain.
+It was for me way harder to manage, because I was not used to it and didn&amp;rsquo;t know how to handle it properly.&lt;/p>
+&lt;p>So, as always when I don&amp;rsquo;t know what to do, I seek advice from books, the masters of time. I started reading, I started journaling, I started going around with a backpack filled with weights in order to feel other pain, the more manageable one.&lt;/p>
+&lt;p>November came and I remember it as the thoughest month of the year 2022. From the first day to the very last. But if I look back now, it was the most insightful and it teached me the most.
+I was also going through some kind of relationship problems and that drained much of my mental energy. I started overthinking and I can feel the effects of it still now.&lt;/p>
+&lt;h2 id="how-does-this-all-relate">How does this all relate?
+&lt;/h2>&lt;p>Well the insights from that month, really stood strong and gave me direction on how to come out this lonely, heavy and fearful state of mind. Because everything is in our mind, if you want it or not.
+Two facts really stood by me:&lt;/p>
+&lt;ol>
+&lt;li>Start planning your life from the end&lt;/li>
+&lt;li>How much would you do to have it if you did not&lt;/li>
+&lt;/ol>
+&lt;p>The first resonates with me because I finally felt, and I was able to admit to myself, that I was going down the wrong path. There is nothing wrong with making such videogames and this career path. But at the end of my life I just didn&amp;rsquo;t want to be remembered as such figure.&lt;/p>
+&lt;p>The second instead, taught me some hard lessons about work, love and life. If I didn&amp;rsquo;t have this position, I wouldn&amp;rsquo;t have done much to get into it. I was finally able to explain the situation. Also it taught me about love and what I had lost, it pushed me to try to get it back if I ever will. Because this shows how much I would have been doing, if I didn&amp;rsquo;t have it.&lt;/p>
+&lt;h2 id="to-be-continued">To be continued&amp;hellip;
+&lt;/h2>&lt;p>If you would like to find out how it did end, well you might have to wait some time, because we missed the deadline and we are still working on it.&lt;/p>
+&lt;p>&lt;strong>STAY TUNED&lt;/strong>&lt;/p>
+&lt;p>&lt;em>P.S. let me know if you liked this personal stories and what would you like to develop more&lt;/em>&lt;/p></description></item><item><title>The frog in the pot</title><link>https://sebo-the-tramp.github.io/p/the-frog-in-the-pot/</link><pubDate>Sun, 15 Jan 2023 14:36:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/the-frog-in-the-pot/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/the-frog-in-the-pot/cover.JPG" alt="Featured image of post The frog in the pot" />&lt;h1 id="the-boiling-frog-an-analogy-for-climate-change">The Boiling Frog: An Analogy for Climate Change
+&lt;/h1>&lt;p>The story of the boiling frog is a well-known analogy for the gradual and insidious nature of change. The tale goes that if a frog is placed in a pot of boiling water, it will immediately jump out to safety. However, if a frog is placed in a pot of cool water that is slowly heated, it will not notice the change and eventually be boiled to death.&lt;/p>
+&lt;h2 id="now">Now
+&lt;/h2>&lt;p>This analogy can be applied to the current situation of climate change. The Earth&amp;rsquo;s temperature is slowly and steadily rising, and many people are not taking notice or taking action. Just like the frog in the pot, we are becoming accustomed to the gradual changes and not realizing the danger we are in.&lt;/p>
+&lt;h2 id="how">How
+&lt;/h2>&lt;p>Climate change is caused by human activity, primarily the burning of fossil fuels and deforestation. These actions release greenhouse gases into the atmosphere, trapping heat and raising the Earth&amp;rsquo;s temperature. The effects of climate change are already being felt around the world, from rising sea levels and more intense storms, to droughts and wildfires.&lt;/p>
+&lt;h2 id="denial">Denial
+&lt;/h2>&lt;p>Despite the overwhelming scientific evidence of the reality and seriousness of climate change, there is still a significant portion of the population that denies or downplays the issue. This lack of action and denial can have dire consequences for future generations.&lt;/p>
+&lt;h2 id="so">So
+&lt;/h2>&lt;p>The question remains, will we, as a society, take the necessary steps to reduce our carbon footprint and slow down climate change before it&amp;rsquo;s too late? Or will we, like the frog in the pot, be boiled to death by our own inaction?&lt;/p>
+&lt;h2 id="then">Then?
+&lt;/h2>&lt;p>Only time will tell, but one thing is clear: We must take immediate and decisive action to address climate change before it&amp;rsquo;s too late. The future of humanity depends on it.&lt;/p></description></item><item><title>My First Post</title><link>https://sebo-the-tramp.github.io/p/hello-world/</link><pubDate>Thu, 20 Oct 2022 20:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/hello-world/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/hello-world/cover.jpg" alt="Featured image of post My First Post" />&lt;h1 id="the-motto-of-my-life">The motto of my life
+&lt;/h1>&lt;p>This is a great question that I came across today. I thought it wouldn&amp;rsquo;t be too hard to come up with one, since I have so many thoughts and I am creative. That, sadly, didn&amp;rsquo;t happen. I turned then to a quote by Elon Musk, just to close and send the form I was filling. It was &amp;ldquo;Solve climate change or die trying&amp;rdquo;. I soon realized that it didn&amp;rsquo;t feel like mine but I sent the quote anyway because I had spent too much time on this. I need to think of a motto for my future.&lt;/p>
+&lt;h2 id="tragedy">Tragedy
+&lt;/h2>&lt;p>For me that I always had, and still have mentors, people that really inspire me, is difficult to go off the known path and continue on the path less traveled. I know it is a trivial thing to do if I want to accomplish anything. But here I am struggling on a simple and &amp;ldquo;to be&amp;rdquo; catchy phrase.&lt;/p>
+&lt;h2 id="what-now">What now
+&lt;/h2>&lt;p>Now I think I am still dealing with som past experiences, and just recently got over them and accepted. I am finding a new path to follow for my life. A small light is appearing at the end of the tunnel. This has been a dark age of mine, and still is, but the fact that I reached the bottom, or so it seems, gives me hope.
+I&amp;rsquo;ve fallen into the hopelessness hole and I was dizzily falling. One day I grasped on a though, actually a book. The essentialism. It gave me hope and a strong direction to follow.
+Here I am putting my future actions into words. The most difficult and dangling part.&lt;/p>
+&lt;h2 id="getting-back-to-the-point">Getting back to the point
+&lt;/h2>&lt;p>In this moment I am taking the wheel of my life again, and I can think clearly only for a couple weeks now. This gives me hope in finding a new motto for my life. An original and unique one. One that resembles my optimism for the future, the hope in humanity, but that still keeps me humble in my infinitesimal littleness, but with the willingness to change the world for the better&lt;/p>
+&lt;h2 id="the-next-step">The next step
+&lt;/h2>&lt;p>Is only one step forward. In the unknown. But is one and it must be steady.&lt;/p></description></item></channel></rss>
