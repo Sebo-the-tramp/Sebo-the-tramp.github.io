@@ -49,7 +49,15 @@ links:
 
 
 
-Welcome to my website! I am Sebastian Cavada, a dedicated Computer Science graduate from the Free University Bolzano, where I earned my Bachelor's degree with distinction. My bachelor's thesis, supervised by Prof. Oswald Lanz, explored topics in 3D pose estimation from video streams. Currently, I am pursuing a Master of Research in Computer Vision at MBZUAI in Abu Dhabi, specializing in 3D Gaussian splatting under the guidance of Prof. Ian Reid. My academic journey includes an enriching Erasmus experience in Cognitive Science at the University of Osnabrück, where I focused on Machine Learning and Computer Vision. I am passionate about advancing computer vision technologies and applying them to solve real-world problems. 🚀
+Welcome to my website! I am Sebastian Cavada, a dedicated Master Student in Computer Vision at MBZUAI in Abu Dhabi, specializing in 3D foundation models (Mast3r, Dust3r) and 3D Gaussian splatting under the guidance of Prof. Ian Reid.
+
+*👀 I will graduate in a few months and I am looking for PhD positions in Europe about 3D understanding and reconstruction.👀*
+
+I graduated from the Free University Bolzano, where I earned my Bachelor's degree with distinction. My bachelor's thesis, supervised by Prof. Oswald Lanz, explored topics in 3D pose estimation from video streams. 
+
+My academic journey includes an enriching Erasmus experience in Cognitive Science at the University of Osnabrück, where I focused on Machine Learning and Computer Vision. 
+
+I am passionate about advancing computer vision technologies and applying them to solve real-world problems. 🚀
 
 <!-- ### Hackathons and Competitions:
 I thrive in collaborative environments, which is why I frequently participate in hackathons. One highlight was HackZurich, Europe’s largest hackathon, where my team developed “Out of the Blue,” a tool transforming 2D blueprints into detailed 4D models. This project not only showcased our technical skills but also emphasized our ability to innovate under pressure. Another significant event was the Pioneers 4.0 Hackathon in the UAE, where my team created an optimization solution for tea production, winning first place and securing an internship with LIPTON tea. 🌍✨
