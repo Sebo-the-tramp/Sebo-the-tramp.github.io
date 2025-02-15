@@ -47,8 +47,6 @@ links:
 
 ---
 
-
-
 Welcome to my website! I am Sebastian Cavada, a dedicated Master Student in Computer Vision at MBZUAI in Abu Dhabi, specializing in 3D foundation models (Mast3r, Dust3r) and 3D Gaussian splatting under the guidance of Prof. Ian Reid.
 
 *👀 I will graduate in a few months and I am looking for PhD positions in Europe about 3D understanding and reconstruction.👀*
