@@ -2,9 +2,9 @@
 title: "What about the future"
 description: Describing the future 
 slug: our-future
-date: 2022-10-20T20:21:13+02:00
+date: 2025-02-14T20:21:13+02:00
 image: cover.jpg
-draft: true
+draft: false
 categories:
     - Thoughts
 tags:
