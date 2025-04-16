@@ -21,7 +21,7 @@ links:
     alt: youtube link to my personal channel
   - title: Curriculum
     description: Click on the link to download my curriculum
-    website: ./cv_2024.pdf
+    website: ./Sebastian_Cavada_CV_2025.pdf
     image: ./big.gif
     alt: my photo 
   - title: Project iRefill

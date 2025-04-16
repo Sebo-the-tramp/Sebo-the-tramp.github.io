@@ -16,7 +16,7 @@ comments: true
 
 # Post-thesis in Budapest
 
-I’m sipping hot coffee in a cafe in Budapest, only one after I defended my thesis. Thinking about my future, how to (not) answer my ex’s congratulations, planning the most amazing summer and how cute the barista is.
+I’m sipping hot coffee in Budapest, only one day after I defended my thesis. Thinking about my future, how (not) to answer my ex’s congratulations, planning the most amazing summer and how cute the barista is.
 
 Post hangover, all these thoughts hits me like a confused storm. I didn’t drink much yesterday and yet I feel like shit. I was on a good trajectory of not drinking anymore, then my life got fucked up and here I am enjoying life, or at least what people mean with enjoying. I’ll probably get another coffee to wake up a little more.
 In this physically place that is neither my home nor my place of study I allow things to wonder, give permission to not know and being lost. I usually know how to go from there, but this time I only know that I’ll figure it out. Once again. I guess I am not looking for an answer right now but I’m trying to figure out bunch of things.
