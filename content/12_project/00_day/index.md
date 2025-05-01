@@ -1,7 +1,7 @@
 ---
 title: "Day 0"
 description: Preparing for my 12 days experiment
-slug: about life
+slug: day_00 
 date: 2025-04-22T10:08:13+02:00
 image: day_00.png
 draft: false
@@ -56,6 +56,4 @@ But what about you —
 When was the last time you set out to do something that made you feel truly alive?
 {{< /quote >}}
 
-
-
-## → Watch the video again with this in mind. [YouTube link]
+## → Watch the video again with this in mind. (youtube link)[https://www.youtube.com/watch?v=ac51PvPBw3g&ab_channel=SebastianCavada]

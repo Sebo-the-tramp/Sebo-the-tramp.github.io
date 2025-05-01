@@ -1,5 +1,5 @@
 ---
-title: "HackZurich 2022"
+title: "HackZurich 2022 -  (🏆 WINNER)"
 description: Hackathon in Zurich, the biggest hackathon in Europe
 slug: HackZurich-2022
 date: 2022-09-18T20:21:13+02:00
@@ -7,7 +7,7 @@ image: cover.jpg
 draft: false
     
 tags:
-    - Startup
+    - Win
 
 comments: false
 

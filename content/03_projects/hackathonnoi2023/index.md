@@ -1,5 +1,5 @@
 ---
-title: "Hackathon NOI - November 2022"
+title: "Hackathon NOI - November 2022 - (🏆 WINNER)"
 description: Hackathon hosted by the NOI techpark, team texwiller
 slug: hackathonnoi-2023
 date: 2022-11-11T20:21:13+02:00
@@ -7,7 +7,7 @@ image: cover.jpg
 draft: false
     
 tags:
-    - Startup
+    - Win
 
 comments: false
 

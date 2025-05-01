@@ -1,5 +1,5 @@
 ---
-title: "My first hackathon in the UAE - Pioneers 4.0"
+title: "My first hackathon in the UAE - Pioneers 4.0 - (🏆 WINNER)"
 description: Vibes check and optimization problem solving
 slug: edge-hackathon
 date: 2024-03-04T10:21:13+02:00
@@ -9,7 +9,7 @@ categories:
     - Projects
     - People
 tags:
-    - Life
+    - Win
 author: Sebastian Cavada
 
 comments: true
