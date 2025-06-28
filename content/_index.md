@@ -74,8 +74,10 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News 🎉
 
+- 1 Paper accepted at [ICCV 2025](https://iccv.thecvf.com/) Honolulu, Hawaii - **CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers ** - [PAPER LINK](https://arxiv.org/abs/2412.13810)
 - 10th April 2025 Graduated from MBZUAI (Master)
-- 1 Paper accepted at [CVPR 2025](https://cvpr.thecvf.com/) Nashville, TN - Contributed as native speaker for a multimodal and multilingual LLM - [PAPER LINK](https://openreview.net/forum?id=bPIs9K8gBQ&referrer=%5BAuthor%20Console%5D(%2Fgroup%3Fid%3Dthecvf.com%2FCVPR%2F2025%2FConference%2FAuthors%23your-submissions)) 
+- 1 Paper accepted at [CVPR 2025](https://cvpr.thecvf.com/) Nashville, TN - **All Languages Matter: Evaluating LMMs on Culturally Diverse 100 Languages
+**, Contributed as native speaker for a multimodal and multilingual LLM - [PAPER LINK](https://arxiv.org/abs/2411.16508) 
 - 1 Paper accepted at [HEALTHINFO 2024](https://www.iaria.org/conferences2024/HEALTHINFO24.html) Nice, France - 🏆 Best Paper Award 🎉 - [PAPER LINK](https://sebo-the-tramp.github.io/02_publications/complexity_iaria/)
 - 23rd March 2023 Graduated from the Free University of Bolzano (Bachelor)
 
