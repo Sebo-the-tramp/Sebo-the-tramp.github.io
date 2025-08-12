@@ -2,7 +2,7 @@
 description: Does complexity Pay Off?
 slug: complexity_iaria
 date: 2024-09-17T20:21:13+02:00
-image: image.png
+image: complexity.png
 draft: false
     
 tags:
