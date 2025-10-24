@@ -5,7 +5,7 @@ description: Just me, a simple human being wondering around the universe, trying
 comments: false
 readingTime: false
 license: false
-draft: true
+draft: false
 
 menu:
     main:

@@ -4,7 +4,7 @@ description: Just a casual deep conversation
 slug: debugging_soul
 date: 2025-03-19T10:21:13+02:00
 image: cover.webp
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:

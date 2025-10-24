@@ -4,7 +4,7 @@ description: Just a reflection in Budapest
 slug: post_budapest
 date: 2025-04-11T10:21:13+02:00
 image: cover.png
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:
