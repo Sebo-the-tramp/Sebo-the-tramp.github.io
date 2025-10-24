@@ -90,6 +90,8 @@ An employee getting fired might finally find the courage to start the new ventur
 
 --- 
 
+#### The original post:
+
 {{< quote author="Dario Cavada" source="https://www.linkedin.com/feed/update/urn:li:activity:7387040204890456066/">}}
 Ogni giorno leggiamo di nuovi licenziamenti,
 anche in aziende che sembravano intoccabili.
