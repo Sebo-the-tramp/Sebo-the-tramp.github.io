@@ -18,25 +18,25 @@ links:
 ---
 
 {{< quote author="Dario Cavada" source="https://www.linkedin.com/feed/update/urn:li:activity:7387040204890456066/">}}
-Ogni giorno leggiamo di nuovi licenziamenti,
-anche in aziende che sembravano intoccabili.
-E ogni volta mi viene la stessa domanda:
+Every day we read about new layoffs,
+even in companies that once seemed untouchable.
+And every time, I find myself asking the same question:
 
-👉 Stiamo insegnando alle AI a fare il nostro lavoro?
+👉 Are we teaching AI to do our jobs?
 
-Migliaia di sviluppatori addestrano agenti intelligenti
-a risolvere problemi, scrivere codice, ottimizzare processi… in completa autonomia.
+Thousands of developers are training intelligent agents
+to solve problems, write code, optimize processes… completely on their own.
 
-Il paradosso?
-È come programmare il proprio licenziamento,
-riga dopo riga di codice.
+The paradox?
+It’s like programming your own dismissal,
+line after line of code.
 
-Un auto-licenziamento collettivo,
-forse non voluto, ma inesorabile a meno che non iniziamo a chiederci:
-che ruolo vogliamo avere quando le macchine sapranno fare tutto ciò che sappiamo noi?
+A collective self-layoff,
+perhaps unintended, but inevitable — unless we start asking ourselves:
+what role do we want to play when machines can do everything we can?
 {{< /quote >}}
 
-This is the quote as he wrote on the post itself, at the end you will find the translation from chatGPT as well. In substance he's arguing that we (programmers) are "programming" our own lay of from AI. This because of today's news about Meta's layoff. Few friends commented that as very pessimistic and arguably it is. I wanted to reply something below his post but I felt few lines could not be in my favour so here it is, in between papers, I am keen to write this piece which is quite dear to me.
+This is the quote translated by ChatGPT fn the post itself, at the end you will find the original one. TL;DR, my dad is arguing that we (programmers) are "programming" our own lay of from AI. This because of today's news about Meta's layoff. Few friends commented that as very pessimistic and arguably it is. I wanted to reply something below his post but I felt few lines could not be in my favour so here it is, in between papers, I am keen to write this piece which is quite dear to me.
 
 But where do I even start? I will go in order of the ideas that I wanted to reply
 
@@ -85,4 +85,26 @@ And concluding I want to underline that I see infinite ways of creating a bright
 
 {{< quote author="Sebastian Cavada" source="Reply n.3 I never posted">}}
 An employee getting fired might finally find the courage to start the new venture that will revolutionize the world.
+{{< /quote >}}
+
+
+--- 
+
+{{< quote author="Dario Cavada" source="https://www.linkedin.com/feed/update/urn:li:activity:7387040204890456066/">}}
+Ogni giorno leggiamo di nuovi licenziamenti,
+anche in aziende che sembravano intoccabili.
+E ogni volta mi viene la stessa domanda:
+
+👉 Stiamo insegnando alle AI a fare il nostro lavoro?
+
+Migliaia di sviluppatori addestrano agenti intelligenti
+a risolvere problemi, scrivere codice, ottimizzare processi… in completa autonomia.
+
+Il paradosso?
+È come programmare il proprio licenziamento,
+riga dopo riga di codice.
+
+Un auto-licenziamento collettivo,
+forse non voluto, ma inesorabile a meno che non iniziamo a chiederci:
+che ruolo vogliamo avere quando le macchine sapranno fare tutto ciò che sappiamo noi?
 {{< /quote >}}
