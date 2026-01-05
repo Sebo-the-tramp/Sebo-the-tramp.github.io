@@ -4,7 +4,7 @@ description: Start with Wellbeing
 slug: wellround
 date: 2024-10-14T10:21:13+02:00
 image: meditation.jpeg
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:
