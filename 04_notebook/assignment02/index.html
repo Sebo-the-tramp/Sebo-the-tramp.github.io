@@ -1,0 +1,936 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="The following tutorial and notebook is about: Implementation of LoG blob detection algorithm to detect flowers in the given flowers.png picture. This part also includes comparison between the method implemented from scratch and the one provided by OpenCV library. Implementation of LoG with normalized scale variations. A multiscale Laplacian of Gaussian(LoG) filtering approach to pulmonary nodule detection from whole-lung CT scans Performance of additional experiments with different threshold values for both algorithms."><title>Blob detection with Laplacian of Gaussian</title>
+<link rel=canonical href=https://sebo-the-tramp.github.io/04_notebook/assignment02/><link rel=stylesheet href=/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css><meta property='og:title' content="Blob detection with Laplacian of Gaussian"><meta property='og:description' content="The following tutorial and notebook is about: Implementation of LoG blob detection algorithm to detect flowers in the given flowers.png picture. This part also includes comparison between the method implemented from scratch and the one provided by OpenCV library. Implementation of LoG with normalized scale variations. A multiscale Laplacian of Gaussian(LoG) filtering approach to pulmonary nodule detection from whole-lung CT scans Performance of additional experiments with different threshold values for both algorithms."><meta property='og:url' content='https://sebo-the-tramp.github.io/04_notebook/assignment02/'><meta property='og:site_name' content='Sebastian Cavada'><meta property='og:type' content='article'><meta property='article:section' content='04_notebook'><meta property='article:published_time' content='2023-10-10T14:31:13+02:00'><meta property='article:modified_time' content='2023-10-10T14:31:13+02:00'><meta name=twitter:title content="Blob detection with Laplacian of Gaussian"><meta name=twitter:description content="The following tutorial and notebook is about: Implementation of LoG blob detection algorithm to detect flowers in the given flowers.png picture. This part also includes comparison between the method implemented from scratch and the one provided by OpenCV library. Implementation of LoG with normalized scale variations. A multiscale Laplacian of Gaussian(LoG) filtering approach to pulmonary nodule detection from whole-lung CT scans Performance of additional experiments with different threshold values for both algorithms."><link rel=icon href=/logo.svg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/big_hu17844177664158792560.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🚀</span></figure><div class=site-meta><h1 class=site-name><a href=/>Sebastian Cavada</a></h1><h2 class=site-description>If you are not building stuff, don't stop people who are!</h2></div></header><ol class=menu-social><li><a href=https://github.com/Sebo-the-tramp target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://github.com/Sebo-the-tramp target=_blank title=Linkedin rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 00-4 0"/></svg></a></li><li><a href=https://mobile.twitter.com/_cavada target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li><li><a href=https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw target=_blank title=Youtube rel=me><svg class="icon icon-tabler icon-tabler-brand-youtube" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>Whoami</span></a></li><li><a href=/post/><svg class="icon icon-tabler icon-tabler-book" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 019 0 9 9 0 019 0"/><path d="M3 6a9 9 0 019 0 9 9 0 019 0"/><line x1="3" y1="6" x2="3" y2="19"/><line x1="12" y1="6" x2="12" y2="19"/><line x1="21" y1="6" x2="21" y2="19"/></svg>
+<span>Blog</span></a></li><li><a href=/02_publications/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-certificate-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 15m-3 0a3 3 0 106 0 3 3 0 10-6 0"/><path d="M10 7h4"/><path d="M10 18v4l2-1 2 1v-4"/><path d="M10 19H8a2 2 0 01-2-2V5a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2h-2"/></svg>
+<span>Publications</span></a></li><li><a href=/03_projects/><svg class="icon icon-tabler icon-tabler-circle-square" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9.5" cy="9.5" r="6.5"/><rect x="10" y="10" width="11" height="11" rx="2"/></svg>
+<span>Projects</span></a></li><li class=current><a href=/04_notebook/><svg class="icon icon-tabler icon-tabler-school" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 9 12 5 2 9l10 4 10-4v6"/><path d="M6 10.6V16a6 3 0 0012 0v-5.4"/></svg>
+<span>Notebook</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#implementation-of-unnormalized-laplacian-of-gaussian-filter-for-blob-detection>Implementation of unnormalized Laplacian of Gaussian filter for blob detection</a><ol><li><a href=#test-with-light-blobs>Test with light blobs</a></li></ol></li><li><a href=#implementation-of-normalized-laplacian-of-gaussian-filter-for-blob-detection>Implementation of normalized Laplacian of Gaussian filter for blob detection</a></li><li><a href=#additional-experiments-to-analyse-the-impact-of-threshold-on-resulting-blob-detection>Additional experiments to analyse the impact of threshold on resulting blob detection</a></li><li><a href=#other-tests>Other tests</a></li></ol></nav></div></section></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/04_notebook/assignment02/>Blob detection with Laplacian of Gaussian</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Oct 10, 2023</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>19 minute read</time></div></footer></div></header><section class=article-content><p>The following tutorial and notebook is about:</p><ol><li>Implementation of <strong>LoG blob detection algorithm</strong> to detect flowers in the given flowers.png picture. This part also includes comparison between the method implemented from scratch and the one provided by OpenCV library.</li><li>Implementation of LoG with <strong>normalized scale variations</strong>. <a class=link href=https://arxiv.org/pdf/1907.08328.pdf target=_blank rel=noopener>A multiscale Laplacian of Gaussian(LoG) filtering approach to pulmonary nodule detection from
+whole-lung CT scans</a></li><li>Performance of additional experiments with different <strong>threshold values</strong> for both algorithms.</li></ol><h2 id=implementation-of-unnormalized-laplacian-of-gaussian-filter-for-blob-detection>Implementation of unnormalized Laplacian of Gaussian filter for blob detection</h2><p><strong>The idea:</strong> Convolve an image with multiple different-scale &ldquo;blob&rdquo; filters and look for the zero-crossings in order to find edges in the specific scale space.</p><p>Laplacian is a second-order derivative scale invariant filter. Unlike first-order filters, Laplacian detects the edges at zero crossings i.e. where the value changes from negative to positive and vice-versa. To reduce the noise effect, image is first smoothed with a Gaussian filter and then we find the zero crossings using Laplacian. This two-step process is called the Laplacian of Gaussian (LoG) operation.</p><p>$$
+LoG(x,y) = -\frac{1}{\pi \sigma^4} \left [1 - \frac{x^2 + y^2}{2 \sigma^2} \right] \exp^{- \frac{x^2 + y^2}{2 \sigma^2}}
+$$</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=ch>#!pip install scikit-image</span>
+</span></span></code></pre></td></tr></table></div></div><p>To have an idea about what kind of output we should expect from implemented algorith we decided to firs run the LoG function available in the scikit-image library.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>matplotlib.pyplot</span> <span class=k>as</span> <span class=nn>plt</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>skimage</span> <span class=kn>import</span> <span class=n>io</span><span class=p>,</span> <span class=n>color</span><span class=p>,</span> <span class=n>feature</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>scipy</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>draw_circles</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>blobs</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;CMRmap&#39;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># this is the basic function that will be used to draw detected blobs </span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>fig</span><span class=p>,</span> <span class=n>ax</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>ax</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=n>cmap</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>blob</span> <span class=ow>in</span> <span class=n>blobs</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>y</span><span class=p>,</span> <span class=n>x</span><span class=p>,</span> <span class=n>radius</span> <span class=o>=</span> <span class=n>blob</span>
+</span></span><span class=line><span class=cl>        <span class=n>c</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>Circle</span><span class=p>((</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>),</span> <span class=n>radius</span><span class=o>*</span><span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>),</span> <span class=n>color</span><span class=o>=</span><span class=s1>&#39;white&#39;</span><span class=p>,</span> <span class=n>linewidth</span><span class=o>=</span><span class=mi>2</span><span class=p>,</span> <span class=n>fill</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>ax</span><span class=o>.</span><span class=n>add_patch</span><span class=p>(</span><span class=n>c</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>    
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># drawing multiple outputs in one graph</span>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>draw_circles_multi</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>coordinates</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;CMRmap&#39;</span><span class=p>,</span> <span class=n>titles</span> <span class=o>=</span> <span class=p>[]):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>fig</span><span class=p>,</span> <span class=n>ax</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>coordinates</span><span class=p>),</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>20</span><span class=p>,</span> <span class=mi>20</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span><span class=p>,</span> <span class=n>coordinate</span> <span class=ow>in</span> <span class=nb>enumerate</span><span class=p>(</span><span class=n>coordinates</span><span class=p>):</span>        
+</span></span><span class=line><span class=cl>        <span class=n>ax</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=n>cmap</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>blob</span> <span class=ow>in</span> <span class=n>coordinate</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>y</span><span class=p>,</span> <span class=n>x</span><span class=p>,</span> <span class=n>radius</span> <span class=o>=</span> <span class=n>blob</span>
+</span></span><span class=line><span class=cl>            <span class=n>c</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>Circle</span><span class=p>((</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>),</span> <span class=n>radius</span><span class=o>*</span><span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>),</span> <span class=n>color</span><span class=o>=</span><span class=s1>&#39;white&#39;</span><span class=p>,</span> <span class=n>linewidth</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>fill</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>add_patch</span><span class=p>(</span><span class=n>c</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=n>titles</span><span class=p>[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>            <span class=k>except</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>    
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>draw_circles_multi_images</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>coordinates</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;CMRmap&#39;</span><span class=p>,</span> <span class=n>titles</span> <span class=o>=</span> <span class=p>[]):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>fig</span><span class=p>,</span> <span class=n>ax</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>coordinates</span><span class=p>),</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>20</span><span class=p>,</span> <span class=mi>20</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span><span class=p>,</span> <span class=n>coordinate</span> <span class=ow>in</span> <span class=nb>enumerate</span><span class=p>(</span><span class=n>coordinates</span><span class=p>):</span>        
+</span></span><span class=line><span class=cl>        <span class=n>ax</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>img</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>cmap</span><span class=o>=</span><span class=n>cmap</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>blob</span> <span class=ow>in</span> <span class=n>coordinate</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>y</span><span class=p>,</span> <span class=n>x</span><span class=p>,</span> <span class=n>r</span> <span class=o>=</span> <span class=n>blob</span>
+</span></span><span class=line><span class=cl>            <span class=n>c</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>Circle</span><span class=p>((</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>),</span> <span class=n>r</span><span class=o>*</span><span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>),</span> <span class=n>color</span><span class=o>=</span><span class=s1>&#39;red&#39;</span><span class=p>,</span> <span class=n>linewidth</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>fill</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>add_patch</span><span class=p>(</span><span class=n>c</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=k>try</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=n>titles</span><span class=p>[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>            <span class=k>except</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=k>pass</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>    
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># Read image</span>
+</span></span><span class=line><span class=cl><span class=n>img</span> <span class=o>=</span> <span class=n>io</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=s1>&#39;../images/flowers.png&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Convert to grayscale due to the fact that this algorithm is oriented onto having 1 parameter that would correspond to color (either pixel intensity or hue intencity)</span>
+</span></span><span class=line><span class=cl><span class=n>img_gray</span> <span class=o>=</span> <span class=n>color</span><span class=o>.</span><span class=n>rgb2gray</span><span class=p>(</span><span class=n>img</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#io.imshow(img_gray)</span>
+</span></span><span class=line><span class=cl><span class=n>res_skimage</span> <span class=o>=</span> <span class=n>feature</span><span class=o>.</span><span class=n>blob_log</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=n>min_sigma</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>max_sigma</span><span class=o>=</span><span class=mi>9</span><span class=p>,</span> <span class=n>num_sigma</span><span class=o>=</span><span class=mi>50</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>.1</span><span class=p>,</span> <span class=n>overlap</span><span class=o>=</span><span class=mf>.5</span><span class=p>,</span> <span class=n>log_scale</span><span class=o>=</span><span class=kc>False</span><span class=p>,</span> <span class=n>exclude_border</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Draw the results</span>
+</span></span><span class=line><span class=cl><span class=n>draw_circles</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>res_skimage</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_9_0.png width=763 height=818 srcset="/04_notebook/assignment02/task_2_files/task_2_9_0_hu12538613713061874612.png 480w, /04_notebook/assignment02/task_2_files/task_2_9_0_hu12358935751217582439.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=93 data-flex-basis=223px></p><p>This image will be our starting point. It can be noted that light blobs on dark background were detected. What our experimentation will focus instead is on a slightly different approch. Our algorithm should detect dark blobs on light background.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># definitions of second derivate Gaussian and Laplacians</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>gaussian_2d</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>,</span> <span class=n>A</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>x0</span><span class=o>=</span><span class=mi>0</span><span class=p>,</span> <span class=n>y0</span><span class=o>=</span><span class=mi>0</span><span class=p>,</span> <span class=n>sigma</span><span class=o>=</span><span class=mi>1</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>A</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>exp</span><span class=p>(</span><span class=o>-</span><span class=p>(</span> <span class=p>(</span><span class=n>x</span> <span class=o>-</span> <span class=n>x0</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span> <span class=o>/</span> <span class=p>(</span><span class=mi>2</span> <span class=o>*</span> <span class=n>sigma</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>y</span> <span class=o>-</span> <span class=n>y0</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span> <span class=o>/</span> <span class=p>(</span><span class=mi>2</span> <span class=o>*</span> <span class=n>sigma</span><span class=o>**</span><span class=mi>2</span><span class=p>)))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>laplacian_2d</span><span class=p>(</span><span class=n>sigma</span><span class=o>=</span><span class=mi>1</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>n</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>ceil</span><span class=p>(</span><span class=n>sigma</span><span class=o>*</span><span class=mi>6</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>y</span><span class=p>,</span><span class=n>x</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>ogrid</span><span class=p>[</span><span class=o>-</span><span class=n>n</span><span class=o>//</span><span class=mi>2</span><span class=p>:</span><span class=n>n</span><span class=o>//</span><span class=mi>2</span><span class=o>+</span><span class=mi>1</span><span class=p>,</span><span class=o>-</span><span class=n>n</span><span class=o>//</span><span class=mi>2</span><span class=p>:</span><span class=n>n</span><span class=o>//</span><span class=mi>2</span><span class=o>+</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=o>-</span><span class=p>(</span><span class=mi>1</span><span class=o>/</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>pi</span><span class=o>*</span><span class=n>sigma</span><span class=o>**</span><span class=mi>4</span><span class=p>))</span> <span class=o>*</span> <span class=p>(</span><span class=mi>1</span><span class=o>-</span> <span class=p>((</span><span class=n>x</span><span class=o>**</span><span class=mi>2</span> <span class=o>+</span> <span class=n>y</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span> <span class=o>/</span> <span class=p>(</span><span class=mi>2</span><span class=o>*</span><span class=n>sigma</span><span class=o>**</span><span class=mi>2</span><span class=p>)))</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>exp</span><span class=p>(</span><span class=o>-</span><span class=p>(</span><span class=n>x</span><span class=o>**</span><span class=mi>2</span><span class=o>+</span><span class=n>y</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span><span class=o>/</span><span class=p>(</span><span class=mi>2</span><span class=o>*</span><span class=n>sigma</span><span class=o>**</span><span class=mi>2</span><span class=p>))</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>log_image</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=n>n_kernels</span><span class=o>=</span><span class=mi>9</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>0.2</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=s2>&#34;&#34;&#34;
+</span></span></span><span class=line><span class=cl><span class=s2>    :param img: input image HAS TO BE GRAYSCALE (or single channel)    
+</span></span></span><span class=line><span class=cl><span class=s2>    :param min_sigma: minimum sigma value
+</span></span></span><span class=line><span class=cl><span class=s2>    :param max_sigma: maximum sigma value
+</span></span></span><span class=line><span class=cl><span class=s2>    :param steps: number of steps
+</span></span></span><span class=line><span class=cl><span class=s2>    :return: log image        
+</span></span></span><span class=line><span class=cl><span class=s2>    &#34;&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>k</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>sigma</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>kernels</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>log_images</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=n>sigma_list</span> <span class=o>=</span> <span class=p>[]</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># threshold the log images</span>
+</span></span><span class=line><span class=cl>    <span class=n>log_images_thresholded</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=n>n_kernels</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>sigma_curr</span> <span class=o>=</span> <span class=n>sigma</span> <span class=o>*</span> <span class=n>k</span><span class=o>**</span><span class=n>i</span>
+</span></span><span class=line><span class=cl>        <span class=n>sigma_list</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>sigma_curr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            
+</span></span><span class=line><span class=cl>        <span class=n>kernel_log</span> <span class=o>=</span> <span class=n>laplacian_2d</span><span class=p>(</span><span class=n>sigma</span><span class=o>=</span><span class=n>sigma_curr</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>kernels</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>kernel_log</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>log_image</span> <span class=o>=</span> <span class=n>scipy</span><span class=o>.</span><span class=n>signal</span><span class=o>.</span><span class=n>convolve2d</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=n>kernel_log</span><span class=p>,</span> <span class=n>mode</span><span class=o>=</span><span class=s1>&#39;same&#39;</span><span class=p>,</span> <span class=n>boundary</span><span class=o>=</span><span class=s1>&#39;symm&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>log_images</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>log_image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>log_image_thresholded</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>zeros_like</span><span class=p>(</span><span class=n>log_images</span><span class=p>[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>        <span class=n>log_image_thresholded</span><span class=p>[</span><span class=n>log_images</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>&gt;=</span> <span class=nb>max</span><span class=p>(</span><span class=n>log_images</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>flatten</span><span class=p>())</span><span class=o>-</span><span class=p>(</span><span class=n>threshold</span> <span class=o>*</span> <span class=nb>max</span><span class=p>(</span><span class=n>log_images</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>flatten</span><span class=p>()))]</span> <span class=o>=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>        <span class=n>log_images_thresholded</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>log_image_thresholded</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>log_images_np</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>log_images</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>log_images_np</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>log_images_thresholded</span><span class=p>),</span> <span class=n>sigma_list</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>print_steps</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=n>log_images_thresholded</span><span class=p>,</span> <span class=n>sigma_list</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>n_kernels</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>shape</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>)[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># plot the kernels</span>
+</span></span><span class=line><span class=cl>    <span class=n>fig</span><span class=p>,</span> <span class=n>axs</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>n_kernels</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>20</span><span class=p>,</span> <span class=mi>20</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n_kernels</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>kernels</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;gray&#39;</span><span class=p>)</span>        
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;kernel σ </span><span class=si>{:.5f}</span><span class=s1>&#39;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>sigma_list</span><span class=p>[</span><span class=n>i</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># plot the log images</span>
+</span></span><span class=line><span class=cl>    <span class=n>fig</span><span class=p>,</span> <span class=n>axs</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>n_kernels</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>20</span><span class=p>,</span> <span class=mi>20</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>n_kernels</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;gray&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#axs[i].set_title(&#39;σ {:.2f} max{:.2f} min{:.2f}&#39;.format(sigma_list[i], max(log_images_np[i].flatten()), min(log_images_np[i].flatten())))</span>
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;kernel σ </span><span class=si>{:.5f}</span><span class=s1>&#39;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>sigma_list</span><span class=p>[</span><span class=n>i</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=p>(</span><span class=n>log_images_thresholded</span> <span class=ow>is</span> <span class=ow>not</span> <span class=kc>None</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>fig</span><span class=p>,</span> <span class=n>axs</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>n_kernels</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>20</span><span class=p>,</span> <span class=mi>20</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>shape</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>)[</span><span class=mi>0</span><span class=p>]):</span>        
+</span></span><span class=line><span class=cl>            <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>log_images_thresholded</span><span class=p>[</span><span class=n>i</span><span class=p>],</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;gray&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1>#axs[i].set_title(&#39;σ {:.2f} max{:.2f} min{:.2f}&#39;.format(sigma_list[i],  max(log_images_thresholded.flatten()), min(log_images_thresholded.flatten())))</span>
+</span></span><span class=line><span class=cl>            <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;kernel σ </span><span class=si>{:.5f}</span><span class=s1>&#39;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>sigma_list</span><span class=p>[</span><span class=n>i</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>fig</span><span class=p>,</span> <span class=n>axs</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>np</span><span class=o>.</span><span class=n>shape</span><span class=p>(</span><span class=n>log_images_thresholded</span><span class=p>)[</span><span class=mi>0</span><span class=p>],</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>20</span><span class=p>,</span> <span class=mi>20</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>shape</span><span class=p>(</span><span class=n>log_images_thresholded</span><span class=p>)[</span><span class=mi>0</span><span class=p>]):</span>
+</span></span><span class=line><span class=cl>            <span class=n>img_test</span> <span class=o>=</span> <span class=n>img</span><span class=o>.</span><span class=n>copy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>            <span class=n>img_test</span><span class=p>[</span><span class=n>log_images_thresholded</span><span class=p>[</span><span class=n>i</span><span class=p>]</span> <span class=o>==</span> <span class=mi>1</span><span class=p>]</span> <span class=o>=</span> <span class=mi>255</span>
+</span></span><span class=line><span class=cl>            <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>img_test</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1>#axs[i].set_title(&#39;σ {:.2f} max{:.2f} min{:.2f}&#39;.format(sigma_list[i],  max(log_images_thresholded.flatten()), min(log_images_thresholded.flatten())))</span>
+</span></span><span class=line><span class=cl>            <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;kernel σ </span><span class=si>{:.5f}</span><span class=s1>&#39;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>sigma_list</span><span class=p>[</span><span class=n>i</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p>Here you can see all of the steps that are being taken in order to further detect the &ldquo;blobs&rdquo;. First row displays the impact of each sigma value on the kernel and its values - those are kernels used for convolution. Second row shows the imact of the convolution operation on the original image with regard to sigma. Last line shows how thresholding impacts the number of blobs that are &ldquo;activated&rdquo; after LoG filter. More on that in the last part of this task.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>log_images_np</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=n>log_images_thresholded</span><span class=p>,</span> <span class=n>sigma_list</span> <span class=o>=</span> <span class=n>log_image</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>0.4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>print_steps</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=n>log_images_thresholded</span><span class=p>,</span> <span class=n>sigma_list</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_15_0.png width=1588 height=230 srcset="/04_notebook/assignment02/task_2_files/task_2_15_0_hu10910738366337839328.png 480w, /04_notebook/assignment02/task_2_files/task_2_15_0_hu13683650211156363141.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=690 data-flex-basis=1657px></p><p><img src=/04_notebook/assignment02/task_2_files/task_2_15_1.png width=1606 height=245 srcset="/04_notebook/assignment02/task_2_files/task_2_15_1_hu5571143196185758992.png 480w, /04_notebook/assignment02/task_2_files/task_2_15_1_hu13715524527617277438.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=655 data-flex-basis=1573px></p><p><img src=/04_notebook/assignment02/task_2_files/task_2_15_2.png width=1606 height=245 srcset="/04_notebook/assignment02/task_2_files/task_2_15_2_hu6816370427958940372.png 480w, /04_notebook/assignment02/task_2_files/task_2_15_2_hu3323655389374441991.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=655 data-flex-basis=1573px></p><p><img src=/04_notebook/assignment02/task_2_files/task_2_15_3.png width=1606 height=245 srcset="/04_notebook/assignment02/task_2_files/task_2_15_3_hu1190339972612119691.png 480w, /04_notebook/assignment02/task_2_files/task_2_15_3_hu6942392209017018736.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=655 data-flex-basis=1573px></p><p>Here it is an example of how the circles or blobs are chosen. First we divide the image into chunks, with different size according to the sigma value. Then for every chunck, a maximum point is selected and it becomes the center of the blob for that particular value of sigma. We highlighted the patches where there is maximum activation in the image for the sigma of value 8. It is noticeable even if a bit hard to see the different shades of white and gray. The most white part is in the middle of the blob usually and it is the exact point chose as the center of the circle.</p><p>Also in order to achieve maximum accuracy we needed to pad the image to divide the image without any pixel being left out. We can do that and we pad with the black color as it doesn&rsquo;t affect the choice of the maximum point in the blob.
+Without this small tweaking, some blobs near the edge vere left out.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>size</span> <span class=o>=</span> <span class=mi>45</span>
+</span></span><span class=line><span class=cl><span class=n>padd_x</span> <span class=o>=</span> <span class=n>img</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>%</span><span class=n>size</span>
+</span></span><span class=line><span class=cl><span class=n>padd_y</span> <span class=o>=</span> <span class=n>img</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>%</span><span class=n>size</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>index</span> <span class=o>=</span> <span class=mi>7</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>log_image_np</span> <span class=o>=</span> <span class=n>log_images_np</span><span class=p>[</span><span class=n>index</span><span class=p>]</span><span class=o>.</span><span class=n>copy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># convert log image to rgb</span>
+</span></span><span class=line><span class=cl><span class=n>log_image_np</span> <span class=o>=</span> <span class=p>(</span><span class=n>log_image_np</span> <span class=o>-</span> <span class=nb>min</span><span class=p>(</span><span class=n>log_image_np</span><span class=o>.</span><span class=n>flatten</span><span class=p>()))</span>
+</span></span><span class=line><span class=cl><span class=n>log_image_np_1</span> <span class=o>=</span> <span class=p>(</span><span class=n>log_image_np</span> <span class=o>/</span> <span class=nb>max</span><span class=p>(</span><span class=n>log_image_np</span><span class=o>.</span><span class=n>flatten</span><span class=p>()))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>log_image_rgb</span> <span class=o>=</span> <span class=n>color</span><span class=o>.</span><span class=n>gray2rgb</span><span class=p>(</span><span class=n>log_image_np_1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>img_padded</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>pad</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=p>((</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_y</span><span class=p>),(</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_x</span><span class=p>),(</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>)),</span> <span class=s1>&#39;constant&#39;</span><span class=p>,</span> <span class=n>constant_values</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>log_image_thresholded_padded</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>pad</span><span class=p>(</span><span class=n>log_images_thresholded</span><span class=p>,</span> <span class=p>((</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),(</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_y</span><span class=p>),(</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_x</span><span class=p>)),</span> <span class=s1>&#39;constant&#39;</span><span class=p>,</span> <span class=n>constant_values</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>log_image_rgb</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>pad</span><span class=p>(</span><span class=n>log_image_rgb</span><span class=p>,</span> <span class=p>((</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_y</span><span class=p>),(</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_x</span><span class=p>),</span> <span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>)),</span> <span class=s1>&#39;constant&#39;</span><span class=p>,</span> <span class=n>constant_values</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>log_image_rgb</span> <span class=o>=</span> <span class=n>log_image_rgb</span> <span class=o>*</span> <span class=mi>255</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>threshold</span> <span class=o>=</span> <span class=mi>200</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>fig</span><span class=p>,</span> <span class=n>axs</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>img_padded</span><span class=p>)</span><span class=o>//</span><span class=n>size</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>img_padded</span><span class=p>)</span><span class=o>//</span><span class=n>size</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>10</span><span class=p>,</span> <span class=mi>10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>img_padded</span><span class=p>)</span><span class=o>//</span><span class=n>size</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>img_padded</span><span class=p>)</span><span class=o>//</span><span class=n>size</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>img_test</span> <span class=o>=</span> <span class=n>img_padded</span><span class=o>.</span><span class=n>copy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>img_test</span><span class=p>[</span><span class=n>log_image_rgb</span> <span class=o>&gt;</span> <span class=n>threshold</span><span class=p>]</span> <span class=o>=</span> <span class=n>log_image_rgb</span><span class=p>[</span><span class=n>log_image_rgb</span> <span class=o>&gt;</span> <span class=n>threshold</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>img_test</span><span class=p>[</span><span class=n>i</span><span class=o>*</span><span class=n>size</span><span class=p>:(</span><span class=n>i</span><span class=o>+</span><span class=mi>1</span><span class=p>)</span><span class=o>*</span><span class=n>size</span><span class=p>,</span><span class=n>j</span><span class=o>*</span><span class=n>size</span><span class=p>:(</span><span class=n>j</span><span class=o>+</span><span class=mi>1</span><span class=p>)</span><span class=o>*</span><span class=n>size</span><span class=p>,:])</span>
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>]</span><span class=o>.</span><span class=n>set_xticks</span><span class=p>([])</span>
+</span></span><span class=line><span class=cl>        <span class=n>axs</span><span class=p>[</span><span class=n>i</span><span class=p>,</span><span class=n>j</span><span class=p>]</span><span class=o>.</span><span class=n>set_yticks</span><span class=p>([])</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_17_0.png width=794 height=790 srcset="/04_notebook/assignment02/task_2_files/task_2_17_0_hu2376082844289450172.png 480w, /04_notebook/assignment02/task_2_files/task_2_17_0_hu6731653277127593251.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=100 data-flex-basis=241px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>detect_blob_v2</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>,</span> <span class=n>k</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>),</span> <span class=n>sigma</span> <span class=o>=</span> <span class=mi>1</span><span class=p>,</span> <span class=n>percentage_high</span> <span class=o>=</span> <span class=mf>0.5</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>co_ordinates</span> <span class=o>=</span> <span class=p>[]</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>co_ordinates</span> <span class=o>=</span> <span class=p>[[]</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>log_images_np</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>])]</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>z</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>log_images_np</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>size</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>ceil</span><span class=p>(</span><span class=n>sigma</span> <span class=o>*</span> <span class=n>k</span><span class=o>**</span><span class=n>z</span><span class=p>))</span> <span class=o>*</span> <span class=mi>5</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>padd_y</span> <span class=o>=</span> <span class=n>img</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>%</span><span class=n>size</span>
+</span></span><span class=line><span class=cl>        <span class=n>padd_x</span> <span class=o>=</span> <span class=n>img</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>%</span><span class=n>size</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>log_images_np_padded</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>pad</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>[</span><span class=n>z</span><span class=p>],</span> <span class=p>((</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_x</span><span class=p>),(</span><span class=mi>0</span><span class=p>,</span><span class=n>padd_y</span><span class=p>)),</span> <span class=n>constant_values</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span>                
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=p>(</span><span class=n>h</span><span class=p>,</span><span class=n>w</span><span class=p>)</span> <span class=o>=</span> <span class=n>log_images_np_padded</span><span class=o>.</span><span class=n>shape</span>                          
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=n>threshold</span> <span class=o>=</span> <span class=nb>max</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>[</span><span class=n>z</span><span class=p>]</span><span class=o>.</span><span class=n>flatten</span><span class=p>())</span><span class=o>-</span><span class=p>(</span><span class=n>percentage_high</span> <span class=o>*</span> <span class=nb>max</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>[</span><span class=n>z</span><span class=p>]</span><span class=o>.</span><span class=n>flatten</span><span class=p>()))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>),</span><span class=nb>int</span><span class=p>(</span><span class=n>h</span><span class=o>-</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>),</span> <span class=n>size</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=nb>int</span><span class=p>(</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>),</span> <span class=nb>int</span><span class=p>(</span><span class=n>w</span><span class=o>-</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>),</span> <span class=n>size</span><span class=p>):</span>                
+</span></span><span class=line><span class=cl>                
+</span></span><span class=line><span class=cl>                <span class=n>slice_img</span> <span class=o>=</span> <span class=n>log_images_np</span><span class=p>[</span><span class=n>z</span><span class=p>,</span><span class=n>i</span><span class=o>-</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>:</span><span class=n>i</span><span class=o>+</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span><span class=n>j</span><span class=o>-</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>:</span><span class=n>j</span><span class=o>+</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>]</span>                                
+</span></span><span class=line><span class=cl>                <span class=n>x_max</span><span class=p>,</span> <span class=n>y_max</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>unravel_index</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>argmax</span><span class=p>(</span><span class=n>slice_img</span><span class=p>),</span> <span class=n>slice_img</span><span class=o>.</span><span class=n>shape</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                
+</span></span><span class=line><span class=cl>                <span class=k>if</span> <span class=n>slice_img</span><span class=p>[</span><span class=n>x_max</span><span class=p>,</span> <span class=n>y_max</span><span class=p>]</span> <span class=o>&gt;</span> <span class=n>threshold</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                    <span class=n>co_ordinates</span><span class=p>[</span><span class=n>z</span><span class=p>]</span><span class=o>.</span><span class=n>append</span><span class=p>((</span><span class=n>i</span><span class=o>+</span><span class=n>x_max</span><span class=o>-</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span><span class=n>j</span><span class=o>+</span><span class=n>y_max</span><span class=o>-</span><span class=n>size</span><span class=o>//</span><span class=mi>2</span><span class=p>,(</span><span class=n>k</span><span class=o>**</span><span class=n>z</span><span class=p>)</span><span class=o>*</span><span class=n>sigma</span><span class=p>))</span>                         
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>co_ordinates</span>
+</span></span></code></pre></td></tr></table></div></div><p>Here we are printing all the circles found for every sigma values. The smaller the sigma, the smaller the blobs that were found in the image.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>coordinates</span> <span class=o>=</span> <span class=n>detect_blob_v2</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>titles</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;sigma </span><span class=si>{:.2f}</span><span class=s2>&#34;</span><span class=o>.</span><span class=n>format</span><span class=p>(</span><span class=n>x</span><span class=p>)</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>sigma_list</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>draw_circles_multi</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>coordinates</span><span class=p>,</span> <span class=n>titles</span><span class=o>=</span><span class=n>titles</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_20_0.png width=1606 height=245 srcset="/04_notebook/assignment02/task_2_files/task_2_20_0_hu11942197654530601238.png 480w, /04_notebook/assignment02/task_2_files/task_2_20_0_hu12188973249883017129.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=655 data-flex-basis=1573px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>flatten_array_coordinates</span><span class=p>(</span><span class=n>coordinates</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>[</span><span class=n>item</span> <span class=k>for</span> <span class=n>scale</span> <span class=ow>in</span> <span class=n>coordinates</span> <span class=k>for</span> <span class=n>item</span> <span class=ow>in</span> <span class=n>scale</span><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>coordinates_1d</span> <span class=o>=</span> <span class=n>flatten_array_coordinates</span><span class=p>(</span><span class=n>coordinates</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>draw_circles</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>coordinates_1d</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_22_0.png width=763 height=818 srcset="/04_notebook/assignment02/task_2_files/task_2_22_0_hu5582174115219330701.png 480w, /04_notebook/assignment02/task_2_files/task_2_22_0_hu13585395516870649944.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=93 data-flex-basis=223px></p><p>We implemented a very simple non-maximum-suppression, which is accurate and at the same time very fast. The idea is that we start from the bigger blobs and we give more importance to them. If smaller blobs are found inside the bigger blobs, they are eliminated from the blobs list. If the blobs are too close, less than the square root of the square of the radius of the two circles than the second one is also eliminated. The list is shrinked dynamically so that the computational cost is always less than O(n^2). On an average case scenario where nearly half of the blobs are eliminated the computational cost is closer to O(n*logn)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>non_max_suppression</span><span class=p>(</span><span class=n>coordinates</span><span class=p>,</span> <span class=n>threshold</span> <span class=o>=</span> <span class=mi>1</span><span class=p>):</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;before&#34;</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>coordinates</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>curr_coordinates</span> <span class=o>=</span> <span class=n>coordinates</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>tmp_lenght</span> <span class=o>=</span> <span class=nb>len</span><span class=p>(</span><span class=n>curr_coordinates</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>while</span><span class=p>(</span><span class=n>i</span> <span class=o>&lt;</span> <span class=n>tmp_lenght</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>j</span> <span class=o>=</span> <span class=n>i</span><span class=o>+</span><span class=mi>1</span>
+</span></span><span class=line><span class=cl>        <span class=k>while</span> <span class=n>j</span> <span class=o>&lt;</span> <span class=n>tmp_lenght</span><span class=p>:</span>            
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>x1</span><span class=p>,</span> <span class=n>y1</span><span class=p>,</span> <span class=n>r1</span> <span class=o>=</span> <span class=n>curr_coordinates</span><span class=p>[</span><span class=n>i</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>            <span class=n>x2</span><span class=p>,</span> <span class=n>y2</span><span class=p>,</span> <span class=n>r2</span> <span class=o>=</span> <span class=n>curr_coordinates</span><span class=p>[</span><span class=n>j</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>            
+</span></span><span class=line><span class=cl>            <span class=n>distance</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>((</span><span class=n>x1</span><span class=o>-</span><span class=n>x2</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span> <span class=o>+</span> <span class=p>(</span><span class=n>y1</span><span class=o>-</span><span class=n>y2</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>distance</span> <span class=o>&lt;</span> <span class=n>threshold</span> <span class=o>*</span> <span class=p>(</span><span class=n>r1</span><span class=o>+</span><span class=n>r2</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>                <span class=n>curr_coordinates</span><span class=o>.</span><span class=n>pop</span><span class=p>(</span><span class=n>j</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>tmp_lenght</span> <span class=o>-=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>                <span class=n>j</span> <span class=o>-=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>j</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>i</span> <span class=o>+=</span> <span class=mi>1</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=s2>&#34;after&#34;</span><span class=p>,</span> <span class=nb>len</span><span class=p>(</span><span class=n>curr_coordinates</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>curr_coordinates</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># performing non max suppression in order to minimize blob overlapping in the image</span>
+</span></span><span class=line><span class=cl><span class=n>res</span> <span class=o>=</span> <span class=n>non_max_suppression</span><span class=p>(</span><span class=n>coordinates_1d</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>before 996
+after 395
+</code></pre><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>res_skimage</span> <span class=o>=</span> <span class=n>feature</span><span class=o>.</span><span class=n>blob_log</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=n>min_sigma</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>max_sigma</span><span class=o>=</span><span class=mi>8</span><span class=p>,</span> <span class=n>num_sigma</span><span class=o>=</span><span class=mi>50</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>.1</span><span class=p>,</span> <span class=n>overlap</span><span class=o>=</span><span class=mf>.5</span><span class=p>,</span> <span class=n>log_scale</span><span class=o>=</span><span class=kc>False</span><span class=p>,</span> <span class=n>exclude_border</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>draw_circles_multi</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=nb>list</span><span class=p>([</span><span class=n>res</span><span class=p>,</span> <span class=n>res_skimage</span><span class=p>]))</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_26_0.png width=1606 height=814 srcset="/04_notebook/assignment02/task_2_files/task_2_26_0_hu17656145175886441911.png 480w, /04_notebook/assignment02/task_2_files/task_2_26_0_hu576913391384944574.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=197 data-flex-basis=473px></p><p>As we can see when comparing the algorithm from scratch (left) to the pre-build one from skimage (right), we can see that hand built algorithm actually has less outliers and targets the values that correspond to the flower centers, while the pre-build one has a lot more of small, let&rsquo;s say &rsquo;noisy&rsquo; circles that don&rsquo;t contribute to the blobs, which gives the feeling that it targets highlights rather that the dark spots. As per the outliers in the from-scratch algorithm, they can be removed with the help of &ldquo;normalization&rdquo;. We will talk about it in the next section.</p><h3 id=test-with-light-blobs>Test with light blobs</h3><p>We also tested and compared our algorithm with the famous implementation on skimage. There are some difference. But overall we can say that it approximates it with high degree of accuracy. First of all the implementation identifies light blobs on dark background while our implementation works the opposite way. Therefore for a good comparation we had to invert our initial function and compare in this way.
+We can see that they have many mor smaller point, than we have. That is due to the fact that they might have allowed more threshold in the first place. Secondly in their approach we can see less bigger circles or blobs. We are not sure about why, but a possible explanation is because they did normalize (again this far we haven&rsquo;t normalized the LoG yet) and also because of the non-maximum-suppression algorithm that they implemented which might be a bit more sophisticated.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1>#res_skimage = feature.blob_log(img_gray, min_sigma=1, max_sigma=8, num_sigma=50, threshold=.1, overlap=.5, log_scale=False, exclude_border=False)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1>#draw_circles_multi(img, list([res, res_skimage]))</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=implementation-of-normalized-laplacian-of-gaussian-filter-for-blob-detection>Implementation of normalized Laplacian of Gaussian filter for blob detection</h2><p><strong>The idea:</strong> Increase effectiveness of the filtering of the original image with scale-normalized LoG kernels of continuously changing scale parameter.</p><p>Normalization is necessary to eliminate the effect of decreasing spatial derivatives with the increase of scale and is defined as the negated multiplication of LoG by σ2.</p><p>$$
+L_{norm}(X, σ)
+$$
+is the scale-space representation obtained for image I(X) by convolving it with normalized Gaussian kernel at continuous set of scales</p><p>$$
+\nabla^2_{norm} L(X, \sigma) = \nabla^2_{norm} G(X, \sigma) * I(X)
+$$</p><p>$$
+\nabla^2_{norm} G(X, \sigma) = \sigma^2\nabla^2G(X, \sigma)
+$$</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>cv2</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>input_image</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=s2>&#34;../images/flowers.png&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>image_rgb</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>input_image</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2RGB</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>image_gray</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>input_image</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2GRAY</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># since given image is in .png format it was decided to use cv2 to read it, due to the fact that it</span>
+</span></span><span class=line><span class=cl><span class=c1># removes 4th bin (alpha) that is taken into account if using skimage, for instance</span>
+</span></span><span class=line><span class=cl><span class=c1># step with transforming image to rgb was made due to the fact that by default cv2 reads images in bgr - it was important to put colo channels back in place</span>
+</span></span><span class=line><span class=cl><span class=c1># for LoG it is better to work with 1 parameter that would correspond to color (pixel intensity or color intensity), due to the fact that it explicitly works with intensity change and min-max response, that&#39;s why original image was converted into gray scale for experiments</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>f</span><span class=p>,</span> <span class=p>(</span><span class=n>ax1</span><span class=p>,</span> <span class=n>ax2</span><span class=p>)</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax1</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>image_rgb</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax1</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s2>&#34;Original image&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax2</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>image_gray</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;gray&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax2</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s2>&#34;Original image in grayscale&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_33_0.png width=553 height=311 srcset="/04_notebook/assignment02/task_2_files/task_2_33_0_hu7278658144077259102.png 480w, /04_notebook/assignment02/task_2_files/task_2_33_0_hu5011854131771583824.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=177 data-flex-basis=426px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>create_normalized_log_kernel</span><span class=p>(</span><span class=n>sigma</span> <span class=o>=</span> <span class=mf>1.0</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Step 1: Creating normalized LoG filter/kernel template</span>
+</span></span><span class=line><span class=cl>    <span class=c1># calculating LoG kernel - mix of gaussian smoothing and laplacian second derivative to obtain kernel for convolving with the image in one step</span>
+</span></span><span class=line><span class=cl>    <span class=c1># main difference between this approach and the one without normalization is additional multiplier - np.square(sigma)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># It  is necessary to eliminate the effect of decreasing spatial derivatives with the increase of scale (sigma)</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernel_size</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>ceil</span><span class=p>(</span><span class=n>sigma</span> <span class=o>*</span> <span class=mi>6</span><span class=p>)</span><span class=o>.</span><span class=n>astype</span><span class=p>(</span><span class=nb>int</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>kernel_size</span> <span class=o>%</span> <span class=mi>2</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>kernel_size</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernel</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>fromfunction</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=k>lambda</span> <span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>:</span> <span class=p>(</span><span class=mi>1</span> <span class=o>/</span> <span class=p>(</span><span class=mi>2</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span> <span class=o>*</span> <span class=n>sigma</span> <span class=o>**</span> <span class=mi>4</span><span class=p>))</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>                    <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>([</span>
+</span></span><span class=line><span class=cl>                     <span class=o>-</span> <span class=p>(</span><span class=mf>2.0</span> <span class=o>*</span> <span class=n>sigma</span> <span class=o>**</span> <span class=mi>2</span><span class=p>)</span> <span class=o>+</span> <span class=p>(</span><span class=n>x</span> <span class=o>-</span> <span class=p>(</span><span class=n>kernel_size</span><span class=o>//</span><span class=mi>2</span><span class=p>))</span> <span class=o>**</span> <span class=mi>2</span> <span class=o>+</span> <span class=p>(</span><span class=n>y</span> <span class=o>-</span> <span class=p>(</span><span class=n>kernel_size</span><span class=o>//</span><span class=mi>2</span><span class=p>))</span> <span class=o>**</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>                    <span class=p>])</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl>                    <span class=n>np</span><span class=o>.</span><span class=n>exp</span><span class=p>(</span><span class=o>-</span><span class=p>(((</span><span class=n>x</span> <span class=o>-</span> <span class=p>(</span><span class=n>kernel_size</span><span class=o>//</span><span class=mi>2</span><span class=p>))</span> <span class=o>**</span> <span class=mi>2</span> <span class=o>+</span> <span class=p>(</span><span class=n>y</span> <span class=o>-</span> <span class=p>(</span><span class=n>kernel_size</span><span class=o>//</span><span class=mi>2</span><span class=p>))</span> <span class=o>**</span> <span class=mi>2</span><span class=p>))</span> <span class=o>/</span> <span class=p>(</span><span class=mf>2.0</span> <span class=o>*</span> <span class=n>sigma</span> <span class=o>**</span> <span class=mi>2</span><span class=p>)),</span>
+</span></span><span class=line><span class=cl>        <span class=p>(</span><span class=n>kernel_size</span><span class=p>,</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>(</span><span class=n>kernel</span><span class=p>)</span><span class=o>.</span><span class=n>squeeze</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>convolve_image_with_log</span><span class=p>(</span><span class=n>image</span><span class=p>,</span> <span class=n>conv_number</span> <span class=o>=</span> <span class=mi>6</span><span class=p>,</span> <span class=n>sigma</span> <span class=o>=</span> <span class=mf>1.0</span><span class=p>,</span> <span class=n>step_size</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Step 2: Performing convolution</span>
+</span></span><span class=line><span class=cl>    <span class=c1># to be able to capture blos of different sizes it is important to perform convolutions with multiple filters, because the value of maximum response will never reach its peak, until the diameter of blob perfectly matches the object of interest</span>
+</span></span><span class=line><span class=cl>    <span class=c1># for this reason it is important to try multiple kernels - to enhance blob detection</span>
+</span></span><span class=line><span class=cl>    <span class=c1># in this case to try to approach reasonable set of values I decided to go with 6 convolutions</span>
+</span></span><span class=line><span class=cl>    <span class=n>convolved_image</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>zeros_like</span><span class=p>(</span><span class=n>image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>convolved_images</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=c1># based on the selected reference paper I picked step size of np.sqrt(2) and update function for sigma - sigma_i+1 = sigma_i * k</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=n>conv_number</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=nb>filter</span> <span class=o>=</span> <span class=n>create_normalized_log_kernel</span><span class=p>(</span><span class=n>sigma</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1># convolving image with generated kernel</span>
+</span></span><span class=line><span class=cl>        <span class=n>convolved_image</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>filter2D</span><span class=p>(</span><span class=n>image</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=nb>filter</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>convolved_image</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>square</span><span class=p>(</span><span class=n>convolved_image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>convolved_images</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>convolved_image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>sigma</span> <span class=o>=</span> <span class=n>step_size</span> <span class=o>*</span> <span class=n>sigma</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>([</span><span class=n>i</span> <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>convolved_images</span><span class=p>])</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># plot the log images</span>
+</span></span><span class=line><span class=cl><span class=c1># plot the kernels</span>
+</span></span><span class=line><span class=cl><span class=n>kernels</span><span class=p>,</span> <span class=n>sigmas</span> <span class=o>=</span> <span class=p>[],</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=n>sigma</span> <span class=o>=</span> <span class=mf>1.0</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>7</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernel</span> <span class=o>=</span> <span class=n>create_normalized_log_kernel</span><span class=p>(</span><span class=n>sigma</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernels</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>kernel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>sigmas</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>sigma</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>sigma</span> <span class=o>=</span> <span class=mf>1.27</span> <span class=o>*</span> <span class=n>sigma</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>log_images</span> <span class=o>=</span> <span class=n>convolve_image_with_log</span><span class=p>(</span><span class=n>image_gray</span><span class=p>,</span> <span class=n>conv_number</span><span class=o>=</span><span class=mi>7</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>print_steps</span><span class=p>(</span><span class=n>log_images</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=kc>None</span><span class=p>,</span> <span class=n>sigmas</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_36_0.png width=1588 height=255 srcset="/04_notebook/assignment02/task_2_files/task_2_36_0_hu5662947976457595947.png 480w, /04_notebook/assignment02/task_2_files/task_2_36_0_hu2536955494392264858.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=622 data-flex-basis=1494px></p><p><img src=/04_notebook/assignment02/task_2_files/task_2_36_1.png width=1606 height=271 srcset="/04_notebook/assignment02/task_2_files/task_2_36_1_hu11281789570093863633.png 480w, /04_notebook/assignment02/task_2_files/task_2_36_1_hu6647463825147216506.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=592 data-flex-basis=1422px></p><p>Here you can see how each sigma scaled kernel looks like and how it impacts the image. When comparing to the non-normalized kernel we can see that this kernel is indeed more sensitive to intensity change as it has activation in more areas than in previous example.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>normalized_log_gray</span><span class=p>(</span><span class=n>image</span><span class=p>,</span> <span class=n>sigma</span> <span class=o>=</span> <span class=mf>1.0</span><span class=p>,</span> <span class=n>threshold</span> <span class=o>=</span> <span class=mf>0.03</span><span class=p>,</span> <span class=n>conv_number</span> <span class=o>=</span> <span class=mi>6</span><span class=p>,</span> <span class=n>step_size</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>sqrt</span><span class=p>(</span><span class=mi>2</span><span class=p>)):</span>
+</span></span><span class=line><span class=cl>    <span class=n>image</span> <span class=o>=</span> <span class=n>image</span><span class=o>/</span><span class=mf>255.0</span>
+</span></span><span class=line><span class=cl>    <span class=n>convolved_images</span> <span class=o>=</span> <span class=n>convolve_image_with_log</span><span class=p>(</span><span class=n>image</span><span class=p>,</span> <span class=n>conv_number</span><span class=p>,</span> <span class=n>sigma</span><span class=p>,</span> <span class=n>step_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Step 3: Finding local maximas This step finds local maxima in N-dimensional (conv_number) search space with respect to both location and scale.</span>
+</span></span><span class=line><span class=cl>    <span class=n>height</span><span class=p>,</span> <span class=n>width</span> <span class=o>=</span> <span class=n>image</span><span class=o>.</span><span class=n>shape</span>
+</span></span><span class=line><span class=cl>    <span class=c1># here we will be finding the coordinates of the local maximas with respect to pixel positions (h - height, w - width) and dimension (n - which is one of the responses of te convolved image)</span>
+</span></span><span class=line><span class=cl>    <span class=n>maximums</span> <span class=o>=</span> <span class=p>[]</span> 
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>height</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=n>j</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>width</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>            <span class=n>tile</span> <span class=o>=</span> <span class=n>convolved_images</span><span class=p>[:,</span> <span class=n>i</span><span class=o>-</span><span class=mi>1</span> <span class=p>:</span> <span class=n>i</span><span class=o>+</span><span class=mi>2</span><span class=p>,</span> <span class=n>j</span><span class=o>-</span><span class=mi>1</span> <span class=p>:</span> <span class=n>j</span><span class=o>+</span><span class=mi>2</span><span class=p>]</span> 
+</span></span><span class=line><span class=cl>            <span class=n>maximum</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>amax</span><span class=p>(</span><span class=n>tile</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># threshold is important because for each pixel there will be a maximum, but not all of the pixels them contribute to blobs</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>maximum</span> <span class=o>&gt;=</span> <span class=n>threshold</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=c1># dimension will help with finding exact sigma that was used to define that kernel and blob sizes targeted</span>
+</span></span><span class=line><span class=cl>                <span class=n>dimension</span> <span class=p>,</span> <span class=n>x_coord</span><span class=p>,</span> <span class=n>y_coordinate</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>unravel_index</span><span class=p>(</span><span class=n>tile</span><span class=o>.</span><span class=n>argmax</span><span class=p>(),</span><span class=n>tile</span><span class=o>.</span><span class=n>shape</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=c1># each point is (original coordinte x, original coordinate y, radius size)</span>
+</span></span><span class=line><span class=cl>                <span class=n>maximums</span><span class=o>.</span><span class=n>append</span><span class=p>((</span><span class=n>i</span><span class=o>+</span><span class=n>x_coord</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=n>j</span><span class=o>+</span><span class=n>y_coordinate</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=n>sigma</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>power</span><span class=p>(</span><span class=n>step_size</span><span class=p>,</span> <span class=n>dimension</span><span class=p>)))</span> <span class=c1>#finding co-rdinates</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>maximums</span> <span class=o>=</span> <span class=nb>list</span><span class=p>(</span><span class=nb>set</span><span class=p>(</span><span class=n>maximums</span><span class=p>))</span>       
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>maximums</span>
+</span></span></code></pre></td></tr></table></div></div><p>In this second part of the code we implemented a slightly different blob detection that finds the maximum across all the images convolved with different kernels. This is the main difference from the previous blob detection algorithm. This can be done now, because all the values have been normalized and therefore the maximum is consisten across all different activation function images. This way the image can be divided into many chunks of fixed sized and for each the maximum is found, then if it above the global threshold it is then considered a blob. In the end the same algorithm of non-maximum suprression has been applied.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># calling the function with all default parameters before fine tuning the parameters and non-max supression</span>
+</span></span><span class=line><span class=cl><span class=n>blobs</span> <span class=o>=</span> <span class=n>normalized_log_gray</span><span class=p>(</span><span class=n>image_gray</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Step 4: Drawing blobs</span>
+</span></span><span class=line><span class=cl><span class=n>draw_circles</span><span class=p>(</span><span class=n>image_rgb</span><span class=p>,</span> <span class=n>blobs</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_40_0.png width=763 height=818 srcset="/04_notebook/assignment02/task_2_files/task_2_40_0_hu2310001967510924415.png 480w, /04_notebook/assignment02/task_2_files/task_2_40_0_hu9608065917103945637.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=93 data-flex-basis=223px></p><p>You can see a result of normalized LoG blob detection based on some &ldquo;random&rdquo; input hyperparameters. These are: step size, sigma, threshold and number of convolutions (these values were taken from multiple papers/lecture slides as &ldquo;optimal&rdquo;). In order to get a better detection we had to fine tune the parameters. Below you can see the results (including non-maximum suppression to reduce number of overlapping blobs).</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>optimal_blobs</span> <span class=o>=</span> <span class=n>normalized_log_gray</span><span class=p>(</span><span class=n>image_gray</span><span class=p>,</span> <span class=n>sigma</span><span class=o>=</span><span class=mf>1.1</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>0.04</span><span class=p>,</span> <span class=n>conv_number</span><span class=o>=</span><span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>optimal_blobs</span> <span class=o>=</span> <span class=n>non_max_suppression</span><span class=p>(</span><span class=n>optimal_blobs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>draw_circles_multi</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=nb>list</span><span class=p>([</span><span class=n>optimal_blobs</span><span class=p>,</span> <span class=n>res</span><span class=p>,</span> <span class=n>res_skimage</span><span class=p>]))</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>before 1449
+after 339
+</code></pre><p><img src=/04_notebook/assignment02/task_2_files/task_2_42_1.png width=1606 height=544 srcset="/04_notebook/assignment02/task_2_files/task_2_42_1_hu15366309457502746050.png 480w, /04_notebook/assignment02/task_2_files/task_2_42_1_hu10333761274755880170.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=295 data-flex-basis=708px></p><p>As a result, we have three output images: (1) - Normalized LoG, (2) - Non-Normalized Log, and (3) - Pre-built function. One difference is clear from the beginning, the algorithm of skimage has more granular results and the size of the detected blob is smaller than our algorithm. This initial difference is mainly due to the parameters of the algorithm. Secondly, it can be shown that the center of the sunflower is not detected but rather the petals are. This means that the skimage algorithm is using the same function as us \textbf{but} with a plus in front of it.
+As per the two algorithms done from scratch, both result in a rather precise detection. As expected, the normalized algorithm produced fewer outliers, due to the stronger response in the case of successful matching, and better results as it is more precise in finding the center of the blob.
+It has to be noted that the absence of smaller blobs in the first two images can be traced to two main factors: 1) higher threshold value and 2) different sigma range implementation in the algorithm</p><h2 id=additional-experiments-to-analyse-the-impact-of-threshold-on-resulting-blob-detection>Additional experiments to analyse the impact of threshold on resulting blob detection</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>coordinates_diff_threshold</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>thresholds</span> <span class=o>=</span> <span class=p>[</span><span class=mf>0.2</span><span class=p>,</span><span class=mf>0.3</span><span class=p>,</span><span class=mf>0.4</span><span class=p>,</span><span class=mf>0.5</span><span class=p>,</span><span class=mf>0.7</span><span class=p>,</span><span class=mf>0.9</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>thresholds</span> <span class=o>=</span> <span class=n>thresholds</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>thresholds</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>log_images_np</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=n>log_images_thresholded</span><span class=p>,</span> <span class=n>sigma_list</span> <span class=o>=</span> <span class=n>log_image</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=mi>8</span><span class=p>)</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>coordinates</span> <span class=o>=</span> <span class=n>detect_blob_v2</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>,</span> <span class=n>percentage_high</span><span class=o>=</span><span class=n>x</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>coordinates_1d</span> <span class=o>=</span> <span class=n>flatten_array_coordinates</span><span class=p>(</span><span class=n>coordinates</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>res</span> <span class=o>=</span> <span class=n>non_max_suppression</span><span class=p>(</span><span class=n>coordinates_1d</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>coordinates_diff_threshold</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>res</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>titles</span> <span class=o>=</span> <span class=p>[</span><span class=s2>&#34;Threshold: &#34;</span> <span class=o>+</span> <span class=nb>str</span><span class=p>(</span><span class=n>x</span><span class=p>)</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>thresholds</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    
+</span></span></code></pre></td></tr></table></div></div><pre><code>before 5728
+after 2279
+before 2590
+after 921
+before 996
+after 395
+before 553
+after 256
+before 249
+after 145
+before 107
+after 68
+</code></pre><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>draw_circles_multi</span><span class=p>(</span><span class=n>img</span><span class=p>,</span> <span class=n>coordinates_diff_threshold</span><span class=p>,</span> <span class=n>titles</span><span class=o>=</span><span class=n>titles</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_46_0.png width=1606 height=307 srcset="/04_notebook/assignment02/task_2_files/task_2_46_0_hu10515397643138798673.png 480w, /04_notebook/assignment02/task_2_files/task_2_46_0_hu667561803539702079.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=523 data-flex-basis=1255px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>threshold_values</span> <span class=o>=</span> <span class=p>[</span><span class=mf>0.0</span><span class=p>,</span> <span class=mf>0.02</span><span class=p>,</span> <span class=mf>0.04</span><span class=p>,</span> <span class=mf>0.06</span><span class=p>,</span> <span class=mf>0.08</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>thresholded_images</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>index</span><span class=p>,</span> <span class=n>value</span> <span class=ow>in</span> <span class=nb>enumerate</span><span class=p>(</span><span class=n>threshold_values</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>thresholded_images</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>non_max_suppression</span><span class=p>(</span><span class=n>normalized_log_gray</span><span class=p>(</span><span class=n>image_gray</span><span class=p>,</span> <span class=n>sigma</span><span class=o>=</span><span class=mf>1.1</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=n>value</span><span class=p>,</span> <span class=n>conv_number</span><span class=o>=</span><span class=mi>8</span><span class=p>)))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>draw_circles_multi</span><span class=p>(</span><span class=n>image_rgb</span><span class=p>,</span> <span class=n>thresholded_images</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>before 62593
+after 3517
+before 13748
+after 1266
+before 1449
+after 339
+before 97
+after 59
+before 12
+after 11
+</code></pre><p><img src=/04_notebook/assignment02/task_2_files/task_2_47_1.png width=1606 height=339 srcset="/04_notebook/assignment02/task_2_files/task_2_47_1_hu948431606036519415.png 480w, /04_notebook/assignment02/task_2_files/task_2_47_1_hu6029158636515633070.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=473 data-flex-basis=1136px></p><p>As we can see from the examples below, threshold values are very important for the output. For the analysis we decided to go with gradual increase of the threshold, starting with 0.0 and with the max value of 0.08. As it was expected, threshold value and number of blobs are inversely proportional - with the increase of threshold we observe decrease in a blob count.
+For the 0.0 value we basically received white image (without non-max supression it would have been fully covered with white, having the number of detected pixels that &ldquo;contribute&rdquo; to blob) - this happened due to the fact that we pretty much don&rsquo;t threshold at all and let all maximum pixel intensities contribute to blobs (each pixel has a max within the 8-dimensional kernel, so all pixels will have to be activated). Here we can also see that with the given hyperparameters there are almost no pixels with intencities higher that 0.06 (last two examples), so to be able to tune the threshold to the &ldquo;optimal value&rdquo; in this set up we will have to search for the value between 0.02, although this is still very little value that produces too much noise, and 0.06 (with 0.04 being latest greatest pick).</p><h2 id=other-tests>Other tests</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>input_image_fish</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=s2>&#34;../images/fishes.jpg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>image_rgb_fish</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>input_image_fish</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2RGB</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>image_gray_fish</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>input_image_fish</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2GRAY</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>input_image_butterfly</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=s2>&#34;../images/butterfly.jpg&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>image_rgb_butterfly</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>input_image_butterfly</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2RGB</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>image_gray_butterfly</span> <span class=o>=</span> <span class=n>cv2</span><span class=o>.</span><span class=n>cvtColor</span><span class=p>(</span><span class=n>input_image_butterfly</span><span class=p>,</span> <span class=n>cv2</span><span class=o>.</span><span class=n>COLOR_BGR2GRAY</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>f</span><span class=p>,</span> <span class=p>(</span><span class=n>ax1</span><span class=p>,</span> <span class=n>ax2</span><span class=p>)</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>2</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax1</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>image_rgb_fish</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax1</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s2>&#34;Original image of fish&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax1</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>image_gray_fish</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;gray&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax1</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s2>&#34;Original image of fish in grayscale&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax2</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>image_rgb_butterfly</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax2</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s2>&#34;Original image of butterfly&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax2</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>image_gray_butterfly</span><span class=p>,</span> <span class=n>cmap</span><span class=o>=</span><span class=s1>&#39;gray&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ax2</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s2>&#34;Original image of butterfly in grayscale&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>tight_layout</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_50_0.png width=662 height=477 srcset="/04_notebook/assignment02/task_2_files/task_2_50_0_hu10963310930861188479.png 480w, /04_notebook/assignment02/task_2_files/task_2_50_0_hu12255014430771898150.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=138 data-flex-basis=333px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>fish_blobs</span> <span class=o>=</span> <span class=n>normalized_log_gray</span><span class=p>(</span><span class=n>image_gray_fish</span><span class=p>,</span> <span class=n>sigma</span><span class=o>=</span><span class=mf>1.15</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>0.03</span><span class=p>,</span> <span class=n>conv_number</span><span class=o>=</span><span class=mi>8</span><span class=p>,</span> <span class=n>step_size</span><span class=o>=</span><span class=mf>1.27</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>fish_blobs</span> <span class=o>=</span> <span class=n>non_max_suppression</span><span class=p>(</span><span class=n>fish_blobs</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>draw_circles</span><span class=p>(</span><span class=n>image_rgb_fish</span><span class=p>,</span> <span class=n>fish_blobs</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>before 499
+after 57
+</code></pre><p><img src=/04_notebook/assignment02/task_2_files/task_2_51_1.png width=831 height=567 srcset="/04_notebook/assignment02/task_2_files/task_2_51_1_hu15054107016496208933.png 480w, /04_notebook/assignment02/task_2_files/task_2_51_1_hu9872309476924875605.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=146 data-flex-basis=351px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>butterfly_blobs</span> <span class=o>=</span> <span class=n>normalized_log_gray</span><span class=p>(</span><span class=n>image_gray_butterfly</span><span class=p>,</span> <span class=n>sigma</span><span class=o>=</span><span class=mf>1.2</span><span class=p>,</span> <span class=n>threshold</span><span class=o>=</span><span class=mf>0.09</span><span class=p>,</span> <span class=n>conv_number</span><span class=o>=</span><span class=mi>7</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>draw_circles</span><span class=p>(</span><span class=n>image_rgb_butterfly</span><span class=p>,</span> <span class=n>butterfly_blobs</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_52_0.png width=831 height=608 srcset="/04_notebook/assignment02/task_2_files/task_2_52_0_hu12213025424183077043.png 480w, /04_notebook/assignment02/task_2_files/task_2_52_0_hu17422740974894500743.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=136 data-flex-basis=328px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>coordinates_diff_images</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl><span class=n>images</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># read folders</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>image</span> <span class=ow>in</span> <span class=n>os</span><span class=o>.</span><span class=n>listdir</span><span class=p>(</span><span class=s2>&#34;../images/&#34;</span><span class=p>):</span>          
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Read image</span>
+</span></span><span class=line><span class=cl>    <span class=n>img</span> <span class=o>=</span> <span class=n>io</span><span class=o>.</span><span class=n>imread</span><span class=p>(</span><span class=s1>&#39;../images/&#39;</span> <span class=o>+</span> <span class=n>image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>images</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>img</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Convert to grayscale</span>
+</span></span><span class=line><span class=cl>    <span class=n>img_gray</span> <span class=o>=</span> <span class=n>color</span><span class=o>.</span><span class=n>rgb2gray</span><span class=p>(</span><span class=n>img</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>log_images_np</span><span class=p>,</span> <span class=n>kernels</span><span class=p>,</span> <span class=n>log_images_thresholded</span><span class=p>,</span> <span class=n>sigma_list</span> <span class=o>=</span> <span class=n>log_image</span><span class=p>(</span><span class=n>img_gray</span><span class=p>,</span> <span class=mi>8</span><span class=p>)</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>coordinates</span> <span class=o>=</span> <span class=n>detect_blob_v2</span><span class=p>(</span><span class=n>log_images_np</span><span class=p>,</span> <span class=n>percentage_high</span><span class=o>=</span><span class=mf>0.4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>coordinates_1d</span> <span class=o>=</span> <span class=n>flatten_array_coordinates</span><span class=p>(</span><span class=n>coordinates</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>res</span> <span class=o>=</span> <span class=n>non_max_suppression</span><span class=p>(</span><span class=n>coordinates_1d</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>coordinates_diff_images</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>res</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>fence.jpg
+before 3383
+after 1512
+fishes.jpg
+before 534
+after 223
+flowers.png
+before 553
+after 256
+einstein.jpg
+before 135
+after 49
+butterfly.jpg
+before 409
+after 194
+</code></pre><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>titles</span> <span class=o>=</span> <span class=p>[</span><span class=nb>str</span><span class=p>(</span><span class=n>x</span><span class=p>)</span> <span class=o>+</span>  <span class=s2>&#34; - threshold 0.4&#34;</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=n>os</span><span class=o>.</span><span class=n>listdir</span><span class=p>(</span><span class=s2>&#34;../images/&#34;</span><span class=p>)]</span>
+</span></span><span class=line><span class=cl><span class=n>draw_circles_multi_images</span><span class=p>(</span><span class=n>images</span><span class=p>,</span> <span class=n>coordinates_diff_images</span><span class=p>,</span> <span class=n>titles</span><span class=o>=</span><span class=n>titles</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/assignment02/task_2_files/task_2_54_0.png width=1614 height=400 srcset="/04_notebook/assignment02/task_2_files/task_2_54_0_hu14346079440149466197.png 480w, /04_notebook/assignment02/task_2_files/task_2_54_0_hu390942327658930426.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=403 data-flex-basis=968px></p><p>As we can see during these additional tests, normalized LoG implemented from scratch does work on different images. Although, it worth mentioning afain that the key is in tuning the hyperparameters with regard to the input data.</p></section><footer class=article-footer></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><div class="article-list--compact links"><article><a href=./Assignment_2_CV.pdf target=_blank rel=noopener><div class=article-details><h2 class=article-title>Complete PDF report</h2><footer class=article-time>Click on the link to download the full report</footer></div></a></article></div><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 Sebastian Cavada</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.26.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>
