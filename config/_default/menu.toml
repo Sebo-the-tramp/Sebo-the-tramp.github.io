@@ -8,6 +8,14 @@
 #newtab = true
 
 [[social]]
+identifier = "scholar"
+name = "Google Scholar"
+url = "https://scholar.google.com/citations?user=NBH8onQAAAAJ"
+
+[social.params]
+icon = "brand-scholar"
+
+[[social]]
 identifier = "github"
 name = "GitHub"
 url = "https://github.com/Sebo-the-tramp"
@@ -17,12 +25,11 @@ icon = "brand-github"
 
 [[social]]
 identifier = "linkedin"
-name = "Linkedin"
-url = "https://github.com/Sebo-the-tramp"
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/sebastiancavada/"
 
 [social.params]
 icon = "brand-linkedin"
-
 
 [[social]]
 identifier = "twitter"
@@ -31,13 +38,5 @@ url = "https://mobile.twitter.com/_cavada"
 
 [social.params]
 icon = "brand-twitter"
-
-[[social]]
-identifier = "youtube"
-name = "Youtube"
-url = "https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw"
-
-[social.params]
-icon = "brand-youtube"
 
 

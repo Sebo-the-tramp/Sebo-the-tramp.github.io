@@ -1,0 +1,407 @@
+/*
+ * Custom SCSS for Sebastian Cavada's Academic Portfolio
+ * Modern minimalist styling with academic focus
+ */
+
+/* ==========================================================================
+   Color Palette - Modern Academic
+   ========================================================================== */
+:root {
+    /* Light mode - clean, scholarly aesthetic */
+    --body-background: #fafbfc;
+    --accent-color: #1a365d;        /* Deep navy - academic, professional */
+    --accent-color-darker: #0f2440;
+    --accent-color-text: #ffffff;
+    --body-text-color: #374151;     /* Darker gray for better readability */
+
+    /* Card styling - minimal, NO borders */
+    --card-background: #ffffff;
+    --card-background-selected: #f7fafc;
+    --card-text-color-main: #111827;
+    --card-text-color-secondary: #374151;
+    --card-text-color-tertiary: #6b7280;
+    --card-separator-color: transparent;
+
+    /* Refined border radius */
+    --card-border-radius: 8px;
+    --tag-border-radius: 4px;
+
+    /* Shadows only - no borders */
+    --shadow-l1: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-l2: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-l3: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-l4: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+    /* Links */
+    --link-background-color: 26, 54, 93;
+    --link-background-opacity: 0.1;
+    --link-background-opacity-hover: 0.2;
+
+    &[data-scheme="dark"] {
+        --body-background: #111827;
+        --accent-color: #60a5fa;
+        --accent-color-darker: #3b82f6;
+        --accent-color-text: #111827;
+        --body-text-color: #e5e7eb;
+
+        --card-background: #1f2937;
+        --card-background-selected: #374151;
+        --card-text-color-main: #f9fafb;
+        --card-text-color-secondary: #e5e7eb;
+        --card-text-color-tertiary: #9ca3af;
+        --card-separator-color: transparent;
+    }
+}
+
+/* ==========================================================================
+   Typography - Clean & Readable
+   ========================================================================== */
+:root {
+    --base-font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    --article-font-family: var(--base-font-family);
+    --article-font-size: 1.7rem;
+    --article-line-height: 1.75;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ==========================================================================
+   Global Fixes - Remove Borders
+   ========================================================================== */
+
+/* Remove all card borders */
+.article-list article,
+.card-category,
+.widget,
+article.main-article,
+.article-page .main-article {
+    border: none !important;
+    box-shadow: var(--shadow-l2);
+}
+
+/* Disable hover lift effects */
+.article-list article,
+.widget {
+    transition: none;
+}
+
+/* ==========================================================================
+   Sidebar
+   ========================================================================== */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .site-avatar {
+        .site-logo {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto;
+        }
+    }
+
+    .site-name {
+        font-weight: 700;
+        font-size: 1.8rem;
+        letter-spacing: -0.02em;
+        margin-top: 1.5rem;
+    }
+
+    .site-description {
+        font-size: 1rem;
+        color: var(--card-text-color-secondary);
+        line-height: 1.6;
+    }
+
+    .social-menu a {
+        opacity: 0.7;
+        transition: none;
+    }
+}
+
+/* Larger avatar on desktop */
+@media (min-width: 1024px) {
+    .sidebar .site-avatar .site-logo {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* ==========================================================================
+   Headings - Clean, Professional
+   ========================================================================== */
+.article-content {
+    h1 {
+        font-size: 2.4rem;
+        font-weight: 700;
+        color: var(--card-text-color-main);
+        margin-bottom: 1.5rem;
+        letter-spacing: -0.02em;
+    }
+
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: var(--card-text-color-main);
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--accent-color);
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--card-text-color-main);
+    }
+
+    /* Body text - larger */
+    p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--card-text-color-secondary);
+    }
+
+    /* First paragraph - intro style */
+    > p:first-of-type {
+        font-size: 1.2rem;
+        line-height: 1.85;
+    }
+}
+
+/* ==========================================================================
+   Affiliations Logo Bar
+   ========================================================================== */
+.affiliations {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem 3rem;
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+
+    a {
+        display: inline-block;
+        text-decoration: none;
+        opacity: 0.9;
+        transition: none;
+
+        img {
+            height: 45px;
+            width: auto;
+        }
+    }
+}
+
+[data-scheme="dark"] .affiliations {
+    border-bottom-color: rgba(255,255,255,0.1);
+
+    a img {
+        filter: brightness(2);
+    }
+}
+
+/* ==========================================================================
+   Tables - Clean styling
+   ========================================================================== */
+.article-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 1rem;
+
+    th, td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border: none;
+        border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+
+    th {
+        font-weight: 600;
+        color: var(--card-text-color-main);
+        background: transparent;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+}
+
+[data-scheme="dark"] .article-content table {
+    th, td {
+        border-bottom-color: rgba(255,255,255,0.1);
+    }
+
+}
+
+/* ==========================================================================
+   Lists - News section
+   ========================================================================== */
+.article-content ul {
+    list-style: none;
+    padding-left: 0;
+
+    li {
+        padding: 0.6rem 0;
+        font-size: 1rem;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        strong {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+    }
+}
+
+/* ==========================================================================
+   Links & Publications
+   ========================================================================== */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+/* Publication styling */
+.article-content > p strong {
+    display: block;
+    font-size: 1.15rem;
+    color: var(--card-text-color-main);
+    margin-top: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.article-content > p em {
+    color: var(--card-text-color-tertiary);
+    font-style: normal;
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Navigation Menu
+   ========================================================================== */
+.menu li a {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+/* ==========================================================================
+   Disable Hover Effects Site-wide
+   ========================================================================== */
+.article-list article,
+.article-list--tile article,
+.widget,
+.tagCloud .tagCloud-tags a,
+.links .link-card,
+.article-category a,
+.article-tags a,
+.menu li a,
+.sidebar .social-menu a,
+.affiliations a,
+a,
+.hamburger {
+    transition: none !important;
+}
+
+.article-category a,
+.article-tags a {
+    --tag-bg: var(--accent-color);
+    background-color: var(--tag-bg);
+}
+
+.article-list article:nth-child(5n+1) .article-category a { --tag-bg: #8ea885; }
+.article-list article:nth-child(5n+2) .article-category a { --tag-bg: #df7988; }
+.article-list article:nth-child(5n+3) .article-category a { --tag-bg: #0177b8; }
+.article-list article:nth-child(5n+4) .article-category a { --tag-bg: #ffb900; }
+.article-list article:nth-child(5n+5) .article-category a { --tag-bg: #6b69d6; }
+
+.article-list article:hover,
+.article-list--tile article:hover,
+.tagCloud .tagCloud-tags a:hover,
+.links .link-card:hover,
+.widget:hover,
+.menu li a:hover,
+.sidebar .social-menu a:hover,
+.affiliations a:hover,
+.article-category a:hover,
+.article-tags a:hover,
+a:hover,
+.hamburger:hover,
+.hamburger.is-active:hover {
+    transform: none !important;
+    opacity: 1 !important;
+    text-decoration: none !important;
+}
+
+.article-list article:hover,
+.widget:hover {
+    box-shadow: var(--shadow-l2) !important;
+}
+
+.article-list--tile article:hover,
+.tagCloud .tagCloud-tags a:hover,
+.links .link-card:hover {
+    box-shadow: var(--shadow-l1) !important;
+}
+
+.article-category a:hover,
+.article-tags a:hover {
+    background-color: var(--tag-bg) !important;
+}
+
+.menu li a:hover,
+.sidebar .social-menu a:hover {
+    color: inherit !important;
+}
+
+a:hover {
+    color: var(--accent-color) !important;
+}
+
+.article-content h1:hover a.header-anchor,
+.article-content h2:hover a.header-anchor,
+.article-content h3:hover a.header-anchor,
+.article-content h4:hover a.header-anchor,
+.article-content h5:hover a.header-anchor,
+.article-content h6:hover a.header-anchor {
+    opacity: 0;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 768px) {
+    .affiliations {
+        gap: 1.5rem;
+
+        a img {
+            height: 32px;
+        }
+    }
+
+    .article-content {
+        h1 { font-size: 1.8rem; }
+        h2 { font-size: 1.5rem; }
+        p { font-size: 1rem; }
+    }
+
+    .sidebar .site-name {
+        font-size: 1.5rem;
+    }
+}
+
+/* ==========================================================================
+   Print
+   ========================================================================== */
+@media print {
+    .sidebar, .footer, .widget { display: none; }
+    .article-content { font-size: 11pt; }
+}

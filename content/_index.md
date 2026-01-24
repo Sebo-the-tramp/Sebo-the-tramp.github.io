@@ -1,82 +1,71 @@
 ---
-title: Whoami
-description: 
+title: Sebastian Cavada
+description: Computer Vision Researcher
 comments: false
 readingTime: false
 license: false
 image: build_dolomites.jpg
 
-
 menu:
-    main: 
+    main:
         weight: 1
         params:
             icon: user
 
-links:
-  - title: Youtube
-    description: You can find my travels, adventures, hackathons, and life anecdotes here!
-    website: https://www.youtube.com/@sebastiancavada
-    image: ./youtube.gif
-    alt: youtube link to my personal channel
-  - title: Curriculum
-    description: Click on the link to download my curriculum
-    website: ./Sebastian_Cavada_CV_2025.pdf
-    image: ./big.gif
-    alt: my photo 
-  - title: Project iRefill
-    description: A blog and a year long journey trying to understand the fragile balance of our ecosystem
-    website: https://blog.irefill.it
-    image: ./irefill.png
-    alt: logo of iRefill
-  - title: RealverseVR
-    description: A startup that I co-founded and worked at for a year
-    website: https://realversevr.it
-    image: ./logo.gif
-    alt: first startup realverse
-  - title: E3DA
-    description: Energy Efficient Embedded Digital Architectures unit at Fondazione Bruno Kessler researches, where I did my first Internship in AI and TinyML in the summer 2023
-    website: https://e3da.fbk.eu/
-    image: ./e3da.gif
-    alt: internship_2023 FBK - E3DA group
-  - title: CVI2
-    description: Computer vision reserch group where I did my internship in the Summer 2024 on Computer Aided Design, LLMs and Visual Language Models
-    website: https://cvi2.uni.lu/
-    image: ./uni.svg
-    alt: internship_2024 luxembourg
+---
+
+<div class="affiliations">
+  <a href="https://mbzuai.ac.ae/"><img src="/logos/mbzuai.svg" alt="MBZUAI"></a>
+  <a href="https://www.inria.fr/"><img src="/logos/inria.svg" alt="INRIA"></a>
+  <a href="https://cvi2.uni.lu/"><img src="/logos/unilu.svg" alt="University of Luxembourg"></a>
+  <a href="https://e3da.fbk.eu/"><img src="/logos/fbk.svg" alt="FBK"></a>
+  <a href="https://covisionlab.com/"><img src="/logos/covisionlab.svg" alt="CovisionLAB"></a>
+</div>
+
+I am a Computer Vision researcher interested in 3D scene understanding, semantic reconstruction, and vision-language models. My work focuses on teaching machines to perceive and interact with spatial environments, from CAD understanding to real-time scene interpretation.
+
+I recently graduated with a Master's degree from **MBZUAI** (April 2025) and hold a Bachelor's in Computer Science from the **Free University of Bolzano**. I have conducted research at **INRIA**, **CVI2 (University of Luxembourg)**, and **FBK**.
 
 ---
 
-Whether walking through the streets of Abu Dhabi, Luxembourg, or Paris, where I have spent years studying and collaborating, or hiking in the mountains of northern Italy, where I was born, I often find myself wondering how machines might perceive these environments: not merely reconstructing their geometry, but understanding their meaning and enabling interaction. My fascination lies in teaching machines to see the world beyond point clouds and pixels, to interpret space semantically, dynamically, and at scale. Working with structure from motion, photogrammetry, and Gaussian Splatting has deepened this curiosity; each method reveals part of the picture, yet none achieve real-time, semantically grounded understanding.
+## Publications
 
-<!-- ### Hackathons and Competitions:
-I thrive in collaborative environments, which is why I frequently participate in hackathons. One highlight was HackZurich, Europe’s largest hackathon, where my team developed “Out of the Blue,” a tool transforming 2D blueprints into detailed 4D models. This project not only showcased our technical skills but also emphasized our ability to innovate under pressure. Another significant event was the Pioneers 4.0 Hackathon in the UAE, where my team created an optimization solution for tea production, winning first place and securing an internship with LIPTON tea. 🌍✨
+**CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers**
+*ICCV 2025* | Honolulu, Hawaii
+[[Paper]](https://arxiv.org/abs/2412.13810) [[Project Page]](https://sebo-the-tramp.github.io/02_publications/03_cad_assistant/)
 
-#### Checkout more [here](https://sebo-the-tramp.github.io/03_projects/) -->
+**All Languages Matter: Evaluating LMMs on Culturally Diverse 100 Languages**
+*CVPR 2025* | Nashville, TN
+Contributed as native speaker for multimodal and multilingual evaluation
+[[Paper]](https://arxiv.org/abs/2411.16508)
 
-<!-- ### Academic Experience:
-My academic work is complemented by an internship at CVI2, a research group at the University of Luxembourg, where I focus on developing cutting-edge solutions in computer vision. Previously, I co-founded RealverseVR, a startup dedicated to creating educational experiences through virtual and augmented reality. 🎓👨‍💻
+**Complexity Analysis and Optimizations for Biomedical Imaging** (Best Paper Award)
+*HEALTHINFO 2024* | Nice, France
+[[Paper]](https://sebo-the-tramp.github.io/02_publications/complexity_iaria/)
 
-#### Checkout more [here](https://sebo-the-tramp.github.io/04_notebook/) -->
+---
 
-<!-- ### Projects and Interests:
-I am deeply invested in creating content around fitness and exploring the potential of 3D worlds and virtual reality. My GitHub profile, Sebo-the-tramp, features a variety of projects that reflect my diverse interests and technical prowess. I also share my thoughts and projects on my blog. 📚💡
+## Research Experience
 
-#### Checkout more [here](https://sebo-the-tramp.github.io/post/) -->
+| Institution | Role | Period | Focus |
+|-------------|------|--------|-------|
+| **INRIA** | Research Intern | 2024-2025 | *Paper in progress* |
+| **CovisionLAB** | Research Intern | Upcoming | 3D Vision |
+| **CVI2, Univ. Luxembourg** | Research Intern | Summer 2024 | CAD, VLMs, LLMs |
+| **E3DA, FBK** | Research Intern | Summer 2023 | AI, TinyML |
 
-## News 🎉
+---
 
-- 1 Paper accepted at [ICCV 2025](https://iccv.thecvf.com/) Honolulu, Hawaii - **CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers ** - [PAPER LINK](https://arxiv.org/abs/2412.13810)
-- 10th April 2025 Graduated from MBZUAI (Master)
-- 1 Paper accepted at [CVPR 2025](https://cvpr.thecvf.com/) Nashville, TN - **All Languages Matter: Evaluating LMMs on Culturally Diverse 100 Languages
-**, Contributed as native speaker for a multimodal and multilingual LLM - [PAPER LINK](https://arxiv.org/abs/2411.16508) 
-- 1 Paper accepted at [HEALTHINFO 2024](https://www.iaria.org/conferences2024/HEALTHINFO24.html) Nice, France - 🏆 Best Paper Award 🎉 - [PAPER LINK](https://sebo-the-tramp.github.io/02_publications/complexity_iaria/)
-- 23rd March 2023 Graduated from the Free University of Bolzano (Bachelor)
+## News
 
-<!-- ## Connect with Me
+- **ICCV 2025**: Paper accepted - CAD-Assistant
+- **April 2025**: Graduated from MBZUAI (Master's)
+- **CVPR 2025**: Paper accepted - All Languages Matter
+- **HEALTHINFO 2024**: Best Paper Award
+- **March 2023**: Graduated from Free University of Bolzano (Bachelor's)
 
-I love connecting with like-minded individuals and exploring new opportunities. Feel free to reach out to me on LinkedIn or check out my YouTube channel for more insights into my work and interests. Let’s build the future together! 🌐🤝 -->
+---
 
-<!-- I am a Junior Developer and Innovation Enthusiast with experience in the technology industry. I worked last year as the CTO of RealverseVR, a start-up focused on creating educational experiences through virtual and augmented reality. I also previously worked as a sales staff for La Sportiva, a company that produces and develops mountaineering equipment, and completed internships as a Junior Developer for Suggesto and as an IT-component repair technician for RepairMy. 
+## Resources
 
-I hold a Bachelor's degree in Computer Science from the Free University of Bolzano, where I was also a student representative for 2 years. I also studied Cognitive Science as part of an Erasmus program at the University of Osnabrück and has completed secondary education in both Italy and Ireland. I received several awards for my work in hackathons and was a finalist for Italian Climate Launchpad and Productflows as part of my passion for enterpreneurship.  -->
+[**Curriculum Vitae**](./Sebastian_Cavada_CV_2025.pdf) | [**Google Scholar**](https://scholar.google.com/citations?user=NBH8onQAAAAJ) | [**GitHub**](https://github.com/Sebo-the-tramp)

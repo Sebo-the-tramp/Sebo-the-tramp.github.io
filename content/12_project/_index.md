@@ -7,13 +7,5 @@ readingTime: false
 license: false
 draft: true
 
-
-menu:
-    main:
-        name: 12
-        weight: 4
-        params:
-            icon: book
-    
 ---
 
