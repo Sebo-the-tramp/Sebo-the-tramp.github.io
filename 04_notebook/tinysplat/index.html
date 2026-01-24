@@ -1,0 +1,1074 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="2D Gaussian splatting from scratch with tinygrad This is an introduction to Gaussian splatting from scratch. We are going to start from the basics about the Gaussians, creation of the image till the training of it. This material&rsquo;s purpose is teaching firstly to myself and then to the community. I am a neewby myself so any suggestions or corrections are very welcome! 1 2 3 !python -m pip install git+https://github.com/tinygrad/tinygrad.git !"><title>2D Gaussian Splatting with Tinygrad</title>
+<link rel=canonical href=https://sebo-the-tramp.github.io/04_notebook/tinysplat/><link rel=stylesheet href=/scss/style.min.0304c6baf04e01a8fe70693791cb744d56a3578a3120a8796cefc66825aa39c7.css><meta property='og:title' content="2D Gaussian Splatting with Tinygrad"><meta property='og:description' content="2D Gaussian splatting from scratch with tinygrad This is an introduction to Gaussian splatting from scratch. We are going to start from the basics about the Gaussians, creation of the image till the training of it. This material&rsquo;s purpose is teaching firstly to myself and then to the community. I am a neewby myself so any suggestions or corrections are very welcome! 1 2 3 !python -m pip install git+https://github.com/tinygrad/tinygrad.git !"><meta property='og:url' content='https://sebo-the-tramp.github.io/04_notebook/tinysplat/'><meta property='og:site_name' content='Sebastian Cavada'><meta property='og:type' content='article'><meta property='article:section' content='04_notebook'><meta property='article:published_time' content='2024-09-27T14:31:13+02:00'><meta property='article:modified_time' content='2024-09-27T14:31:13+02:00'><meta property='og:image' content='https://sebo-the-tramp.github.io/04_notebook/tinysplat/tinysplat_files/tinysplat_34_20.png'><meta name=twitter:title content="2D Gaussian Splatting with Tinygrad"><meta name=twitter:description content="2D Gaussian splatting from scratch with tinygrad This is an introduction to Gaussian splatting from scratch. We are going to start from the basics about the Gaussians, creation of the image till the training of it. This material&rsquo;s purpose is teaching firstly to myself and then to the community. I am a neewby myself so any suggestions or corrections are very welcome! 1 2 3 !python -m pip install git+https://github.com/tinygrad/tinygrad.git !"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://sebo-the-tramp.github.io/04_notebook/tinysplat/tinysplat_files/tinysplat_34_20.png'><link rel=icon href=/logo.svg></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><div class="container main-container flex on-phone--column extended"><aside class="sidebar left-sidebar sticky"><button class="hamburger hamburger--spin" type=button id=toggle-menu aria-label="Toggle Menu">
+<span class=hamburger-box><span class=hamburger-inner></span></span></button><header><figure class=site-avatar><a href=/><img src=/img/big_hu17844177664158792560.png width=300 height=300 class=site-logo loading=lazy alt=Avatar>
+</a><span class=emoji>🚀</span></figure><div class=site-meta><h1 class=site-name><a href=/>Sebastian Cavada</a></h1><h2 class=site-description>If you are not building stuff, don't stop people who are!</h2></div></header><ol class=menu-social><li><a href=https://github.com/Sebo-the-tramp target=_blank title=GitHub rel=me><svg class="icon icon-tabler icon-tabler-brand-github" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6.0 00-1.3-3.2 4.2 4.2.0 00-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3.0 00-6.2.0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2.0 00-.1 3.2A4.6 4.6.0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg></a></li><li><a href=https://github.com/Sebo-the-tramp target=_blank title=Linkedin rel=me><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-brand-linkedin"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 012-2h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2z"/><path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 00-4 0"/></svg></a></li><li><a href=https://mobile.twitter.com/_cavada target=_blank title=Twitter rel=me><svg class="icon icon-tabler icon-tabler-brand-twitter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84.0 00.497-3.753C20.18 7.773 21.692 5.25 22 4.009z"/></svg></a></li><li><a href=https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw target=_blank title=Youtube rel=me><svg class="icon icon-tabler icon-tabler-brand-youtube" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="5" width="18" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/></svg></a></li></ol><ol class=menu id=main-menu><li><a href=/><svg class="icon icon-tabler icon-tabler-user" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="7" r="4"/><path d="M6 21v-2a4 4 0 014-4h4a4 4 0 014 4v2"/></svg>
+<span>Whoami</span></a></li><li><a href=/post/><svg class="icon icon-tabler icon-tabler-book" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 19a9 9 0 019 0 9 9 0 019 0"/><path d="M3 6a9 9 0 019 0 9 9 0 019 0"/><line x1="3" y1="6" x2="3" y2="19"/><line x1="12" y1="6" x2="12" y2="19"/><line x1="21" y1="6" x2="21" y2="19"/></svg>
+<span>Blog</span></a></li><li><a href=/02_publications/><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-certificate-2"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 15m-3 0a3 3 0 106 0 3 3 0 10-6 0"/><path d="M10 7h4"/><path d="M10 18v4l2-1 2 1v-4"/><path d="M10 19H8a2 2 0 01-2-2V5a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2h-2"/></svg>
+<span>Publications</span></a></li><li><a href=/03_projects/><svg class="icon icon-tabler icon-tabler-circle-square" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="9.5" cy="9.5" r="6.5"/><rect x="10" y="10" width="11" height="11" rx="2"/></svg>
+<span>Projects</span></a></li><li class=current><a href=/04_notebook/><svg class="icon icon-tabler icon-tabler-school" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M22 9 12 5 2 9l10 4 10-4v6"/><path d="M6 10.6V16a6 3 0 0012 0v-5.4"/></svg>
+<span>Notebook</span></a></li><li><a href=/archives/><svg class="icon icon-tabler icon-tabler-archive" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><rect x="3" y="4" width="18" height="4" rx="2"/><path d="M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+<span>Archives</span></a></li><li><a href=/search/><svg class="icon icon-tabler icon-tabler-search" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="10" cy="10" r="7"/><line x1="21" y1="21" x2="15" y2="15"/></svg>
+<span>Search</span></a></li><li class=menu-bottom-section><ol class=menu><li id=dark-mode-toggle><svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<span>Dark Mode</span></li></ol></li></ol></aside><aside class="sidebar right-sidebar sticky"><section class="widget archives"><div class=widget-icon><svg class="icon icon-tabler icon-tabler-hash" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><line x1="5" y1="9" x2="19" y2="9"/><line x1="5" y1="15" x2="19" y2="15"/><line x1="11" y1="4" x2="7" y2="20"/><line x1="17" y1="4" x2="13" y2="20"/></svg></div><h2 class="widget-title section-title">Table of contents</h2><div class=widget--toc><nav id=TableOfContents><ol><li><a href=#introduction-to-gaussian-splatting>Introduction to Gaussian splatting</a></li><li><a href=#putting-it-all-together>Putting it all together</a></li><li><a href=#loss-function>Loss Function</a></li><li><a href=#gaussian-initialization>Gaussian initialization</a></li><li><a href=#training-loop>Training Loop</a></li><li><a href=#training-loop-without-jit>Training Loop without JIT</a></li><li><a href=#conclusions>Conclusions</a></li></ol></nav></div></section></aside><main class="main full-width"><article class="has-image main-article"><header class=article-header><div class=article-image><a href=/04_notebook/tinysplat/><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_20_hu15005852187187613790.png srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_20_hu15005852187187613790.png 800w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_20_hu6999424595073779733.png 1600w" width=800 height=298 loading=lazy alt="Featured image of post 2D Gaussian Splatting with Tinygrad"></a></div><div class=article-details><div class=article-title-wrapper><h2 class=article-title><a href=/04_notebook/tinysplat/>2D Gaussian Splatting with Tinygrad</a></h2></div><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
+<time class=article-time--published>Sep 27, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
+<time class=article-time--reading>17 minute read</time></div></footer></div></header><section class=article-content><h1 id=2d-gaussian-splatting-from-scratch-with-tinygrad>2D Gaussian splatting from scratch with tinygrad</h1><p>This is an introduction to Gaussian splatting from scratch. We are going to start from the basics about the Gaussians, creation of the image till the training of it.
+This material&rsquo;s purpose is teaching firstly to myself and then to the community. I am a neewby myself so any suggestions or corrections are very welcome!</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=err>!</span><span class=n>python</span> <span class=o>-</span><span class=n>m</span> <span class=n>pip</span> <span class=n>install</span> <span class=n>git</span><span class=o>+</span><span class=n>https</span><span class=p>:</span><span class=o>//</span><span class=n>github</span><span class=o>.</span><span class=n>com</span><span class=o>/</span><span class=n>tinygrad</span><span class=o>/</span><span class=n>tinygrad</span><span class=o>.</span><span class=n>git</span>
+</span></span><span class=line><span class=cl><span class=err>!</span><span class=n>python</span> <span class=o>-</span><span class=n>m</span> <span class=n>pip</span> <span class=n>install</span> <span class=n>matplotli</span>
+</span></span><span class=line><span class=cl><span class=err>!</span><span class=n>python</span> <span class=o>-</span><span class=n>m</span> <span class=n>pip</span> <span class=n>install</span> <span class=n>pyyaml</span>
+</span></span></code></pre></td></tr></table></div></div><p>First of all import all the libraries. Note how little number of libraries we have. Nice, soon also numpy is going to be replaced!</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># first let&#39;s import the necessary libraries</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>numpy</span> <span class=k>as</span> <span class=nn>np</span> <span class=c1># numpy is the main library we will use for numerical computations</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>matplotlib.pyplot</span> <span class=k>as</span> <span class=nn>plt</span> <span class=c1># matplotlib is the main library we will use for plotting</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># the only two libraries we will need.</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>tinygrad</span> <span class=kn>import</span> <span class=n>Tensor</span><span class=p>,</span> <span class=n>dtypes</span> <span class=c1># Autograd library</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>tinygrad.nn.optim</span> <span class=kn>import</span> <span class=n>Adam</span>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>tinygrad</span> <span class=kn>import</span> <span class=n>TinyJit</span>
+</span></span></code></pre></td></tr></table></div></div><p>In the following I will explain step by step the code and have examples of output and explaining such outputs step by step!</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>img_size</span> <span class=o>=</span> <span class=p>(</span><span class=mi>256</span><span class=p>,</span><span class=mi>256</span><span class=p>,</span><span class=mi>3</span><span class=p>)</span> <span class=c1># size of the image</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># first we will define 3 example of Gaussians with their properties</span>
+</span></span><span class=line><span class=cl><span class=n>kernel_size</span> <span class=o>=</span> <span class=mi>105</span> <span class=c1># dimension of the kernel -&gt; it is the quality of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>scale_x</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>1.0</span><span class=p>,</span><span class=mf>0.5</span><span class=p>,</span><span class=mf>1.0</span><span class=p>])</span> <span class=c1># scale of the Gaussian in x direction</span>
+</span></span><span class=line><span class=cl><span class=n>scale_y</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>1.0</span><span class=p>,</span><span class=mf>1.5</span><span class=p>,</span><span class=mf>0.5</span><span class=p>])</span> <span class=c1># scale of the Gaussian in y direction</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># we need to add a regularization to the scale to get the correct scale when generating an image</span>
+</span></span><span class=line><span class=cl><span class=c1># the kernel defines the how big the gaussian is going to be. </span>
+</span></span><span class=line><span class=cl><span class=c1># Depending on the kernel size, the scale of the Gaussian needs to be adjusted to be consistent among images</span>
+</span></span><span class=line><span class=cl><span class=c1># this took me quite some time to figure it out, but it is important to have the correct scale for the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>scale_x</span> <span class=o>=</span> <span class=n>scale_x</span> <span class=o>/</span> <span class=p>(</span><span class=n>img_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>/</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>scale_y</span> <span class=o>=</span> <span class=n>scale_y</span> <span class=o>/</span> <span class=p>(</span><span class=n>img_size</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>/</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>scale</span> <span class=o>=</span> <span class=n>scale_x</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>scale_y</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span> <span class=c1># stack the two scales together</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>rotation</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>0.0</span><span class=p>,</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span><span class=o>/</span><span class=mi>4</span><span class=p>,</span> <span class=o>-</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>pi</span><span class=o>/</span><span class=mi>2</span><span class=p>)])</span> <span class=c1># rotation of the Gaussian in radians</span>
+</span></span><span class=line><span class=cl><span class=n>coordinates</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([(</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),</span> <span class=p>(</span><span class=mi>5</span><span class=p>,</span><span class=mi>5</span><span class=p>),</span> <span class=p>(</span><span class=o>-</span><span class=mf>0.5</span><span class=p>,</span> <span class=o>-</span><span class=mf>0.5</span><span class=p>)])</span> <span class=c1># coordinates of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>colors</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([(</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),</span> <span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>,</span><span class=mi>1</span><span class=p>)])</span> <span class=c1># color of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>img_size</span> <span class=o>=</span> <span class=p>(</span><span class=mi>105</span><span class=p>,</span><span class=mi>105</span><span class=p>,</span><span class=mi>3</span><span class=p>)</span> <span class=c1># size of the image</span>
+</span></span><span class=line><span class=cl><span class=n>W</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=c1># width of the image</span>
+</span></span><span class=line><span class=cl><span class=n>H</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=c1># height of the image</span>
+</span></span></code></pre></td></tr></table></div></div><p>after defining all these variables that hopefully makes sense to you, we will use said variables to display an image containing the Gaussians defined with these variables.
+We need to remember that we always want all these process to be differentiable so to have the created image compared to a loss and back-propagate the error.</p><h2 id=introduction-to-gaussian-splatting>Introduction to Gaussian splatting</h2><p>This function takes as input the above variables and returns an image.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>batch_size</span> <span class=o>=</span> <span class=n>colors</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=c1># number of Gaussians defined above</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># check that everything has the correct shape</span>
+</span></span><span class=line><span class=cl><span class=n>scale</span> <span class=o>=</span> <span class=n>scale</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>rotation</span> <span class=o>=</span> <span class=n>rotation</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=n>batch_size</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>Now from the data we need to create the covariance matrix that defines the Gaussian. This way we can obtain a differentiable function for splatting the Gaussian. For more informations please get familiar with the math at the following link <a class=link href=https://arxiv.org/pdf/2312.02121 target=_blank rel=noopener>here</a>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>import</span> <span class=nn>math</span>
+</span></span><span class=line><span class=cl><span class=n>np</span><span class=o>.</span><span class=n>cos</span><span class=p>([</span><span class=mf>0.0</span><span class=p>,</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span><span class=o>/</span><span class=mi>4</span><span class=p>,</span> <span class=o>-</span><span class=mf>1.5707964</span><span class=p>])</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>array([ 1.00000000e+00,  7.07106781e-01, -7.32051035e-08])
+</code></pre><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># create the rotation matrix R</span>
+</span></span><span class=line><span class=cl><span class=n>cos_rot</span> <span class=o>=</span> <span class=n>rotation</span><span class=o>.</span><span class=n>cos</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>sin_rot</span> <span class=o>=</span> <span class=n>rotation</span><span class=o>.</span><span class=n>sin</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>top</span> <span class=o>=</span> <span class=n>cos_rot</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=o>-</span><span class=n>sin_rot</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>bottom</span> <span class=o>=</span> <span class=n>sin_rot</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>cos_rot</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>R</span> <span class=o>=</span> <span class=n>top</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>bottom</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;R&#34;</span><span class=p>,</span> <span class=n>R</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;==&#34;</span> <span class=o>*</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># create the scale matrix S</span>
+</span></span><span class=line><span class=cl><span class=n>S</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>eye</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span> <span class=o>*</span> <span class=n>scale</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;S&#34;</span><span class=p>,</span> <span class=n>S</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;==&#34;</span> <span class=o>*</span> <span class=mi>10</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>covariance</span> <span class=o>=</span> <span class=n>R</span> <span class=o>@</span> <span class=n>S</span> <span class=o>@</span> <span class=n>S</span> <span class=o>@</span> <span class=n>R</span><span class=o>.</span><span class=n>transpose</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span><span class=o>-</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;covariance&#34;</span><span class=p>,</span> <span class=n>covariance</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;==&#34;</span> <span class=o>*</span> <span class=mi>10</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>R [[[ 1.000000e+00  0.000000e+00]
+  [-0.000000e+00  1.000000e+00]]
+
+ [[ 7.071068e-01  7.071068e-01]
+  [-7.071068e-01  7.071068e-01]]
+
+ [[-8.742278e-08 -1.000000e+00]
+  [ 1.000000e+00 -8.742278e-08]]]
+====================
+S [[[0.41015625 0.        ]
+  [0.         0.41015625]]
+
+ [[0.20507812 0.        ]
+  [0.         0.6152344 ]]
+
+ [[0.41015625 0.        ]
+  [0.         0.20507812]]]
+====================
+covariance [[[ 1.6822815e-01  0.0000000e+00]
+  [ 0.0000000e+00  1.6822815e-01]]
+
+ [[ 2.1028520e-01  1.6822816e-01]
+  [ 1.6822816e-01  2.1028520e-01]]
+
+ [[ 4.2057037e-02 -1.1030229e-08]
+  [-1.1030229e-08  1.6822815e-01]]]
+====================
+</code></pre><p>At this point, we need to get the inverse of the covariance matrix to be used to create the Gaussian. The inverse method is nicely implemented in torch, but since we are on hardcore mode, we have to implement it ourselves. Luckily the matrices are only 2x2, therefore the method is straightforward.
+We also return the determinant since it will come handy later on, and we will save some computations.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>get_inverse_batched</span><span class=p>(</span><span class=n>matrices</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>a</span> <span class=o>=</span> <span class=n>matrices</span><span class=p>[:,</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>b</span> <span class=o>=</span> <span class=n>matrices</span><span class=p>[:,</span><span class=mi>0</span><span class=p>,</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>c</span> <span class=o>=</span> <span class=n>matrices</span><span class=p>[:,</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>d</span> <span class=o>=</span> <span class=n>matrices</span><span class=p>[:,</span><span class=mi>1</span><span class=p>,</span><span class=mi>1</span><span class=p>]</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>det</span> <span class=o>=</span> <span class=n>a</span><span class=o>*</span><span class=n>d</span> <span class=o>-</span> <span class=n>b</span><span class=o>*</span><span class=n>c</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># we need to perfrom the following operations as tinygrad does not support </span>
+</span></span><span class=line><span class=cl>    <span class=c1># derivatives of set items at some index operations</span>
+</span></span><span class=line><span class=cl>    <span class=n>d_new</span> <span class=o>=</span> <span class=n>d</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>b_new</span> <span class=o>=</span> <span class=o>-</span><span class=n>b</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>a_new</span> <span class=o>=</span> <span class=n>a</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>c_new</span> <span class=o>=</span> <span class=o>-</span><span class=n>c</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>top</span> <span class=o>=</span> <span class=n>d_new</span><span class=o>.</span><span class=n>cat</span><span class=p>(</span><span class=n>b_new</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>bottom</span> <span class=o>=</span> <span class=n>c_new</span><span class=o>.</span><span class=n>cat</span><span class=p>(</span><span class=n>a_new</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>inverse</span> <span class=o>=</span> <span class=n>top</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>bottom</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>2</span><span class=p>)</span> 
+</span></span><span class=line><span class=cl>    <span class=n>inverse</span> <span class=o>=</span> <span class=n>inverse</span> <span class=o>*</span> <span class=p>(</span><span class=mf>1.0</span> <span class=o>/</span> <span class=n>det</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>inverse</span><span class=p>,</span> <span class=n>det</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>inv_covariance</span><span class=p>,</span> <span class=n>covariance_det</span> <span class=o>=</span> <span class=n>get_inverse_batched</span><span class=p>(</span><span class=n>covariance</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;determinant&#34;</span><span class=p>,</span> <span class=n>covariance_det</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;inv_covariance&#34;</span><span class=p>,</span> <span class=n>inv_covariance</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>determinant [0.02830071 0.01591915 0.00707518]
+inv_covariance [[[ 5.9443083e+00 -0.0000000e+00]
+  [-0.0000000e+00  5.9443083e+00]]
+
+ [[ 1.3209574e+01 -1.0567659e+01]
+  [-1.0567659e+01  1.3209574e+01]]
+
+ [[ 2.3777233e+01  1.5590037e-06]
+  [ 1.5590037e-06  5.9443083e+00]]]
+</code></pre><p>Now into the interesting part and where the visualization will come in useful. At this point we need to create some matrices to insert the values picked from the Gaussian distribution. To do so we need to create the matrix in a smart way as again there is no out of the pocket function that does so in tinygrad.
+I like tinygrad because it makes us to go to the bottom of things in order to work.
+(on the other hand you will figure out that if you want to do more complex things, this becomes quite difficult)</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>x</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>linspace</span><span class=p>(</span><span class=o>-</span><span class=mi>5</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>y</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>linspace</span><span class=p>(</span><span class=o>-</span><span class=mi>5</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>yy</span><span class=p>,</span> <span class=n>xx</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>meshgrid</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>))</span>
+</span></span><span class=line><span class=cl><span class=n>yy</span> <span class=o>=</span> <span class=n>yy</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>xx</span> <span class=o>=</span> <span class=n>xx</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>coordinates</span><span class=p>[:,:]</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># here we are also adding the coordinates of the Gaussian to the grid</span>
+</span></span><span class=line><span class=cl><span class=c1># in other words we are shifting the grid by the coordinates of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>xx</span> <span class=o>=</span> <span class=n>xx</span> <span class=o>+</span> <span class=n>coordinates</span><span class=p>[:,</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>yy</span> <span class=o>=</span> <span class=n>yy</span> <span class=o>+</span> <span class=n>coordinates</span><span class=p>[:,</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>xx</span><span class=o>.</span><span class=n>shape</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>[[[[ 0.   0. ]]]
+
+
+ [[[ 5.   5. ]]]
+
+
+ [[[-0.5 -0.5]]]]
+(3, 105, 105)
+</code></pre><p>Probably I need to expand this section</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>xy</span> <span class=o>=</span> <span class=n>xx</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>yy</span><span class=p>,</span> <span class=n>dim</span><span class=o>=-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># The xy matrix represents the coordinates of the image</span>
+</span></span><span class=line><span class=cl><span class=c1># so that at each coordinate we have the x and y values</span>
+</span></span><span class=line><span class=cl><span class=c1># which will take up some value based on the inverse of the </span>
+</span></span><span class=line><span class=cl><span class=c1># covariance matrix</span>
+</span></span><span class=line><span class=cl><span class=c1># print(&#34;xy - matrix shape&#34;, xy.shape)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># print(&#34;xy - matrix&#34;) # is the x and y repeated kernel_size times</span>
+</span></span><span class=line><span class=cl><span class=c1># print(xy.numpy())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># z is the standard Gaussian kernel with the given covariance matrix</span>
+</span></span><span class=line><span class=cl><span class=n>z</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>einsum</span><span class=p>(</span><span class=s1>&#39;bxyi,bij,bxyj-&gt;bxy&#39;</span><span class=p>,</span> <span class=n>xy</span><span class=p>,</span> <span class=o>-</span><span class=mf>0.5</span> <span class=o>*</span> <span class=n>inv_covariance</span><span class=p>,</span> <span class=n>xy</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>fig</span><span class=p>,</span> <span class=n>axes</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>12</span><span class=p>,</span> <span class=mi>6</span><span class=p>))</span>  <span class=c1># Adjust figsize as needed</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>axes</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>z</span><span class=o>.</span><span class=n>numpy</span><span class=p>()[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=n>axes</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;z - matrix </span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>kernel</span> <span class=o>=</span> <span class=n>z</span><span class=o>.</span><span class=n>exp</span><span class=p>()</span> <span class=o>/</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span> <span class=o>*</span> <span class=n>covariance_det</span><span class=o>.</span><span class=n>sqrt</span><span class=p>()</span><span class=o>.</span><span class=n>view</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># print(&#34;kernel - matrix&#34;, kernel.numpy())</span>
+</span></span><span class=line><span class=cl><span class=n>kernel_max</span> <span class=o>=</span> <span class=n>kernel</span><span class=o>.</span><span class=n>max</span><span class=p>(</span><span class=n>axis</span><span class=o>=</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>),</span> <span class=n>keepdim</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>kernel_norm</span> <span class=o>=</span> <span class=n>kernel</span> <span class=o>/</span> <span class=n>kernel_max</span> 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># show the 3 kernels</span>
+</span></span><span class=line><span class=cl><span class=n>fig</span><span class=p>,</span> <span class=n>axes</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>12</span><span class=p>,</span> <span class=mi>6</span><span class=p>))</span>  <span class=c1># Adjust figsize as needed</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>axes</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>kernel_norm</span><span class=o>.</span><span class=n>numpy</span><span class=p>()[</span><span class=n>i</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>    <span class=n>axes</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;kernel - matrix </span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_16_0.png width=987 height=339 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_16_0_hu15693313983164770417.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_16_0_hu14110846910810922701.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=291 data-flex-basis=698px></p><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_16_1.png width=987 height=339 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_16_1_hu10194874778826031820.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_16_1_hu15722205887275290755.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=291 data-flex-basis=698px></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># now we are going into create the RGB space for the kernels</span>
+</span></span><span class=line><span class=cl><span class=n>kernel_rgb</span> <span class=o>=</span> <span class=n>kernel_norm</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>kernel_rgb</span><span class=o>.</span><span class=n>shape</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=c1># show the 3 kernels</span>
+</span></span><span class=line><span class=cl><span class=n>fig</span><span class=p>,</span> <span class=n>axes</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=mi>12</span><span class=p>,</span> <span class=mi>6</span><span class=p>))</span>  <span class=c1># Adjust figsize as needed</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mi>3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>axes</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>kernel_rgb</span><span class=o>.</span><span class=n>numpy</span><span class=p>()[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>transpose</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>0</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>axes</span><span class=p>[</span><span class=n>i</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;kernel - matrix </span><span class=si>{</span><span class=n>i</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>(3, 3, 105, 105)
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_17_1.png width=987 height=339 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_17_1_hu192437288412251019.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_17_1_hu16779727475459128567.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=291 data-flex-basis=698px></p><p>Now we have 3 in this case, but n in the general case gaussian kernels. To each pixel will be associated a value for transparency or opacity. As you can not very well there are colors missing. Also we want to merge all these Gaussian kernels into a single image.</p><p>We will do the following in two steps as described below:</p><ol><li>Multiply each kernel with the RGB value associated (initialized in the previous values)</li><li>sum the rgb Gaussians along each rgb channel to get the final colors and shapes</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>rgb_values_reshaped</span> <span class=o>=</span> <span class=n>colors</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>permute</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;rgb_values_reshaped&#34;</span><span class=p>,</span> <span class=n>rgb_values_reshaped</span><span class=o>.</span><span class=n>shape</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>final_image_layers</span> <span class=o>=</span> <span class=n>rgb_values_reshaped</span> <span class=o>*</span> <span class=n>kernel_rgb</span>
+</span></span><span class=line><span class=cl><span class=n>final_image</span> <span class=o>=</span> <span class=n>final_image_layers</span><span class=o>.</span><span class=n>sum</span><span class=p>(</span><span class=n>axis</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>final_image</span> <span class=o>=</span> <span class=n>final_image</span><span class=o>.</span><span class=n>clamp</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>final_image</span> <span class=o>=</span> <span class=n>final_image</span><span class=o>.</span><span class=n>permute</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>final_image</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>axis</span><span class=p>(</span><span class=s2>&#34;off&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>tight_layout</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>rgb_values_reshaped (3, 3, 1, 1)
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_19_1.png width=469 height=470 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_19_1_hu16661705351796225559.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_19_1_hu7028196820345276532.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=99 data-flex-basis=239px></p><h2 id=putting-it-all-together>Putting it all together</h2><p>Putting all together we will get a single function that given an input it will return the desired image.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>generate_splat</span><span class=p>(</span><span class=n>coordinates</span><span class=p>,</span> <span class=n>colors</span><span class=p>,</span> <span class=n>scale_x</span><span class=p>,</span> <span class=n>scale_y</span><span class=p>,</span> <span class=n>rotation</span><span class=p>,</span> <span class=n>img_size</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernel_size</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>    <span class=n>W</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=c1># width of the image</span>
+</span></span><span class=line><span class=cl>    <span class=n>H</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=c1># height of the image</span>
+</span></span><span class=line><span class=cl>    <span class=n>batch_size</span> <span class=o>=</span> <span class=n>colors</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=c1># number of Gaussians defined above</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>scale</span> <span class=o>=</span> <span class=n>scale_x</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>scale_y</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span> <span class=c1># stack the two scales together</span>
+</span></span><span class=line><span class=cl>    <span class=n>scale</span> <span class=o>=</span> <span class=n>scale</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>rotation</span> <span class=o>=</span> <span class=n>rotation</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=n>batch_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>cos_rot</span> <span class=o>=</span> <span class=n>rotation</span><span class=o>.</span><span class=n>cos</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>sin_rot</span> <span class=o>=</span> <span class=n>rotation</span><span class=o>.</span><span class=n>sin</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>top</span> <span class=o>=</span> <span class=n>cos_rot</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=o>-</span><span class=n>sin_rot</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>bottom</span> <span class=o>=</span> <span class=n>sin_rot</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>cos_rot</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>R</span> <span class=o>=</span> <span class=n>top</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>bottom</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>2</span><span class=p>)</span><span class=o>.</span><span class=n>reshape</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>S</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>eye</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span> <span class=o>*</span> <span class=n>scale</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>covariance</span> <span class=o>=</span> <span class=n>R</span> <span class=o>@</span> <span class=n>S</span> <span class=o>@</span> <span class=n>S</span> <span class=o>@</span> <span class=n>R</span><span class=o>.</span><span class=n>transpose</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span><span class=o>-</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>inv_covariance</span><span class=p>,</span> <span class=n>covariance_det</span> <span class=o>=</span> <span class=n>get_inverse_batched</span><span class=p>(</span><span class=n>covariance</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>x</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>linspace</span><span class=p>(</span><span class=o>-</span><span class=mi>5</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>y</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>linspace</span><span class=p>(</span><span class=o>-</span><span class=mi>5</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>yy</span><span class=p>,</span> <span class=n>xx</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>meshgrid</span><span class=p>(</span><span class=n>x</span><span class=p>,</span> <span class=n>y</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>yy</span> <span class=o>=</span> <span class=n>yy</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>xx</span> <span class=o>=</span> <span class=n>xx</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>xx</span> <span class=o>=</span> <span class=n>xx</span> <span class=o>+</span> <span class=n>coordinates</span><span class=p>[:,</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=o>*</span> <span class=mi>5</span>
+</span></span><span class=line><span class=cl>    <span class=n>yy</span> <span class=o>=</span> <span class=n>yy</span> <span class=o>+</span> <span class=n>coordinates</span><span class=p>[:,</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span> <span class=o>*</span> <span class=mi>5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>xy</span> <span class=o>=</span> <span class=n>xx</span><span class=o>.</span><span class=n>stack</span><span class=p>(</span><span class=n>yy</span><span class=p>,</span> <span class=n>dim</span><span class=o>=-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>z</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>einsum</span><span class=p>(</span><span class=s1>&#39;bxyi,bij,bxyj-&gt;bxy&#39;</span><span class=p>,</span> <span class=n>xy</span><span class=p>,</span> <span class=o>-</span><span class=mf>0.5</span> <span class=o>*</span> <span class=n>inv_covariance</span><span class=p>,</span> <span class=n>xy</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>kernel</span> <span class=o>=</span> <span class=n>z</span><span class=o>.</span><span class=n>exp</span><span class=p>()</span> <span class=o>/</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span> <span class=o>*</span> <span class=n>covariance_det</span><span class=o>.</span><span class=n>sqrt</span><span class=p>()</span><span class=o>.</span><span class=n>view</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernel_max</span> <span class=o>=</span> <span class=n>kernel</span><span class=o>.</span><span class=n>max</span><span class=p>(</span><span class=n>axis</span><span class=o>=</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>),</span> <span class=n>keepdim</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span> <span class=o>+</span> <span class=mf>1e-6</span> <span class=c1># avoid division by zero</span>
+</span></span><span class=line><span class=cl>    <span class=n>kernel_norm</span> <span class=o>=</span> <span class=n>kernel</span> <span class=o>/</span> <span class=n>kernel_max</span> 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>kernel_rgb</span> <span class=o>=</span> <span class=n>kernel_norm</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>,</span> <span class=o>-</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>rgb_values_reshaped</span> <span class=o>=</span> <span class=n>colors</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>permute</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>final_image_layers</span> <span class=o>=</span> <span class=n>rgb_values_reshaped</span> <span class=o>*</span> <span class=n>kernel_rgb</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>final_image</span> <span class=o>=</span> <span class=n>final_image_layers</span><span class=o>.</span><span class=n>sum</span><span class=p>(</span><span class=n>axis</span><span class=o>=</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>final_image</span> <span class=o>=</span> <span class=n>final_image</span><span class=o>.</span><span class=n>clamp</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>final_image</span> <span class=o>=</span> <span class=n>final_image</span><span class=o>.</span><span class=n>permute</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>final_image</span>
+</span></span></code></pre></td></tr></table></div></div><p>Testing the new function with new values will bring:</p><p>NOTE: converting from torch to tinygrad meant losing some out of the box function such as affine_grid, which required some advanced algorithms such as bilinear interpolation to work. I didn&rsquo;t have time and deep knowledge on how to make it work on tinygrad I directly skipped that step. On the other side that particular function was needed to learn the translation matrix for the Gaussian I had to make it learnable from some other place.
+As you might have noticed, I shifted the kernel directly when I was creating it. A problem of this is that the kernel has to already be the size of the image, which will alterate the meaning of mu and the covariance matrix, when the kernel dimensions change.
+Therefore because of that you will see in the next cell, that the scale_x and scale_y values are downsized by the ration of img size and kernel.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>img_size</span> <span class=o>=</span> <span class=p>(</span><span class=mi>256</span><span class=p>,</span><span class=mi>256</span><span class=p>,</span><span class=mi>3</span><span class=p>)</span> <span class=c1># size of the image</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>kernel_size</span> <span class=o>=</span> <span class=mi>105</span> <span class=c1># dimension of the kernel -&gt; it is the quality of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>scale_x</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>1.0</span><span class=p>,</span><span class=mf>2.0</span><span class=p>,</span><span class=mf>2.0</span><span class=p>])</span> <span class=c1># scale of the Gaussian in x direction</span>
+</span></span><span class=line><span class=cl><span class=n>scale_y</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>1.0</span><span class=p>,</span><span class=mf>2.0</span><span class=p>,</span><span class=mf>1.0</span><span class=p>])</span> <span class=c1># scale of the Gaussian in y direction</span>
+</span></span><span class=line><span class=cl><span class=n>scale_x</span> <span class=o>=</span> <span class=n>scale_x</span> <span class=o>/</span> <span class=p>(</span><span class=n>img_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>/</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>scale_y</span> <span class=o>=</span> <span class=n>scale_y</span> <span class=o>/</span> <span class=p>(</span><span class=n>img_size</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>/</span> <span class=n>kernel_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>rotation</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>0.0</span><span class=p>,</span> <span class=mf>0.0</span><span class=p>,</span> <span class=o>-</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>pi</span><span class=o>/</span><span class=mi>2</span><span class=p>)])</span> <span class=c1># rotation of the Gaussian in radians</span>
+</span></span><span class=line><span class=cl><span class=n>coordinates</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([(</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),</span> <span class=p>(</span><span class=mf>0.5</span><span class=p>,</span><span class=mf>0.5</span><span class=p>),</span> <span class=p>(</span><span class=o>-</span><span class=mf>0.1</span><span class=p>,</span> <span class=o>-</span><span class=mf>0.1</span><span class=p>)])</span> <span class=c1># coordinates of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>colors</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([(</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),</span> <span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>,</span><span class=mi>0</span><span class=p>),</span> <span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>)])</span> <span class=c1># color of the Gaussian</span>
+</span></span><span class=line><span class=cl><span class=n>W</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=c1># width of the image</span>
+</span></span><span class=line><span class=cl><span class=n>H</span> <span class=o>=</span> <span class=n>img_size</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=c1># height of the image</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>splatted</span> <span class=o>=</span> <span class=n>generate_splat</span><span class=p>(</span><span class=n>coordinates</span><span class=p>,</span> <span class=n>colors</span><span class=p>,</span> <span class=n>scale_x</span><span class=p>,</span> <span class=n>scale_y</span><span class=p>,</span> <span class=n>rotation</span><span class=p>,</span> <span class=n>img_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>splatted</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>axis</span><span class=p>(</span><span class=s2>&#34;off&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>tight_layout</span><span class=p>()</span>
+</span></span><span class=line><span class=cl><span class=n>plt</span><span class=o>.</span><span class=n>show</span><span class=p>()</span>
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_24_0.png width=469 height=470 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_24_0_hu18089680563862855717.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_24_0_hu11038678057393257888.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=99 data-flex-basis=239px></p><h2 id=loss-function>Loss Function</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>create_window</span><span class=p>(</span><span class=n>window_size</span><span class=p>,</span> <span class=n>channel</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>def</span> <span class=nf>gaussian</span><span class=p>(</span><span class=n>window_size</span><span class=p>,</span> <span class=n>sigma</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>gauss</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=o>-</span><span class=p>(</span><span class=n>x</span> <span class=o>-</span> <span class=n>window_size</span><span class=o>//</span><span class=mi>2</span><span class=p>)</span><span class=o>**</span><span class=mi>2</span><span class=o>/</span><span class=nb>float</span><span class=p>(</span><span class=mi>2</span><span class=o>*</span><span class=n>sigma</span><span class=o>**</span><span class=mi>2</span><span class=p>)</span> <span class=k>for</span> <span class=n>x</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>window_size</span><span class=p>)])</span>
+</span></span><span class=line><span class=cl>        <span class=n>gauss</span> <span class=o>=</span> <span class=n>gauss</span><span class=o>.</span><span class=n>exp</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=c1># print(gauss.numpy())</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>gauss</span> <span class=o>/</span> <span class=n>gauss</span><span class=o>.</span><span class=n>sum</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=n>_1D_window</span> <span class=o>=</span> <span class=n>gaussian</span><span class=p>(</span><span class=n>window_size</span><span class=p>,</span> <span class=mf>1.5</span><span class=p>)</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># print(_1D_window.numpy())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>_2D_window</span> <span class=o>=</span> <span class=n>_1D_window</span> <span class=o>@</span> <span class=n>_1D_window</span><span class=o>.</span><span class=n>transpose</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># print(_2D_window.numpy())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>window</span> <span class=o>=</span> <span class=n>_2D_window</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=o>.</span><span class=n>expand</span><span class=p>(</span><span class=n>channel</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>window_size</span><span class=p>,</span> <span class=n>window_size</span><span class=p>)</span><span class=o>.</span><span class=n>contiguous</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># print(&#34;WINDOW&#34;, window.numpy())</span>
+</span></span><span class=line><span class=cl>    <span class=c1># print(window.shape)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>window</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>window</span> <span class=o>=</span> <span class=n>create_window</span><span class=p>(</span><span class=mi>11</span><span class=p>,</span> <span class=mi>3</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>ssim</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>,</span> <span class=n>window_size</span><span class=o>=</span><span class=mi>11</span><span class=p>,</span> <span class=n>size_average</span><span class=o>=</span><span class=kc>True</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=p>(</span><span class=n>_</span><span class=p>,</span><span class=n>_</span><span class=p>,</span><span class=n>channel</span><span class=p>)</span> <span class=o>=</span> <span class=n>img1</span><span class=o>.</span><span class=n>shape</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>img1</span> <span class=o>=</span> <span class=n>img1</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=o>.</span><span class=n>permute</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>img2</span> <span class=o>=</span> <span class=n>img2</span><span class=o>.</span><span class=n>unsqueeze</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span><span class=o>.</span><span class=n>permute</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1>#parameters for ssim --&gt; https://en.wikipedia.org/wiki/Structural_similarity_index_measure</span>
+</span></span><span class=line><span class=cl>    <span class=n>C1</span> <span class=o>=</span> <span class=mf>0.01</span><span class=o>**</span><span class=mi>2</span>
+</span></span><span class=line><span class=cl>    <span class=n>C2</span> <span class=o>=</span> <span class=mf>0.03</span><span class=o>**</span><span class=mi>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>window</span> <span class=o>=</span> <span class=n>create_window</span><span class=p>(</span><span class=n>window_size</span><span class=p>,</span> <span class=n>channel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>mux</span> <span class=o>=</span> <span class=p>(</span><span class=n>img1</span><span class=p>)</span><span class=o>.</span><span class=n>conv2d</span><span class=p>(</span><span class=n>window</span><span class=p>,</span> <span class=n>stride</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>padding</span><span class=o>=</span><span class=n>window_size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span> <span class=n>groups</span><span class=o>=</span><span class=n>channel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>muy</span> <span class=o>=</span> <span class=p>(</span><span class=n>img2</span><span class=p>)</span><span class=o>.</span><span class=n>conv2d</span><span class=p>(</span><span class=n>window</span><span class=p>,</span> <span class=n>stride</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>padding</span><span class=o>=</span><span class=n>window_size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span> <span class=n>groups</span><span class=o>=</span><span class=n>channel</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>mu_x_sq</span> <span class=o>=</span> <span class=n>mux</span> <span class=o>*</span> <span class=n>mux</span>
+</span></span><span class=line><span class=cl>    <span class=n>mu_y_sq</span> <span class=o>=</span> <span class=n>muy</span> <span class=o>*</span> <span class=n>muy</span>
+</span></span><span class=line><span class=cl>    <span class=n>mu_xy</span> <span class=o>=</span> <span class=n>mux</span> <span class=o>*</span> <span class=n>muy</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>sigma_x_sq</span> <span class=o>=</span> <span class=p>(</span><span class=n>img1</span> <span class=o>*</span> <span class=n>img1</span><span class=p>)</span><span class=o>.</span><span class=n>conv2d</span><span class=p>(</span><span class=n>window</span><span class=p>,</span> <span class=n>stride</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>padding</span><span class=o>=</span><span class=n>window_size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span> <span class=n>groups</span><span class=o>=</span><span class=n>channel</span><span class=p>)</span> <span class=o>-</span> <span class=n>mu_x_sq</span>
+</span></span><span class=line><span class=cl>    <span class=n>sigma_y_sq</span> <span class=o>=</span> <span class=p>(</span><span class=n>img2</span> <span class=o>*</span> <span class=n>img2</span><span class=p>)</span><span class=o>.</span><span class=n>conv2d</span><span class=p>(</span><span class=n>window</span><span class=p>,</span> <span class=n>stride</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>padding</span><span class=o>=</span><span class=n>window_size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span> <span class=n>groups</span><span class=o>=</span><span class=n>channel</span><span class=p>)</span> <span class=o>-</span> <span class=n>mu_y_sq</span>
+</span></span><span class=line><span class=cl>    <span class=n>sigma_xy</span> <span class=o>=</span> <span class=p>(</span><span class=n>img1</span> <span class=o>*</span> <span class=n>img2</span><span class=p>)</span><span class=o>.</span><span class=n>conv2d</span><span class=p>(</span><span class=n>window</span><span class=p>,</span> <span class=n>stride</span><span class=o>=</span><span class=mi>1</span><span class=p>,</span> <span class=n>padding</span><span class=o>=</span><span class=n>window_size</span><span class=o>//</span><span class=mi>2</span><span class=p>,</span> <span class=n>groups</span><span class=o>=</span><span class=n>channel</span><span class=p>)</span> <span class=o>-</span> <span class=n>mu_xy</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>SSIM_numerator</span> <span class=o>=</span> <span class=p>(</span><span class=mi>2</span> <span class=o>*</span> <span class=n>mu_xy</span> <span class=o>+</span> <span class=n>C1</span><span class=p>)</span> <span class=o>*</span> <span class=p>(</span><span class=mi>2</span> <span class=o>*</span> <span class=n>sigma_xy</span> <span class=o>+</span> <span class=n>C2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>SSIM_denominator</span> <span class=o>=</span> <span class=p>(</span><span class=n>mu_x_sq</span> <span class=o>+</span> <span class=n>mu_y_sq</span> <span class=o>+</span> <span class=n>C1</span><span class=p>)</span> <span class=o>*</span> <span class=p>(</span><span class=n>sigma_x_sq</span> <span class=o>+</span> <span class=n>sigma_y_sq</span> <span class=o>+</span> <span class=n>C2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># print(SSIM_numerator.numpy())</span>
+</span></span><span class=line><span class=cl>    <span class=c1># print(SSIM_denominator.numpy())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>ssim_map</span> <span class=o>=</span> <span class=n>SSIM_numerator</span> <span class=o>/</span> <span class=n>SSIM_denominator</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># print(ssim_map.numpy())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>ret</span> <span class=o>=</span> <span class=p>((</span><span class=mi>1</span><span class=o>-</span><span class=n>ssim_map</span><span class=p>)</span><span class=o>/</span><span class=mi>2</span><span class=p>)</span><span class=o>.</span><span class=n>clamp</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=mi>1</span><span class=p>)</span>  
+</span></span><span class=line><span class=cl>    <span class=c1># print(ret.numpy())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>ret</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>d_ssim_loss</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>,</span> <span class=n>window_size</span><span class=o>=</span><span class=mi>11</span><span class=p>,</span> <span class=n>size_average</span><span class=o>=</span><span class=kc>True</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>ssim</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>,</span> <span class=n>window_size</span><span class=p>,</span> <span class=n>size_average</span><span class=p>)</span><span class=o>.</span><span class=n>mean</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>l1_loss</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>(</span><span class=n>img1</span> <span class=o>-</span> <span class=n>img2</span><span class=p>)</span><span class=o>.</span><span class=n>abs</span><span class=p>()</span><span class=o>.</span><span class=n>mean</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>combined_loss</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>,</span> <span class=n>lambda_param</span><span class=o>=</span><span class=mf>0.84</span><span class=p>):</span>   
+</span></span><span class=line><span class=cl>    <span class=c1># print(&#34;l1_loss&#34;, l1_loss(img1, img2).numpy())</span>
+</span></span><span class=line><span class=cl>    <span class=c1># print(&#34;d_ssim_loss&#34;, d_ssim_loss(img1, img2).numpy()) </span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=p>(</span><span class=mi>1</span> <span class=o>-</span> <span class=n>lambda_param</span><span class=p>)</span> <span class=o>*</span> <span class=n>l1_loss</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>)</span> <span class=o>+</span> <span class=n>lambda_param</span> <span class=o>*</span> <span class=n>d_ssim_loss</span><span class=p>(</span><span class=n>img1</span><span class=p>,</span> <span class=n>img2</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><h2 id=gaussian-initialization>Gaussian initialization</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=n>KERNEL_SIZE</span> <span class=o>=</span> <span class=mi>101</span>
+</span></span><span class=line><span class=cl><span class=n>image_size</span> <span class=o>=</span> <span class=p>[</span><span class=mi>256</span><span class=p>,</span> <span class=mi>256</span><span class=p>,</span> <span class=mi>3</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>primary_samples</span> <span class=o>=</span> <span class=mi>1000</span>
+</span></span><span class=line><span class=cl><span class=n>backup_samples</span> <span class=o>=</span> <span class=mi>1000</span>
+</span></span><span class=line><span class=cl><span class=n>num_epochs</span> <span class=o>=</span> <span class=mi>1001</span>
+</span></span><span class=line><span class=cl><span class=n>densification_interval</span> <span class=o>=</span> <span class=mi>300</span>
+</span></span><span class=line><span class=cl><span class=n>learning_rate</span> <span class=o>=</span> <span class=mf>0.01</span>
+</span></span><span class=line><span class=cl><span class=n>image_file_name</span> <span class=o>=</span> <span class=s2>&#34;image.png&#34;</span>
+</span></span><span class=line><span class=cl><span class=n>display_interval</span> <span class=o>=</span> <span class=mi>100</span>
+</span></span><span class=line><span class=cl><span class=n>gradient_threshold</span> <span class=o>=</span> <span class=mf>0.002</span>
+</span></span><span class=line><span class=cl><span class=n>gaussian_threshold</span> <span class=o>=</span> <span class=mf>0.75</span>
+</span></span><span class=line><span class=cl><span class=n>display_loss</span> <span class=o>=</span> <span class=kc>True</span>
+</span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=kn>from</span> <span class=nn>PIL</span> <span class=kn>import</span> <span class=n>Image</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>num_samples</span> <span class=o>=</span> <span class=n>primary_samples</span> <span class=o>+</span> <span class=n>backup_samples</span>
+</span></span><span class=line><span class=cl><span class=n>indices_tensor</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mi>1</span><span class=p>,</span><span class=mi>2</span><span class=p>,</span><span class=mi>3</span><span class=p>,</span><span class=mi>4</span><span class=p>],</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>int32</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>image_path</span> <span class=o>=</span> <span class=n>image_file_name</span>
+</span></span><span class=line><span class=cl><span class=n>original_image</span> <span class=o>=</span> <span class=n>Image</span><span class=o>.</span><span class=n>open</span><span class=p>(</span><span class=n>image_path</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>original_image</span> <span class=o>=</span> <span class=n>original_image</span><span class=o>.</span><span class=n>resize</span><span class=p>((</span><span class=n>image_size</span><span class=p>[</span><span class=mi>0</span><span class=p>],</span><span class=n>image_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]))</span>
+</span></span><span class=line><span class=cl><span class=n>original_image</span> <span class=o>=</span> <span class=n>original_image</span><span class=o>.</span><span class=n>convert</span><span class=p>(</span><span class=s1>&#39;RGB&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>original_array</span> <span class=o>=</span> <span class=n>np</span><span class=o>.</span><span class=n>array</span><span class=p>(</span><span class=n>original_image</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>original_array</span> <span class=o>=</span> <span class=n>original_array</span> <span class=o>/</span> <span class=mf>255.0</span>
+</span></span><span class=line><span class=cl><span class=n>width</span><span class=p>,</span> <span class=n>height</span><span class=p>,</span> <span class=n>_</span> <span class=o>=</span> <span class=n>original_array</span><span class=o>.</span><span class=n>shape</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>image_array</span> <span class=o>=</span> <span class=n>original_array</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>target_tensor</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>(</span><span class=n>image_array</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Creating pixel values</span>
+</span></span><span class=line><span class=cl><span class=n>coords_tensor</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>rand</span><span class=p>(</span><span class=n>primary_samples</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>,</span> <span class=n>requires_grad</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>center_values</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>([</span><span class=mf>0.5</span><span class=p>,</span> <span class=mf>0.5</span><span class=p>],</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>,</span> <span class=n>requires_grad</span><span class=o>=</span><span class=kc>False</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>coords_tensor</span> <span class=o>=</span> <span class=p>(</span><span class=n>coords_tensor</span> <span class=o>-</span> <span class=n>center_values</span><span class=p>)</span> <span class=o>*</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl><span class=n>pixel_coords_tensor</span> <span class=o>=</span> <span class=n>coords_tensor</span><span class=o>.</span><span class=n>atanh</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># integer coordinates</span>
+</span></span><span class=line><span class=cl><span class=n>coords_tensor_integers</span> <span class=o>=</span> <span class=p>(</span><span class=n>coords_tensor</span> <span class=o>+</span> <span class=mi>1</span><span class=p>)</span> <span class=o>*</span> <span class=mf>0.5</span> <span class=o>*</span> <span class=n>image_size</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=n>coords_tensor_integers</span> <span class=o>=</span> <span class=n>coords_tensor_integers</span><span class=o>.</span><span class=n>int</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># creating color values picked from the above pixels coordinates</span>
+</span></span><span class=line><span class=cl><span class=n>color_values</span> <span class=o>=</span> <span class=n>image_array</span><span class=p>[</span><span class=n>coords_tensor_integers</span><span class=p>[:,</span> <span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>numpy</span><span class=p>(),</span> <span class=n>coords_tensor_integers</span><span class=p>[:,</span> <span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>numpy</span><span class=p>()]</span>
+</span></span><span class=line><span class=cl><span class=n>color_values_tensor</span> <span class=o>=</span> <span class=n>Tensor</span><span class=p>(</span><span class=n>color_values</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>,</span> <span class=n>requires_grad</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span> <span class=o>-</span> <span class=mf>1e-6</span>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=n>color_values_tensor</span><span class=p>[</span><span class=n>indices_tensor</span><span class=p>]</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl><span class=n>color_values_tensor</span> <span class=o>=</span> <span class=p>(</span><span class=n>color_values_tensor</span><span class=o>.</span><span class=n>div</span><span class=p>(</span><span class=mi>1</span> <span class=o>-</span> <span class=n>color_values_tensor</span><span class=p>))</span><span class=o>.</span><span class=n>log</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># randomly initialize the scales of the Gaussians</span>
+</span></span><span class=line><span class=cl><span class=n>scale_values_tensor</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>rand</span><span class=p>(</span><span class=n>primary_samples</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>,</span> <span class=n>requires_grad</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>scale_values_tensor</span> <span class=o>=</span> <span class=n>scale_values_tensor</span> <span class=o>*</span> <span class=p>(</span><span class=n>KERNEL_SIZE</span> <span class=o>/</span> <span class=n>image_size</span><span class=p>[</span><span class=mi>0</span><span class=p>])</span>
+</span></span><span class=line><span class=cl><span class=n>scale_values_tensor</span> <span class=o>=</span> <span class=p>(</span><span class=n>scale_values_tensor</span><span class=o>.</span><span class=n>div</span><span class=p>(</span><span class=mi>1</span> <span class=o>-</span> <span class=n>scale_values_tensor</span><span class=p>))</span><span class=o>.</span><span class=n>log</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># randomly initialize the alpha values</span>
+</span></span><span class=line><span class=cl><span class=n>alpha_values_tensor</span> <span class=o>=</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>rand</span><span class=p>(</span><span class=n>primary_samples</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>,</span> <span class=n>requires_grad</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>alpha_values_tensor</span> <span class=o>=</span> <span class=p>(</span><span class=n>alpha_values_tensor</span><span class=o>.</span><span class=n>div</span><span class=p>(</span><span class=mi>1</span><span class=o>-</span><span class=n>alpha_values_tensor</span><span class=p>))</span><span class=o>.</span><span class=n>log</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># randomly initialize the rotation values</span>
+</span></span><span class=line><span class=cl><span class=n>rotation_values_tensor</span> <span class=o>=</span> <span class=p>(</span><span class=mi>2</span> <span class=o>*</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>rand</span><span class=p>(</span><span class=n>primary_samples</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=n>dtype</span><span class=o>=</span><span class=n>dtypes</span><span class=o>.</span><span class=n>float32</span><span class=p>,</span> <span class=n>requires_grad</span><span class=o>=</span><span class=kc>True</span><span class=p>)</span> <span class=o>-</span> <span class=mi>1</span><span class=p>)</span><span class=o>.</span><span class=n>atanh</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>W_values</span> <span class=o>=</span> <span class=n>scale_values_tensor</span><span class=o>.</span><span class=n>cat</span><span class=p>(</span><span class=n>rotation_values_tensor</span><span class=p>,</span> <span class=n>alpha_values_tensor</span><span class=p>,</span> <span class=n>color_values_tensor</span><span class=p>,</span> <span class=n>pixel_coords_tensor</span><span class=p>,</span> <span class=n>dim</span><span class=o>=</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>current_marker</span> <span class=o>=</span> <span class=n>primary_samples</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>optimizer</span> <span class=o>=</span> <span class=n>Adam</span><span class=p>([</span><span class=n>W_values</span><span class=p>],</span> <span class=n>lr</span><span class=o>=</span><span class=mf>0.01</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>loss_history</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>print</span><span class=p>(</span><span class=s2>&#34;W_values&#34;</span><span class=p>,</span> <span class=n>W_values</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span></code></pre></td></tr></table></div></div><pre><code>[[0.999999   0.9843127  0.8980382 ]
+ [0.8392147  0.65882254 0.53333235]
+ [0.7843127  0.52156764 0.3607833 ]
+ [0.41568527 0.21960685 0.13333234]]
+W_values [[-0.54993796 -1.1160274   0.8613155  ...  1.1569787   0.58915764
+   0.56054527]
+ [-0.47431156 -1.4623814  -0.29018548 ...  2.1756144   0.5716399
+   1.3245654 ]
+ [-1.0486472  -0.44274005 -0.24903129 ...  0.13352737 -1.5464258
+  -1.7472926 ]
+ ...
+ [-0.7139706  -0.72302985  0.58153236 ... -1.1786605  -0.5808338
+   0.8099289 ]
+ [-1.3315802  -0.7195469  -0.7180436  ...  0.91354233  1.2216995
+  -1.3849137 ]
+ [-2.0519974  -0.9536712   0.54569    ...  0.67554694  0.77612275
+  -1.0774331 ]]
+</code></pre><h2 id=training-loop>Training Loop</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=k>def</span> <span class=nf>step</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>output</span> <span class=o>=</span> <span class=n>W_values</span><span class=p>[:</span><span class=n>current_marker</span><span class=p>]</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>batch_size</span> <span class=o>=</span> <span class=n>output</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>    
+</span></span><span class=line><span class=cl>    <span class=n>scale</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>0</span><span class=p>:</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>sigmoid</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>rotation</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>tanh</span><span class=p>()</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span> <span class=o>/</span><span class=mi>2</span>
+</span></span><span class=line><span class=cl>    <span class=n>alpha</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>3</span><span class=p>]</span><span class=o>.</span><span class=n>sigmoid</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>color</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>4</span><span class=p>:</span><span class=mi>7</span><span class=p>]</span><span class=o>.</span><span class=n>sigmoid</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>coords</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>7</span><span class=p>:</span><span class=mi>9</span><span class=p>]</span><span class=o>.</span><span class=n>tanh</span><span class=p>()</span>          
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>colors_with_alpha</span> <span class=o>=</span> <span class=n>color</span> <span class=o>*</span> <span class=p>(</span><span class=n>alpha</span><span class=o>.</span><span class=n>view</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>1</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>g_tensor_batch</span> <span class=o>=</span> <span class=n>generate_splat</span><span class=p>(</span><span class=n>coords</span><span class=p>,</span> <span class=n>colors_with_alpha</span><span class=p>,</span> <span class=n>scale</span><span class=p>[:,</span><span class=mi>0</span><span class=p>],</span> <span class=n>scale</span><span class=p>[:,</span><span class=mi>1</span><span class=p>],</span> <span class=n>rotation</span><span class=p>,</span> <span class=n>image_size</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>loss</span> <span class=o>=</span> <span class=n>combined_loss</span><span class=p>(</span><span class=n>g_tensor_batch</span><span class=p>,</span> <span class=n>target_tensor</span><span class=p>,</span> <span class=n>lambda_param</span><span class=o>=</span><span class=mf>0.5</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>optimizer</span><span class=o>.</span><span class=n>zero_grad</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>loss</span><span class=o>.</span><span class=n>backward</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>optimizer</span><span class=o>.</span><span class=n>step</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>loss</span><span class=p>,</span> <span class=n>g_tensor_batch</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>jit_step</span> <span class=o>=</span> <span class=n>TinyJit</span><span class=p>(</span><span class=n>step</span><span class=p>)</span>
+</span></span></code></pre></td></tr></table></div></div><p>In this first training we are also using TinyJIT() to JIT our code and make it faster. On my small benchmarks with JIT I got 40 seconds less time over 1000 iterations, just for free. It is my first experiment with Tinygrad and I will dig deeper in the next parts.</p><p>The goal of the next parts are:</p><ol><li>Make the training faster and try to remove and optimize code</li><li>Make more benchmark with different amounts of Gaussians</li><li>Add one important step -> densification process.</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 1.18 minutes 1000 epochs with MPS acceleration and TinyJIT enabled()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>train</span><span class=p>():</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>epoch</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>num_epochs</span><span class=p>):</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>loss</span><span class=p>,</span> <span class=n>g_tensor_batch</span> <span class=o>=</span> <span class=n>jit_step</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>loss_history</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>loss</span><span class=o>.</span><span class=n>item</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>epoch</span> <span class=o>%</span> <span class=n>display_interval</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>num_subplots</span> <span class=o>=</span> <span class=mi>3</span> <span class=k>if</span> <span class=n>display_loss</span> <span class=k>else</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>            <span class=n>fig_size_width</span> <span class=o>=</span> <span class=mi>18</span> <span class=k>if</span> <span class=n>display_loss</span> <span class=k>else</span> <span class=mi>12</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>fig</span><span class=p>,</span> <span class=n>ax</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>num_subplots</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=n>fig_size_width</span><span class=p>,</span> <span class=mi>6</span><span class=p>))</span>  <span class=c1># Adjust subplot to 1x3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>generated_array</span> <span class=o>=</span> <span class=n>g_tensor_batch</span><span class=o>.</span><span class=n>numpy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>g_tensor_batch</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;2D Gaussian Splatting&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># ax[0].axis(&#39;off&#39;)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>target_tensor</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;Ground Truth&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># ax[1].axis(&#39;off&#39;)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>display_loss</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>plot</span><span class=p>(</span><span class=nb>range</span><span class=p>(</span><span class=n>epoch</span> <span class=o>+</span> <span class=mi>1</span><span class=p>),</span> <span class=n>loss_history</span><span class=p>[:</span><span class=n>epoch</span> <span class=o>+</span> <span class=mi>1</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;Loss vs. Epochs&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_xlabel</span><span class=p>(</span><span class=s1>&#39;Epoch&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_ylabel</span><span class=p>(</span><span class=s1>&#39;Loss&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_xlim</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=n>num_epochs</span><span class=p>)</span>  <span class=c1># Set x-axis limits</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1># Display the image</span>
+</span></span><span class=line><span class=cl>            <span class=c1>#plt.show(block=False)</span>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>subplots_adjust</span><span class=p>(</span><span class=n>wspace</span><span class=o>=</span><span class=mf>0.1</span><span class=p>)</span>  <span class=c1># Adjust this value to your preference</span>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>pause</span><span class=p>(</span><span class=mf>0.1</span><span class=p>)</span>  <span class=c1># Brief pause</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>img</span> <span class=o>=</span> <span class=n>Image</span><span class=o>.</span><span class=n>fromarray</span><span class=p>((</span><span class=n>generated_array</span> <span class=o>*</span> <span class=mi>255</span><span class=p>)</span><span class=o>.</span><span class=n>astype</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>uint8</span><span class=p>))</span>            
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>clf</span><span class=p>()</span>  <span class=c1># Clear the current figure</span>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>close</span><span class=p>()</span>  <span class=c1># Close the current figure</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Epoch </span><span class=si>{</span><span class=n>epoch</span><span class=o>+</span><span class=mi>1</span><span class=si>}</span><span class=s2>/</span><span class=si>{</span><span class=n>num_epochs</span><span class=si>}</span><span class=s2>, Loss: </span><span class=si>{</span><span class=n>loss</span><span class=o>.</span><span class=n>item</span><span class=p>()</span><span class=si>}</span><span class=s2>, on </span><span class=si>{</span><span class=nb>len</span><span class=p>(</span><span class=n>W_values</span><span class=p>[:</span><span class=n>current_marker</span><span class=p>])</span><span class=si>}</span><span class=s2> points&#34;</span><span class=p>)</span> 
+</span></span></code></pre></td></tr></table></div></div><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_0.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_0_hu916629848038515553.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_0_hu18413829263332796380.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 1/1001, Loss: 0.0364842414855957, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_2.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_2_hu2787514703220390894.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_2_hu11556841447877819740.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 101/1001, Loss: 0.03585021570324898, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_4.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_4_hu13881919141200617827.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_4_hu11684509406166452198.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 201/1001, Loss: 0.03566993400454521, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_6.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_6_hu3308284007492192.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_6_hu15360573229030562379.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 301/1001, Loss: 0.034923359751701355, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_8.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_8_hu1685233189444671693.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_8_hu7641399406127955084.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 401/1001, Loss: 0.034740205854177475, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_10.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_10_hu13341613127356026525.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_10_hu10208085520060349264.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 501/1001, Loss: 0.034602079540491104, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_12.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_12_hu15557269618339155627.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_12_hu3930755905100821047.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 601/1001, Loss: 0.034172043204307556, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_14.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_14_hu12214038580766074424.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_14_hu6188527891520249391.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 701/1001, Loss: 0.03396090120077133, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_16.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_16_hu3353246981599674988.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_16_hu12128669040613783205.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 801/1001, Loss: 0.0335845910012722, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_18.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_18_hu5165154543212886154.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_18_hu16595079221153895249.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 901/1001, Loss: 0.03337327390909195, on 1000 points
+</code></pre><p><img src=/04_notebook/tinysplat/tinysplat_files/tinysplat_34_20.png width=1468 height=547 srcset="/04_notebook/tinysplat/tinysplat_files/tinysplat_34_20_hu9890201478576121905.png 480w, /04_notebook/tinysplat/tinysplat_files/tinysplat_34_20_hu11860010788257236280.png 1024w" loading=lazy alt=png class=gallery-image data-flex-grow=268 data-flex-basis=644px></p><pre><code>Epoch 1001/1001, Loss: 0.03339459002017975, on 1000 points
+</code></pre><h2 id=training-loop-without-jit>Training Loop without JIT</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-python data-lang=python><span class=line><span class=cl><span class=c1># 1.58 minutes for 1000 epochs MPS accelerated</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>with</span> <span class=n>Tensor</span><span class=o>.</span><span class=n>train</span><span class=p>():</span>    
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>epoch</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=n>num_epochs</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>output</span> <span class=o>=</span> <span class=n>W_values</span>                                  
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>batch_size</span> <span class=o>=</span> <span class=n>output</span><span class=o>.</span><span class=n>shape</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>        <span class=n>scale</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>0</span><span class=p>:</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>sigmoid</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>rotation</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>tanh</span><span class=p>()</span> <span class=o>*</span> <span class=n>np</span><span class=o>.</span><span class=n>pi</span> <span class=o>/</span><span class=mi>2</span>
+</span></span><span class=line><span class=cl>        <span class=n>alpha</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>3</span><span class=p>]</span><span class=o>.</span><span class=n>sigmoid</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>        <span class=n>color</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>4</span><span class=p>:</span><span class=mi>7</span><span class=p>]</span><span class=o>.</span><span class=n>sigmoid</span><span class=p>()</span>        
+</span></span><span class=line><span class=cl>        <span class=n>coords</span> <span class=o>=</span> <span class=n>output</span><span class=p>[:,</span><span class=mi>7</span><span class=p>:</span><span class=mi>9</span><span class=p>]</span><span class=o>.</span><span class=n>tanh</span><span class=p>()</span>          
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>colors_with_alpha</span> <span class=o>=</span> <span class=n>color</span> <span class=o>*</span> <span class=p>(</span><span class=n>alpha</span><span class=o>.</span><span class=n>view</span><span class=p>(</span><span class=n>batch_size</span><span class=p>,</span> <span class=mi>1</span><span class=p>))</span>     
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># I think I just need to change the order here! and then it should magically work         </span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>g_tensor_batch</span> <span class=o>=</span> <span class=n>generate_splat</span><span class=p>(</span><span class=n>coords</span><span class=p>,</span> <span class=n>colors_with_alpha</span><span class=p>,</span> <span class=n>scale</span><span class=p>[:,</span><span class=mi>0</span><span class=p>],</span> <span class=n>scale</span><span class=p>[:,</span><span class=mi>1</span><span class=p>],</span> <span class=n>rotation</span><span class=p>,</span> <span class=n>image_size</span><span class=p>)</span>        
+</span></span><span class=line><span class=cl>        <span class=n>loss</span> <span class=o>=</span> <span class=n>combined_loss</span><span class=p>(</span><span class=n>g_tensor_batch</span><span class=p>,</span> <span class=n>target_tensor</span><span class=p>,</span> <span class=n>lambda_param</span><span class=o>=</span><span class=mf>0.5</span><span class=p>)</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>optimizer</span><span class=o>.</span><span class=n>zero_grad</span><span class=p>()</span>        
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>loss</span><span class=o>.</span><span class=n>backward</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>optimizer</span><span class=o>.</span><span class=n>step</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=n>loss_history</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>loss</span><span class=o>.</span><span class=n>item</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>epoch</span> <span class=o>%</span> <span class=n>display_interval</span> <span class=o>==</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>num_subplots</span> <span class=o>=</span> <span class=mi>3</span> <span class=k>if</span> <span class=n>display_loss</span> <span class=k>else</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>            <span class=n>fig_size_width</span> <span class=o>=</span> <span class=mi>18</span> <span class=k>if</span> <span class=n>display_loss</span> <span class=k>else</span> <span class=mi>12</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>fig</span><span class=p>,</span> <span class=n>ax</span> <span class=o>=</span> <span class=n>plt</span><span class=o>.</span><span class=n>subplots</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=n>num_subplots</span><span class=p>,</span> <span class=n>figsize</span><span class=o>=</span><span class=p>(</span><span class=n>fig_size_width</span><span class=p>,</span> <span class=mi>6</span><span class=p>))</span>  <span class=c1># Adjust subplot to 1x3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>generated_array</span> <span class=o>=</span> <span class=n>g_tensor_batch</span><span class=o>.</span><span class=n>numpy</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>g_tensor_batch</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;2D Gaussian Splatting&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># ax[0].axis(&#39;off&#39;)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>imshow</span><span class=p>(</span><span class=n>target_tensor</span><span class=o>.</span><span class=n>numpy</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>            <span class=n>ax</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;Ground Truth&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>            <span class=c1># ax[1].axis(&#39;off&#39;)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=n>display_loss</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>plot</span><span class=p>(</span><span class=nb>range</span><span class=p>(</span><span class=n>epoch</span> <span class=o>+</span> <span class=mi>1</span><span class=p>),</span> <span class=n>loss_history</span><span class=p>[:</span><span class=n>epoch</span> <span class=o>+</span> <span class=mi>1</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_title</span><span class=p>(</span><span class=s1>&#39;Loss vs. Epochs&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_xlabel</span><span class=p>(</span><span class=s1>&#39;Epoch&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_ylabel</span><span class=p>(</span><span class=s1>&#39;Loss&#39;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>                <span class=n>ax</span><span class=p>[</span><span class=mi>2</span><span class=p>]</span><span class=o>.</span><span class=n>set_xlim</span><span class=p>(</span><span class=mi>0</span><span class=p>,</span> <span class=n>num_epochs</span><span class=p>)</span>  <span class=c1># Set x-axis limits</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1># Display the image</span>
+</span></span><span class=line><span class=cl>            <span class=c1>#plt.show(block=False)</span>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>subplots_adjust</span><span class=p>(</span><span class=n>wspace</span><span class=o>=</span><span class=mf>0.1</span><span class=p>)</span>  <span class=c1># Adjust this value to your preference</span>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>pause</span><span class=p>(</span><span class=mf>0.1</span><span class=p>)</span>  <span class=c1># Brief pause</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>img</span> <span class=o>=</span> <span class=n>Image</span><span class=o>.</span><span class=n>fromarray</span><span class=p>((</span><span class=n>generated_array</span> <span class=o>*</span> <span class=mi>255</span><span class=p>)</span><span class=o>.</span><span class=n>astype</span><span class=p>(</span><span class=n>np</span><span class=o>.</span><span class=n>uint8</span><span class=p>))</span>            
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>clf</span><span class=p>()</span>  <span class=c1># Clear the current figure</span>
+</span></span><span class=line><span class=cl>            <span class=n>plt</span><span class=o>.</span><span class=n>close</span><span class=p>()</span>  <span class=c1># Close the current figure</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;Epoch </span><span class=si>{</span><span class=n>epoch</span><span class=o>+</span><span class=mi>1</span><span class=si>}</span><span class=s2>/</span><span class=si>{</span><span class=n>num_epochs</span><span class=si>}</span><span class=s2>, Loss: </span><span class=si>{</span><span class=n>loss</span><span class=o>.</span><span class=n>item</span><span class=p>()</span><span class=si>}</span><span class=s2>, on </span><span class=si>{</span><span class=nb>len</span><span class=p>(</span><span class=n>output</span><span class=p>)</span><span class=si>}</span><span class=s2> points&#34;</span><span class=p>)</span> 
+</span></span></code></pre></td></tr></table></div></div><h2 id=conclusions>Conclusions</h2><p>Thank you for reading, this was part 1 of the series on Gaussian splatting. Let me know if you find any errors or have any suggestions. I will be happy to hear from you, just create a pull request or an issue on the github repository.</p><p>Stay tuned for the next part where we will densify the Gaussians and make the training faster and more efficient.</p><p>Also 3D Gaussians is coming soon hopefully!</p></section><footer class=article-footer></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css integrity=sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV crossorigin=anonymous><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js integrity=sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8 crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous defer></script><script>window.addEventListener("DOMContentLoaded",()=>{renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1},{left:"\\[",right:"\\]",display:!0}],ignoredClasses:["gist"]})})</script></article><div class="article-list--compact links"><article><a href=https://github.com/Sebo-the-tramp/tinysplat target=_blank rel=noopener><div class=article-details><h2 class=article-title>Github Repository</h2><footer class=article-time>See the original code and the notebook on Github</footer></div></a></article></div><footer class=site-footer><section class=copyright>&copy;
+2020 -
+2026 Sebastian Cavada</section><section class=powerby>Built with <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a><br>Theme <b><a href=https://github.com/CaiJimmy/hugo-theme-stack target=_blank rel=noopener data-version=3.26.0>Stack</a></b> designed by <a href=https://jimmycai.com target=_blank rel=noopener>Jimmy</a></section></footer><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

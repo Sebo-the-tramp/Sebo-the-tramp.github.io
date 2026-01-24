@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Thoughts on Sebastian Cavada</title><link>https://sebo-the-tramp.github.io/categories/thoughts/</link><description>Recent content in Thoughts on Sebastian Cavada</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 24 Oct 2025 10:21:13 +0200</lastBuildDate><atom:link href="https://sebo-the-tramp.github.io/categories/thoughts/index.xml" rel="self" type="application/rss+xml"/><item><title>In response to Dad's post</title><link>https://sebo-the-tramp.github.io/p/in-response-to-dad/</link><pubDate>Fri, 24 Oct 2025 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/in-response-to-dad/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/in-response-to-dad/cover.png" alt="Featured image of post In response to Dad's post" />&lt;blockquote>
+&lt;p>&lt;p>Every day we read about new layoffs,
+even in companies that once seemed untouchable.
+And every time, I find myself asking the same question:&lt;/p>
+&lt;p>👉 Are we teaching AI to do our jobs?&lt;/p>
+&lt;p>Thousands of developers are training intelligent agents
+to solve problems, write code, optimize processes… completely on their own.&lt;/p>
+&lt;p>The paradox?
+It’s like programming your own dismissal,
+line after line of code.&lt;/p>
+&lt;p>A collective self-layoff,
+perhaps unintended, but inevitable — unless we start asking ourselves:
+what role do we want to play when machines can do everything we can?&lt;/p>
+&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Dario Cavada, &lt;/span>&lt;cite>https://www.linkedin.com/feed/update/urn:li:activity:7387040204890456066/&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;p>This is the quote translated by ChatGPT fn the post itself, at the end you will find the original one. TL;DR, my dad is arguing that we (programmers) are &amp;ldquo;programming&amp;rdquo; our own lay of from AI. This because of today&amp;rsquo;s news about Meta&amp;rsquo;s layoff. Few friends commented that as very pessimistic and arguably it is. I wanted to reply something below his post but I felt few lines could not be in my favour so here it is, in between paper deadline, I am keen to write this piece which is quite dear to me.&lt;/p>
+&lt;p>But where do I even start? I will go in order of the ideas that I wanted to reply&lt;/p>
+&lt;h2 id="abstraction">Abstraction
+&lt;/h2>&lt;blockquote>
+&lt;p>I am curios if programmers when compilers and high level languages were this pessimistic too&amp;hellip;&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Sebastian Cavada, &lt;/span>&lt;cite>Reply n.1 I never posted&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;p>This is something that I reasoned about before. It is unintuitive, but someone before me shared it for sure. In particular in the 70s-80s when only programming language was ASSEMBLY, well most programmers were writing exactly in that language, then C came around, and C++ never mind python&amp;hellip; Such programmers might have thought: &amp;ldquo;If everything is offloaded to the compiler, we would do the same things in 1/10th of the time&amp;rdquo;, and we might be replaced. Well I think, and for my knowledge, high level languages are what inspired generations, and also made possible to build what we have available today. Could it be that AI is just another (MASSIVE) improvement in the abstraction of the code stack? Well, I think the first signs of that are already there, see Lovable, see how much more efficient are programmers, see how Tesla has built so much of his tech stack into software 2.0 which is just neural network based. Referring again GeoHot on similar topic to this post &lt;a class="link" href="https://geohot.github.io/blog/jekyll/update/2025/09/12/ai-coding.html" target="_blank" rel="noopener"
+>here&lt;/a> but with some perks ;).&lt;/p>
+&lt;p>Thus generally I&amp;rsquo;d like to see things in an optimistic way, because why not. And second because well it&amp;rsquo;s true that this technology is so new and so &amp;ldquo;alien&amp;rdquo; that we might not know what&amp;rsquo;s coming, what I think though is that we should leverage it, and there are so many possibilities.&lt;/p>
+&lt;h2 id="less-work-or-more">Less work, or more?
+&lt;/h2>&lt;p>One assumption there, is that given that there are lays off, it means there is less work for everyone. I don&amp;rsquo;t agree on that either, thinking back at when agriculture was mainly done by hand. At that time a lot of people were involved, but then technology arrived and the number of people in agriculture became just a fraction of what it was before. I don&amp;rsquo;t see why that is not going to happen as well. Laying offs are (beside very sad, and with lot of negative ripercussions) a natural cycle of business, exactly as it is to open a business, as it is failing at a business. This very process is what led us here today, with this many tools that allows me to write and share with the world my thoughs. A very good turn over of the story is that probably the brilliance of these people will make them find a job instantly, as per many tweets already today of people trying to hire the &amp;ldquo;left out&amp;rdquo;.&lt;/p>
+&lt;p>In general what I see and what I hope will be the future is more about being able to do the same amount of work with less people and more machines, more tokens from an intelligence that is trained to do that. But this will allow to people to do more of those things, and this is exactly where we need to be mindful and cautious.&lt;/p>
+&lt;h2 id="who-is-replacing-whom">Who is replacing whom?
+&lt;/h2>&lt;blockquote>
+&lt;p>Maybe we should think about who owns this AI and how they are trying to lock us in?&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Sebastian Cavada, &lt;/span>&lt;cite>Reply n.2 I never posted&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;p>In the las period I have been thinking about this a lot. If manager and CEOs can lay off employees, why and how are they going to be replaced by? Well easy answer is AI. Yes but more technically? Well it&amp;rsquo;s about LLMs, with agentic capabilities, that can code, better (so they say) than a professional (not really correct maybe better than a freshman). Anyway, assuming this statement correct, than what? Well this agents are running somewhere, and not outside on the ground but in the cloud (small dad joke). So ultimately, employees in my mind are just being replaced by GPUs. Yes but GPUs + electricity (because GPUs without electricity are useless).&lt;/p>
+&lt;p>Fun fact now the compute is not calculated anymore in FLOPS per second (Floating Point Operations Per Second) rather on a larger scale in Gigawatts, yes the unit of Energy! So now energy is directly converted in Computational Scale!&lt;/p>
+&lt;p>Thus employees (humans) are getting replaced by Tecnology, Electricity and you are correct some massime amount of numbers. But this reminds me about again and again, as most of the transitions that happened in humanity.&lt;/p>
+&lt;h2 id="so-is-it-all-rainbows-and-unicorns">So is it all rainbows and unicorns?
+&lt;/h2>&lt;p>Well I tend to be a tecno optimist (I think inspired by GeoHot) and mostly I think everything will go well and humanity as a whole will be fine. I like to think that those technologies, yes are driven by closed source, but open source is taking up faster and faster thanks to some key players. But we cannot rely on their benevolence forever. Things might change, OpenAI, going from non-profit to for-profit, Meta stopping the plans from LLama 5 (So it seems) and taking slightly different direction. Europe not knowing what the hell an LLM is, but wanting to enforce some weird laws anyway. China picking up speed at an unbelivable speed. Well probably that is exactly what we should talk about, not about laysoffs from meta, but rather the broader impact of AI.
+Of course there will be so much to add to this paragraph, about security, AGI, etc, but on this I might refer the reader to the GeoHot blogpost titled &lt;a class="link" href="" >&lt;/a> -&amp;gt; I couldn&amp;rsquo;t find it now&lt;/p>
+&lt;h2 id="in-the-end">In the end
+&lt;/h2>&lt;p>Trying to find the link in the previous paragraph I lost my flow.
+Nevertheless what I wanted to add that is extremely important is that we shouldn&amp;rsquo;t be scared of this progress, we shall try to embrace it learn as much as we can and probably being suprised in the end.&lt;/p>
+&lt;p>The possibilities are limitless. If AI is so powerful and one day it will be, we will get access to free energy from nuclear fusion, we&amp;rsquo;ll get closer to quantum computers and guess, maybe we will be able to train LLMs on quantum computers. We might raise the minimum IQ points, of every child because instead of taking 5 years of elementary school they will go to a kindergarten where they will learn calculus by building with legos. They will engage in languages from 4-5 years old and grow up knowing 10 different languages. We could cure cancer, not only by editing genes and personalized cures, but and especially in the prevention of those, by optimal nutrition, sport, health, stress monitoring etc.
+By the way I am not saying everything will be good, but the good will outweight the bad. But we need to be careful not to fall in the AI slope of infinite amount of funny videos generated by sora that will keep us attached to our phone and dopamine maxxing without any positive output for the society.&lt;/p>
+&lt;p>And concluding I want to underline that I see infinite ways of creating a bright future, it’s up to us to choose whether we see the glass half empty, or overflowing with possibility.&lt;/p>
+&lt;blockquote>
+&lt;p>An employee getting fired might finally find the courage to start the new venture that will revolutionize the world.&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Sebastian Cavada, &lt;/span>&lt;cite>Reply n.3 I never posted&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;hr>
+&lt;h4 id="the-original-post">The original post:
+&lt;/h4>&lt;blockquote>
+&lt;p>&lt;p>Ogni giorno leggiamo di nuovi licenziamenti,
+anche in aziende che sembravano intoccabili.
+E ogni volta mi viene la stessa domanda:&lt;/p>
+&lt;p>👉 Stiamo insegnando alle AI a fare il nostro lavoro?&lt;/p>
+&lt;p>Migliaia di sviluppatori addestrano agenti intelligenti
+a risolvere problemi, scrivere codice, ottimizzare processi… in completa autonomia.&lt;/p>
+&lt;p>Il paradosso?
+È come programmare il proprio licenziamento,
+riga dopo riga di codice.&lt;/p>
+&lt;p>Un auto-licenziamento collettivo,
+forse non voluto, ma inesorabile a meno che non iniziamo a chiederci:
+che ruolo vogliamo avere quando le macchine sapranno fare tutto ciò che sappiamo noi?&lt;/p>
+&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Dario Cavada, &lt;/span>&lt;cite>https://www.linkedin.com/feed/update/urn:li:activity:7387040204890456066/&lt;/cite>&lt;/span>&lt;/blockquote></description></item><item><title>Day 1</title><link>https://sebo-the-tramp.github.io/12_project/day_01/</link><pubDate>Wed, 23 Apr 2025 10:08:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/12_project/day_01/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/12_project/day_01/day_01.png" alt="Featured image of post Day 1" />&lt;h1 id="day-1--partire-leaving">Day 1 – Partire (Leaving)
+&lt;/h1>&lt;h2 id="what-i-saw">What I saw:
+&lt;/h2>&lt;p>Another opportunity.
+An opportunity to start a journey with friends—many, then a few—and eventually, just myself. An opportunity that comes with responsibilities, that comes with drawbacks and downsides.
+The good outweighed the bad. The return outweighed the cost. The opportunity was too big to say no.&lt;/p>
+&lt;p>I left. It is never easy. Especially when there is someone home waiting for you. I am so lucky that my family supports me to the fullest and encourages me to do the things I wish. It is the real &amp;ldquo;richness&amp;rdquo;. That’s the real wealth. Not money. Not comfort. Just knowing someone’s always rooting for you. That’s what makes all this possible.&lt;/p>
+&lt;p>And lately I have been leaving home &amp;ldquo;lighter&amp;rdquo;. It&amp;rsquo;s strange but now has become &amp;ldquo;routine&amp;rdquo;.&lt;/p>
+&lt;h2 id="what-i-felt">What I felt:
+&lt;/h2>&lt;p>I usually feel lighter, full of energy and direction. Though I’m away for less time, the feeling hit harder this time. The belonging to my family and to my home, were dragging me back more than usual, and at the same time the unknown of this 12 days, was exciting me more than I thought.&lt;/p>
+&lt;h2 id="what-i-learned">What I learned:
+&lt;/h2>&lt;p>Well, I guess I had to come to know this a while ago when I really needed, that the people you can really count on are maybe a handful if you are lucky. They’re the ones who stay, through everything—literally everything. That’s what makes them worth calling family.
+And those are the people that it will always be hard to leave when I start new adventures like this. They are the very reason I do this. They gave me the chance—and the foundation—for everything I’ve become.&lt;/p>
+&lt;h2 id="a-question-for-you">A question for you:
+&lt;/h2>&lt;blockquote>
+&lt;p>Family and friends are the soul’s anchors.
+And you, when was the last time you were grateful for your people that made &amp;ldquo;leaving&amp;rdquo; so difficult?&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Me, abstract from my thesis&lt;/span>&lt;cite>&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;h2 id="-watch-the-video-again-with-this-in-mind-youtube-linkhttpswwwyoutubecomwatchvac51pvpbw3gab_channelsebastiancavada">→ Watch the video again with this in mind. (youtube link)[https://www.youtube.com/watch?v=ac51PvPBw3g&amp;amp;ab_channel=SebastianCavada]
+&lt;/h2></description></item><item><title>Day 1</title><link>https://sebo-the-tramp.github.io/12_project/day_01/</link><pubDate>Wed, 23 Apr 2025 10:08:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/12_project/day_01/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/12_project/day_01/day_01.png" alt="Featured image of post Day 1" />&lt;h1 id="day-1--partire-leaving">Day 1 – Partire (Leaving)
+&lt;/h1>&lt;h2 id="what-i-saw">What I saw:
+&lt;/h2>&lt;p>Another opportunity.
+An opportunity to start a journey with friends—many, then a few—and eventually, just myself. An opportunity that comes with responsibilities, that comes with drawbacks and downsides.
+The good outweighed the bad. The return outweighed the cost. The opportunity was too big to say no.&lt;/p>
+&lt;p>I left. It is never easy. Especially when there is someone home waiting for you. I am so lucky that my family supports me to the fullest and encourages me to do the things I wish. It is the real &amp;ldquo;richness&amp;rdquo;. That’s the real wealth. Not money. Not comfort. Just knowing someone’s always rooting for you. That’s what makes all this possible.&lt;/p>
+&lt;p>And lately I have been leaving home &amp;ldquo;lighter&amp;rdquo;. It&amp;rsquo;s strange but now has become &amp;ldquo;routine&amp;rdquo;.&lt;/p>
+&lt;h2 id="what-i-felt">What I felt:
+&lt;/h2>&lt;p>I usually feel lighter, full of energy and direction. Though I’m away for less time, the feeling hit harder this time. The belonging to my family and to my home, were dragging me back more than usual, and at the same time the unknown of this 12 days, was exciting me more than I thought.&lt;/p>
+&lt;h2 id="what-i-learned">What I learned:
+&lt;/h2>&lt;p>Well, I guess I had to come to know this a while ago when I really needed, that the people you can really count on are maybe a handful if you are lucky. They’re the ones who stay, through everything—literally everything. That’s what makes them worth calling family.
+And those are the people that it will always be hard to leave when I start new adventures like this. They are the very reason I do this. They gave me the chance—and the foundation—for everything I’ve become.&lt;/p>
+&lt;h2 id="a-question-for-you">A question for you:
+&lt;/h2>&lt;blockquote>
+&lt;p>Family and friends are the soul’s anchors.
+And you, when was the last time you were grateful for your people that made &amp;ldquo;leaving&amp;rdquo; so difficult?&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Me, abstract from my thesis&lt;/span>&lt;cite>&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;h2 id="-watch-the-video-again-with-this-in-mind-youtube-linkhttpswwwyoutubecomwatchvac51pvpbw3gab_channelsebastiancavada">→ Watch the video again with this in mind. (youtube link)[https://www.youtube.com/watch?v=ac51PvPBw3g&amp;amp;ab_channel=SebastianCavada]
+&lt;/h2></description></item><item><title>Day 0</title><link>https://sebo-the-tramp.github.io/12_project/day_00/</link><pubDate>Tue, 22 Apr 2025 10:08:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/12_project/day_00/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/12_project/day_00/day_00.png" alt="Featured image of post Day 0" />&lt;h1 id="day-0--beginning-of-infinity">Day 0 – Beginning of infinity
+&lt;/h1>&lt;h2 id="what-i-saw">What I saw:
+&lt;/h2>&lt;p>An opportunity.
+After two intense years of my master’s — 99% done, some final words still to write — I saw a chance to move, travel, and breathe.
+A short dive into the digital nomad life.
+And I want to bring you with me — into this experiment of discovery, presence, and full-on adventure.&lt;/p>
+&lt;p>I won’t tell you what’s coming.
+Every day is a surprise — for you, but also for me.
+Only plane tickets are set. Everything else is open space.&lt;/p>
+&lt;p>Follow the visuals on social, the stories on YouTube…
+But come back here only if you’re ready to face the final boss — truth.&lt;/p>
+&lt;h2 id="what-i-felt">What I felt:
+&lt;/h2>&lt;p>In the last two years, a lot happened.&lt;/p>
+&lt;p>I made a trade: I studied hard, and in doing so, I lost some precious things.&lt;/p>
+&lt;p>But I gained knowledge, perspective, and a few real friendships.&lt;/p>
+&lt;p>And, once again, I found what I always find in the end: I can make it alone.
+But now I carry a quiet awareness — that everything becomes more beautiful with the right people.&lt;/p>
+&lt;h2 id="what-i-learned">What I learned:
+&lt;/h2>&lt;p>I haven’t learned anything yet.
+Not really.
+The world is waiting.
+I’m open now.&lt;/p>
+&lt;h2 id="a-question-for-you">A question for you:
+&lt;/h2>&lt;blockquote>
+&lt;p>For me, this is another crazy thing I’m doing.
+But what about you —
+When was the last time you set out to do something that made you feel truly alive?&lt;/p>&lt;span class="cite">&lt;span>― &lt;/span>&lt;span>Me&lt;/span>&lt;cite>&lt;/cite>&lt;/span>&lt;/blockquote>
+&lt;h2 id="-watch-the-video-again-with-this-in-mind-youtube-linkhttpswwwyoutubecomwatchvac51pvpbw3gab_channelsebastiancavada">→ Watch the video again with this in mind. (youtube link)[https://www.youtube.com/watch?v=ac51PvPBw3g&amp;amp;ab_channel=SebastianCavada]
+&lt;/h2></description></item><item><title>The big bet</title><link>https://sebo-the-tramp.github.io/p/big_bet/</link><pubDate>Tue, 25 Mar 2025 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/big_bet/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/big_bet/cover.JPG" alt="Featured image of post The big bet" />&lt;h1 id="the-big-bet">The big bet
+&lt;/h1>&lt;p>I am referring to this concept only from today. I had this recurrent thoughts about how internet will look like in 2-3 years but it always felt the same. I think now we will more and more start to hear about web 4.0. Web 4.0 is the web of LLM, where not only user interact with users, but LLM can interact with other LLMs mostly but also other users (but as we will see later is a little counter productive).&lt;/p>
+&lt;h2 id="how-did-it-start">How did it start
+&lt;/h2>&lt;p>It all started from an iftar. Iftar is a tradition in Islamic culture, where people during Ramadan gather after the fasting period and shared the first meal after the whole day of not eating. Me and my team from our current startup &lt;a class="link" href="https://wellround.me" target="_blank" rel="noopener"
+>Wellround&lt;/a> were discussing some ideas about data collection and LLMs and suddently the serendipity happened: we were able to connect the dots. In the future, maybe already here, maybe in few months LLMs will probably talk to other LLM and get shit done. Not just coding, not just answering our questions, but performing actions on our behalf. At &lt;a class="link" href="https://wellround.me" target="_blank" rel="noopener"
+>Wellround&lt;/a> we are working on creating a digital twin of a person only from readily available data from smartwatchs, online services, daily reminders, calendars and what not. Turns out our vision was not big enough. We were told that we need to be able to tap into a bigger amount of data, there is where value is stored and not only, but mostly in the connection of this information, which is actually knowledge.&lt;/p>
+&lt;p>Turns out that we can do more than that. What will happen when we let 2 LLMs discuss between each other, having a different background? What happens when that background is the context of 2 different persons?
+Can we create some value between the interaction of two LLMs carrying informations of two different personas?&lt;/p>
+&lt;h2 id="the-most-importan-currency">The most importan currency
+&lt;/h2>&lt;p>I have talked in many previous blogs, how I find that the most precious currency and thing that every human being have is time. It is limited, period. We should make the most out of it, period. What if we could offload some tasks to LLMs? What are the tasks that we could offload to LLMs? What can we get out of it? More time exactly!
+But how do we make LLMs effective to do this tasks as if they were us? Well, they indeed need to know us very well. Our interests, our hobbies, routines life, work etc&amp;hellip;&lt;/p>
+&lt;h2 id="we-build-a-second-self">We build a second self!
+&lt;/h2>&lt;p>Our goal at wellround has always been to be able to aggregate data from multiple parties with a big focus on health data. What we have figured out while working on this task is why cann&amp;rsquo;t we aggregate more data and what is the use that we can then do with it? With the increasing amount of data that you aggregate from a person, you can create a digital twin, what we call &amp;lsquo;persona&amp;rsquo;. The more data points, the more accurate the description, the better the results when they are given to the LLM.
+But what are the use cases? Well, just think of thinks you want to do to reach an outcome but don&amp;rsquo;t have time to?&lt;/p>
+&lt;ul>
+&lt;li>Planning a trip with friends? Offload it to the framework that queries all the personas that are involved in the trip so that they can accomodate everyone.&lt;/li>
+&lt;li>Want to find a new partner but don&amp;rsquo;t want to doom swipe? Let the LLM do the heavy lifting and &amp;ldquo;chat&amp;rdquo; with potential candidate&amp;rsquo;s LLMs and get back at you with just a few &amp;ldquo;potential dates&amp;rdquo;&lt;/li>
+&lt;li>Want to book a restaurant? Offload it to the LLM, and it will know your preferences, yor history, what you already had to eat that day and so on&amp;hellip;&lt;/li>
+&lt;li>Need a psychologist? prompt our system to llok for one, and the LLM will search and will &amp;ldquo;talk&amp;rdquo; to different ones and get back at you with the one that matches your needs and has an expertise on the things you might be needing.&lt;/li>
+&lt;/ul>
+&lt;h2 id="how-do-we-do-that">How do we do that?
+&lt;/h2>&lt;p>That&amp;rsquo;s the real question. The main problem is that all the data needs to be kept private and needs to be accessible by different applications in different ways, with different access rights. This is what we are currently figuring out. Another problem is that we need to understand where this data can be stored. Will it be a peer2peer network or will it be on the cloud with LLMs just querying this database on their own?&lt;/p>
+&lt;p>Stay tuned at &lt;a class="link" href="https://wellround.me" target="_blank" rel="noopener"
+>Wellround.me&lt;/a> to find out!&lt;/p>
+&lt;p>If you are motivate and brilliant SW, ML engineer and/or cloud architect reach out to me at &lt;a class="link" href="sebastian.cavada.dev@gmail.com" >sebastian.cavada.dev@gmail.com&lt;/a> to create a real and valuable future together!&lt;/p></description></item><item><title>Thougts from my Mast3r and the past 25 years</title><link>https://sebo-the-tramp.github.io/p/mast3r_lessons/</link><pubDate>Wed, 19 Mar 2025 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/mast3r_lessons/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/mast3r_lessons/cover.jpeg" alt="Featured image of post Thougts from my Mast3r and the past 25 years" />&lt;h1 id="thoughts-on-my-mast3r">Thoughts on my Mast3r
+&lt;/h1>&lt;p>I am here in the lab, some music, AC going waiting for some results to mess up more with my current understanding of the algorithm. I have completed 99% of my thesis. Last refinements and details are needed. I need to upload the dataset and show some cool visuals to show that I have been doing some cool stuff.&lt;/p>
+&lt;p>Overall this journey has been though, full of insecurities, unplanned detours, long nights and lonely afternoons of writing code and hopeless debug.
+I would do it all over again. This difficulties brought out only the best in me. It showed me how much I can handle and how much stress I can overcome. Fear of not being enough, impostor syndrome, living up to others and especially my expectations has been quite challenging. I don&amp;rsquo;t have a final answer, but if I learned something is that all these emotions need to be invited to the party. You can&amp;rsquo;t fake it, you can bury them, it will just waste energies in the wrong place. Like in Inside Out, they all contribute and we have to accept.&lt;br>
+Also like in Vipassana Meditation, you should be equanimous, but my journey has been all other than equanimous. And now that I am stressing out for my thesis, I ask myself, is it really needed?
+I feel that if I am not stressing out, means I am leaving stuff on the table, but this shouldn&amp;rsquo;t be the case. So here I want to report the findings of these 2 years that put me to the test and showed where my limits are and how can I eventually push them further. I hope someone can emphasize with me and feel a little less out of place.&lt;/p>
+&lt;h2 id="not-being-enough">Not Being Enough
+&lt;/h2>&lt;p>One of the biggest monster that I had to face was definitely not being enough. Most of my life I have been dangling from showing I was worth something to my parents by bringing home good marks, and do whatever I want. Most times I feel that I am only worth what I achieve, what I can program and the results I show. But this research path showed me how difficult that is in a game where nothing is predictable and your strength is seen in if you can push forward for one more time. The results are just downstream task. But then you ask yourself did I do enough.
+Could I have done more? The only way I can answer to this is by spending all my waking ours working, only then I can say I have done all I could. The next step is to work smart, and that is what I am still learning. I feel though at some point I will reach a point in which I will recognize if I could have done more or if I was just lazy.
+In the grand scheme of things, I don&amp;rsquo;t want to arrive at the end of my life and look back and say, I could have done better, why did I settle for mediocrity. I want to reach the end and have as little regrets as possible.&lt;/p>
+&lt;h2 id="others-expectations">Others Expectations
+&lt;/h2>&lt;p>I guess I still care much what other thinks, and that has been fading a lot since the beginning, but one of my biggest fears is to let down, or come short of the expectations that people who believe in me. Some people gave me a lot, and I want to show them I am good, I recognize their time and effort and want to give back. But if than I can only give back less than what they expect, well I feel I didn&amp;rsquo;t live up to the expectations, or either they saw something in me that I was quite not able to bring it out. It seems a toxic trait, but I feel I have grown out of this, and it is still motivation to keep going.&lt;/p>
+&lt;h2 id="time-is-running-out">Time is running out
+&lt;/h2>&lt;p>This is my all-time favourite. At some point in my 20s I realized time is running out. Yes we still might have 60+ years, but how many of this are going to be pristine. And at some point I need to be wise in the next 25 to be even wiser later. You know I feel now is the time to put the foundation of your life. You turn 18 and you think you have all your life and you can change anything, the World. Then you do some stuff you see people your age not caring at all and you are washed away with them. Some years down the line you wake up and see, what the hell I have been doing so far?
+I am lucky as I realized that quite soon, have parents that care, and that see potential in me that sometimes I even fail to see. We should have more people like this in our life. That&amp;rsquo;s what I strive for.
+So, you wake up and say cool, things do not just happen if I wish them to, but an intricate fabric of reality has to be forged in order for things to happen. Like meeting the right people, being in the right place, asking the right questions, and acting accordingly. Failing fast, failing often, saying yes to little, saying no to the rest. Focusing and doubling down on your bets.
+That&amp;rsquo;s not easy, it takes courage, it takes determination and a lot of willingness to be a fool and to risk it all.
+And after this, nothing is still certain, you have no guarantee of success or to be in the place you wish to. That is absolutely impossible to know. But you have to fucking believe and jump.
+But time, time is not on our side, time has been the central part of everything, yet we know so little if something at all. We fight, we plan, we wait but it&amp;rsquo;s like the flow of the river, it just goes.
+So unfortunately as all the others, I do not have any answer on this, but what I am trying to do is to find things and work that makes me feel I am swimming happily in this river of time without aggressively, going against the current but seeing where I will eventually land, by steering my direction accordingly to different opportunities and passions.&lt;/p>
+&lt;h2 id="doing-meaningful-research">Doing meaningful research
+&lt;/h2>&lt;p>That is still a point I don&amp;rsquo;t know how to address. Every time I think about a new idea, it&amp;rsquo;s out the next day from a big research lab. I am still figuring this out, but I think takes time and experience to really understand where the gaps are and how to address them.
+One thing I learned though: meningful research is not done alone in front of the computer, but is done talking to peers, going to reading groups, random discussion with friends/collegues over coffee. That&amp;rsquo;s where it happens, then it is indeed written in the labs and in front of the computer.&lt;/p>
+&lt;h2 id="asking-the-right-questions">Asking the right questions
+&lt;/h2>&lt;p>This is one of the most important and crucial things in my head for a long time. Whenever a professor asks are there questions, I am always hesitant to ask because I think someone might have a better question than me, which I can learn more than just asking my question which might be just because my lack of knowledge, but not really pushing for new point of views etc. That is where I am stuck at the moment. I feel that with more experience and dots, it will be easier to ask questions and connects things together.
+I often attend presentations, and eagerly wait for my supervisor questions, because they are always critical but in such a way that everyone benefits and actually, given his experience are amazing.&lt;/p>
+&lt;h2 id="execution">Execution
+&lt;/h2>&lt;p>Just exacute. Use all your available tools, go fast and accurate. During my thesis I was going too fast that my code bloated up, but with a minimal SW engineering I could have saved. Next time before starting a project and experiment things I might spend quite some time to create the infrastructure and the rest, so that down the line, things will get easier and not harder.
+Hard first, easy later.&lt;/p></description></item><item><title>What about the future</title><link>https://sebo-the-tramp.github.io/p/our-future/</link><pubDate>Fri, 14 Feb 2025 20:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/our-future/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/our-future/cover.jpg" alt="Featured image of post What about the future" />&lt;h1 id="the-future">The future
+&lt;/h1>&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;p>I believe two major forces will shape the future in ways we can barely imagine: AI and longevity. These two domains have the potential to redefine how we live, work, and think.&lt;/p>
+&lt;p>On one hand, advancements in computing power—whether through GPUs or whatever the fuck we are going to build next—will enable faster and more sophisticated manipulation of information. This will lead to the creation of new knowledge, insights, and innovations at an unprecedented pace. As we become more efficient at processing and generating ideas, we’ll also discover better ways to learn and understand. Speed will become a critical asset, not just for doing things faster but for learning and adapting more effectively. Every second saved—whether it’s shaving five seconds off a repetitive task like copy-pasting or streamlining complex workflows—will compound into significant gains over time. Time, after all, is the ultimate currency. Unlike money, which can be created, time is finite. We all have 24 hours in a day, but how we use those hours will determine our success.&lt;/p>
+&lt;p>This is where longevity comes into play. While everyone has the same 24 hours daily, not everyone has the same number of years. Some people live to 50, others to 80 or beyond. That difference translates to decades of additional time—time to create, learn, and contribute. And if we can extend not just lifespan but healthspan—ensuring those extra years are spent in good health, with a sharp mind and an active body—the impact could be transformative.&lt;/p>
+&lt;p>In the short term, saving five seconds here or gaining a year there might seem trivial. But over the long term, these small efficiencies and extensions compound. Five seconds saved on a task could turn into weeks or even months of reclaimed time over a lifetime. Similarly, an extra year of healthy life could snowball into decades of additional productivity and fulfillment.&lt;/p>
+&lt;p>The winners of the future will be those who master these two domains. On one side, it will be the individuals or companies that create tools to maximize productivity—tools that help us work smarter, faster, and more effectively (think of the competition between Cursor and VSCode). On the other side, it will be those who unlock the secrets of longevity, enabling people to live longer, healthier, and more vibrant lives.&lt;/p>
+&lt;p>Once society fully grasps the potential of these two forces, we could be on the brink of something extraordinary. And I want to be there to see it—and be part of it.&lt;/p>
+&lt;p>&lt;a class="link" href="https://chatgpt.com/share/67b0d448-a4a8-8008-96ad-d8c78ac2a36a" target="_blank" rel="noopener"
+>https://chatgpt.com/share/67b0d448-a4a8-8008-96ad-d8c78ac2a36a&lt;/a> 😉&lt;/p></description></item><item><title>A BIG day in AI</title><link>https://sebo-the-tramp.github.io/p/big-day-inai/</link><pubDate>Fri, 16 Feb 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/big-day-inai/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/big-day-inai/cover.jpg" alt="Featured image of post A BIG day in AI" />&lt;h1 id="a-big-day-in-ai">A BIG day in AI
+&lt;/h1>&lt;p>I woke up this morning and as usual, the fatigue to go running was there. I did and ran my 6.5k in around 33 minutes, a very good time and a bit unexpected. Days like this are a sign of a good day. Then while having breakfast with my favorite news platform namely x.com, I started seeing so many posts about Gemini 1.5. Then suddenly a lot of videos and tweets about some text-video model. I was confused. I was excited. OpenAI&amp;rsquo;s name was there, it must be something big I thought.&lt;/p>
+&lt;p>When I started watching the first video I was shocked. I thought this was light years away. And there I was with my cereal bowl and the best AI-generated videos I have ever seen. I was very excited.
+At the same time I was also doubtful: &amp;ldquo;What am I studying for then&amp;rdquo;. Many things have been solved in AI already and this was a big step toward AGI, or as I would discover later to something else.&lt;/p>
+&lt;p>So, as much excited and doubtful as I was I went back to my desk and started studying Gradient Descent and learning rates. It was the right thing to do, but still, it was weird, that I felt I knew so little yet so much had been done.
+After the session, I went to lunch with my dear friends Alvaro and Hassan. We discussed about random stuff and passports.&lt;/p>
+&lt;p>I started reading about this new model and the more video I was watching the more strange I was feeling. I saw some guy on the web doing already 3d reconstruction with such videos. I am working on the same topic. I had to try so I did.&lt;/p>
+&lt;p>But in the meanwhile the highlight of the day and surely of the year, was that the GOAT Yann Le Cun was visiting the campus here today. When I found that out the previous day, I was thrilled. I always looked up to him as an example and took so much inspiration from his talks and works.
+It was a unique moment of deep knowledge, critical thinking and first-principle reasoning. His insights were great and gave me hope for what I was thinking in the morning. My generation has the hope to still make an impact in the research field and hopefully as well for society and the world.
+The questions were not many as the time was limited, and only a handful stood out to me as new and thought-provoking.&lt;/p>
+&lt;ol>
+&lt;li>My supervisor asked the question (that many are wondering) if academia can still compete with the industry in terms of research. The answer wasn&amp;rsquo;t quite clear, but the main point is that academia should challenge the industry with new ideas and most importantly propose new paradigms to solve the problems.&lt;/li>
+&lt;li>The second clever question worth noting is about what are the pillars that are most likely unchanging in the future of AI. The answer comprised 4 main points: backpropagation, the gradient, the minimization of an objective and the GPU. The first three are needed for the learning itself, the latest is the bottleneck of the learning process.&lt;/li>
+&lt;/ol>
+&lt;p>Another worth mentioning concept was the way he mentioned that the Transformer can answer any question, but it will always answer questions using the same amount of computation. This is how it is trained, and what it is supposed to do. But we don&amp;rsquo;t behave like this. If a question is harder we spend more computational power/time to come up with the correct answer. I was enthusiastic about this concept and I feel it is worth exploring more.
+These are some photos I was able to take with Yann Le Cun. The whole community was trying to get some photos and this is the best I could get.&lt;/p>
+&lt;p>![A photo all together]A sneak peek of the talk](IMG_5686.jpg)![A closer selfie with the GOAT]I hope to see him in the future as he is a great scientist and engineer as he calls himself.&lt;/p>
+&lt;p>All in all the day went pretty well, I was able to finish the 3D Gaussian reconstruction I started earlier, which led me to do a video and post it on YouTube. I got also some comments from the video of the campus tour of the university and I was happy to see that people are interested in what we are doing here.&lt;/p>
+&lt;p>This is the result:&lt;/p>
+&lt;div class="video-wrapper">
+&lt;iframe loading="lazy"
+src="https://www.youtube.com/embed/YBUqiYNm-Rs"
+allowfullscreen
+title="YouTube Video"
+>
+&lt;/iframe>
+&lt;/div>
+&lt;p>I might do a video about how I did it, and it is just simple software used one after the other. The peculiarity here is that the video was generated by an AI model, with emergent 3D capabilities. In other words, the 3D information was consistent throughout the video, and this is a big step toward the future of AI-generated videos.
+This was also proved by the good even if not perfect results I got from the 3D reconstruction.&lt;/p></description></item><item><title>ChatGPT</title><link>https://sebo-the-tramp.github.io/p/chatgpt/</link><pubDate>Wed, 25 Jan 2023 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/chatgpt/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/chatgpt/cover.jpg" alt="Featured image of post ChatGPT" />&lt;h1 id="what-is-chatgpt">What is &amp;ldquo;chatGPT&amp;rdquo;
+&lt;/h1>&lt;p>I don&amp;rsquo;t think chatGPT needs much of an introduction. It entered in our lives in late November and it is not going to go away for a long while now. It allows user to write some prompts and get a Natural Language model to answer in any language an to pretty much any question that he get posed.&lt;/p>
+&lt;p>In one way or another, most of us has come into contact with this &amp;ldquo;AI&amp;rdquo; Fanta scientific technology coming from the future. This is the trajectory we are going to follow for the next years. If there are 20 &amp;ldquo;Megatrends&amp;rdquo; well AI is going to lead them all.&lt;/p>
+&lt;p>But enough with speculations, I wanted to share my thoughts on the ethic of using such tools in every day life and where might the boundaries be, from using it to sharpen our knowledge or to fake being smart and pretend to be someone else.&lt;/p>
+&lt;p>Therefore I asked to the direct interested one. ChatGPT.&lt;/p>
+&lt;h2 id="the-input">The input
+&lt;/h2>&lt;p>&amp;ldquo;Is it ethical for a student to use chatGPT, in order to write faster motivational letters, and draft of emails in order to save time to concentrate more on other creative stuff, research and in general other more interesting stuff, given that is not counterproductive? Another example would be to write a motivational letter to enter a course in which he has a lot of interest but too many things to do for preparing a well written and professional text&amp;rdquo;&lt;/p>
+&lt;h2 id="the-answer">The answer
+&lt;/h2>&lt;p>It is ultimately up to the individual to decide whether using a tool like ChatGPT to write motivational letters or emails is ethical. However, it is important to consider the potential consequences of using such a tool. If the student&amp;rsquo;s use of ChatGPT results in a letter or email that is not their own work and does not accurately reflect their own thoughts and writing abilities, it could be considered plagiarism and may lead to disciplinary action. Additionally, if the student relies too heavily on ChatGPT and does not put in the effort to improve their own writing skills, they may not be adequately prepared for future academic or professional writing tasks. Ultimately, it&amp;rsquo;s best to use these tools as a tool to help you and not a replacement of your own efforts and skills.&lt;/p>
+&lt;h2 id="well">Well
+&lt;/h2>&lt;p>The answer is sharp and concise.&lt;/p>
+&lt;blockquote>
+&lt;p>If the student&amp;rsquo;s use of ChatGPT results in a letter or email that is not their own work and does not accurately reflect their own thoughts and writing abilities, it could be considered plagiarism and may lead to disciplinary action.&lt;/p>&lt;/blockquote>
+&lt;p>This short phrase, collects all my thoughts and showcase them in the most brilliant form. The reflection of our own abilities can really be seen in a text, but mostly our actions and things we did and that we take as ours.&lt;/p>
+&lt;h2 id="what-my-grandmother-thinks">What my grandmother thinks
+&lt;/h2>&lt;p>I have talked about this tool with my grandmother and as always when I talk about technology she feels far away from this witchcrafts. She said something interesting thought that can be taken as a starting point of some thoughts flow.
+She said and I quote:&lt;/p>
+&lt;blockquote>
+&lt;p>Everything great is done by people, just like you and if you want to do something great it has to come from yourself.&lt;/p>&lt;/blockquote>
+&lt;p>She is literally afraid of what technology can do even if she acknowledges what good has been brought by innovations. Having said that she doesn&amp;rsquo;t want to have to do with such things, she is too old to learn.&lt;/p>
+&lt;h2 id="finally-me">Finally me
+&lt;/h2>&lt;p>In the end I don&amp;rsquo;t have any answer in this world, yet(?), but something I can tell for sure. If the goal is to go from A to B, you might decide to get by bike, by foot or even by car. I think is ultimately up to us to choose the method in which we reach any goal. Surely it has to be consistent to our thoughts, and just because we have a car and therefore we can visit all the places in a year that will take a lifetime to do by foot, means we are better off. We just had a different journey, maybe it was even worst then the second person&amp;rsquo;s one. I hope you can see the analogy here.&lt;/p>
+&lt;p>The goal and the end of a person has to stay the same, with time this tool will allow to get there, with less risks, maybe even faster and with some different path. Ultimately is the goal we reach that fulfil ourselves and the journey we took there, definitely not the tools used.&lt;/p>
+&lt;p>If we can learn during the process, always be integrity with ourselves and never faking our abilities and accomplishments, it will become irrelevant which tools are we using and why.&lt;/p>
+&lt;h2 id="i-am-no-oracle">I am no Oracle
+&lt;/h2>&lt;p>This is how I came to think now, but I am very curios about other&amp;rsquo;s prospective and ideas. Let&amp;rsquo;s create a healthy discussion in the comments.&lt;/p></description></item><item><title>Realverse</title><link>https://sebo-the-tramp.github.io/p/realverse/</link><pubDate>Sat, 21 Jan 2023 14:31:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/realverse/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/realverse/cover.jpg" alt="Featured image of post Realverse" />&lt;h1 id="for-a-biscuit">For a biscuit
+&lt;/h1>&lt;p>It was late October and during a lesson of entrepreneurship and innovation the class moved outside to take a picture with the guest lecturer from the company &amp;ldquo;Dr. Schär&amp;rdquo;. He told us about his personal story and his business.&lt;/p>
+&lt;p>I was walking out the building and I casually met a person, who offered me a biscuit and we just started chatting about how the seminar went and why we were there. We spent more than an hour chatting around in the cold and under the rain, so I had to take the later bus. But it was worth it all the way.&lt;/p>
+&lt;h2 id="why-a-hackathon">Why a hackathon
+&lt;/h2>&lt;p>Julian and I kept in touch, but it wasn&amp;rsquo;t until the hackathon of November that we met in person and went off with two different teams. In that occasion I brought what seemed to be some cutting edge technology: The oculus quest 2. My team won the hackathon and both me and Julian were thrilled by the prospective opportunities that this technology promised.&lt;/p>
+&lt;p>A couple week after he told to me about a long forgotten project about videogames for the world war 1 in the Dolomites. I was over the top: the technology hyped me, the victory from the hackathon gave me so much confidence and the fact that a good bunch of money was involved was all I could see at that time. So I accepted, and the rest is history.&lt;/p>
+&lt;h2 id="history">History?
+&lt;/h2>&lt;p>We proposed the project to the enterpreneur and he was more than stunned to see what this technology would enable and the (at the time) limitless possibilities of this piece of hardware. Off we went, after a couple weeks we got an offer and without esitations and no experience whatsoever we took the plunge. We were able to get all the burocracy done with the help of some friends and we were ready to show the world what we were capable of and to start a multi-billion euro company.&lt;/p>
+&lt;h2 id="well-not-exactly">Well not exactly
+&lt;/h2>&lt;p>That&amp;rsquo;s all about the heroic and cool part. We didn&amp;rsquo;t have any experience, no computing hardware that was capable of doing anything near what we promised. And our skills were limited to what I and him learned in the University.&lt;/p>
+&lt;p>We had to learn everything and do all from scratch. And that&amp;rsquo;s exactly what we did. I got a new Gaming computer, set up everything, and in doing so I asked a friend for advice and he ended up joining us. We were now 3 undergraduates just trying to pull off a mission.&lt;/p>
+&lt;h2 id="the-plan">The plan
+&lt;/h2>&lt;p>I came back from Erasmus around August and the plan was to start from the 1st September and work until December, every day for 8 hours, 4 days a week. How long did we last?
+Less than a song.&lt;/p>
+&lt;p>We started strong but in the end I felt overwehlmed by the work as I put everything from my health, people to my wellbeing aside. I wanted this to be the most important thing in the next 6 months. I didn&amp;rsquo;t study German, and eventually I failed on it. I didn&amp;rsquo;t persue anything else than just working tirelessly.
+I was heading directly towards the &lt;em>valley of burnout&lt;/em>. It was around October, nearly a year later, when most of us had resized the time allowed for this work that I found myself obsessing over something I shouldn&amp;rsquo;t have. I am used to work many hours a day. But when it is for something I really care and I see my team working as me as well it is when I am pushed to my best and even further. In such a way I do grow.&lt;/p>
+&lt;p>It was not about the team: we were having good interactions, I learned to work in a group project as I did not during my university years, I learned new skills, learned how to manage a big project and retarget the plan once in a while. It was indeed an experience that improved me, but I didn&amp;rsquo;t see myself growing in the right direction. And this insight was not clear from the beginning. I couldn&amp;rsquo;t see anything that made me grow as a person.&lt;/p>
+&lt;p>&lt;strong>It was clear that my head was clashing against my actions, actions made towards a project that I long searched and thrived for.&lt;/strong>&lt;/p>
+&lt;h2 id="the-pain">The pain
+&lt;/h2>&lt;p>The pain arrived from more sides. I was literally sorrounded. I started lifting weights and going to the gym regularly every day since mid October, that has been my saving. The pain was still there but I learned to manage the physical one. The worst was indeed the mental pain.
+It was for me way harder to manage, because I was not used to it and didn&amp;rsquo;t know how to handle it properly.&lt;/p>
+&lt;p>So, as always when I don&amp;rsquo;t know what to do, I seek advice from books, the masters of time. I started reading, I started journaling, I started going around with a backpack filled with weights in order to feel other pain, the more manageable one.&lt;/p>
+&lt;p>November came and I remember it as the thoughest month of the year 2022. From the first day to the very last. But if I look back now, it was the most insightful and it teached me the most.
+I was also going through some kind of relationship problems and that drained much of my mental energy. I started overthinking and I can feel the effects of it still now.&lt;/p>
+&lt;h2 id="how-does-this-all-relate">How does this all relate?
+&lt;/h2>&lt;p>Well the insights from that month, really stood strong and gave me direction on how to come out this lonely, heavy and fearful state of mind. Because everything is in our mind, if you want it or not.
+Two facts really stood by me:&lt;/p>
+&lt;ol>
+&lt;li>Start planning your life from the end&lt;/li>
+&lt;li>How much would you do to have it if you did not&lt;/li>
+&lt;/ol>
+&lt;p>The first resonates with me because I finally felt, and I was able to admit to myself, that I was going down the wrong path. There is nothing wrong with making such videogames and this career path. But at the end of my life I just didn&amp;rsquo;t want to be remembered as such figure.&lt;/p>
+&lt;p>The second instead, taught me some hard lessons about work, love and life. If I didn&amp;rsquo;t have this position, I wouldn&amp;rsquo;t have done much to get into it. I was finally able to explain the situation. Also it taught me about love and what I had lost, it pushed me to try to get it back if I ever will. Because this shows how much I would have been doing, if I didn&amp;rsquo;t have it.&lt;/p>
+&lt;h2 id="to-be-continued">To be continued&amp;hellip;
+&lt;/h2>&lt;p>If you would like to find out how it did end, well you might have to wait some time, because we missed the deadline and we are still working on it.&lt;/p>
+&lt;p>&lt;strong>STAY TUNED&lt;/strong>&lt;/p>
+&lt;p>&lt;em>P.S. let me know if you liked this personal stories and what would you like to develop more&lt;/em>&lt;/p></description></item><item><title>The frog in the pot</title><link>https://sebo-the-tramp.github.io/p/the-frog-in-the-pot/</link><pubDate>Sun, 15 Jan 2023 14:36:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/the-frog-in-the-pot/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/the-frog-in-the-pot/cover.JPG" alt="Featured image of post The frog in the pot" />&lt;h1 id="the-boiling-frog-an-analogy-for-climate-change">The Boiling Frog: An Analogy for Climate Change
+&lt;/h1>&lt;p>The story of the boiling frog is a well-known analogy for the gradual and insidious nature of change. The tale goes that if a frog is placed in a pot of boiling water, it will immediately jump out to safety. However, if a frog is placed in a pot of cool water that is slowly heated, it will not notice the change and eventually be boiled to death.&lt;/p>
+&lt;h2 id="now">Now
+&lt;/h2>&lt;p>This analogy can be applied to the current situation of climate change. The Earth&amp;rsquo;s temperature is slowly and steadily rising, and many people are not taking notice or taking action. Just like the frog in the pot, we are becoming accustomed to the gradual changes and not realizing the danger we are in.&lt;/p>
+&lt;h2 id="how">How
+&lt;/h2>&lt;p>Climate change is caused by human activity, primarily the burning of fossil fuels and deforestation. These actions release greenhouse gases into the atmosphere, trapping heat and raising the Earth&amp;rsquo;s temperature. The effects of climate change are already being felt around the world, from rising sea levels and more intense storms, to droughts and wildfires.&lt;/p>
+&lt;h2 id="denial">Denial
+&lt;/h2>&lt;p>Despite the overwhelming scientific evidence of the reality and seriousness of climate change, there is still a significant portion of the population that denies or downplays the issue. This lack of action and denial can have dire consequences for future generations.&lt;/p>
+&lt;h2 id="so">So
+&lt;/h2>&lt;p>The question remains, will we, as a society, take the necessary steps to reduce our carbon footprint and slow down climate change before it&amp;rsquo;s too late? Or will we, like the frog in the pot, be boiled to death by our own inaction?&lt;/p>
+&lt;h2 id="then">Then?
+&lt;/h2>&lt;p>Only time will tell, but one thing is clear: We must take immediate and decisive action to address climate change before it&amp;rsquo;s too late. The future of humanity depends on it.&lt;/p></description></item></channel></rss>
