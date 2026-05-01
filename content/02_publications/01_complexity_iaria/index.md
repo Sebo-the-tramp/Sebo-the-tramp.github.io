@@ -1,5 +1,6 @@
 ---
-description: Does complexity Pay Off?
+title: "Does Complexity Pay Off?"
+description: "Applying advanced algorithms to depression detection on the GLOBEM dataset."
 slug: complexity_iaria
 date: 2024-09-17T20:21:13+02:00
 image: complexity.png
@@ -10,13 +11,13 @@ tags:
 
 comments: false
 links:
-  - title: Link to the paper
-    description: Arxiv link of the paper
+  - title: Paper
+    description: Published HEALTHINFO 2024 paper
     website: https://www.thinkmind.org/articles/healthinfo_2024_2_60_90043.pdf
 
 ---
 
-### 🏆 Best Paper Award 🎉
+### HEALTHINFO 2024 Best Paper Award
 
 **Does Complexity Pay Off? Applying Advanced Algorithms to Depression Detection on the GLOBEM Dataset**
 

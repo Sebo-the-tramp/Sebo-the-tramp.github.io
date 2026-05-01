@@ -2,7 +2,7 @@
 title: "Publications"
 date: 2022-03-06
 slug: "publications"
-description: "My publications"
+description: "Peer-reviewed publications, preprints, and research benchmarks."
 menu:
     main:
     
@@ -11,4 +11,4 @@ menu:
             icon: certificate
 ---
 
-Nothing here yet, but I am cooking!
+Selected publications and research outputs in computer vision, multimodal models, 3D reconstruction, CAD reasoning, and applied machine learning.

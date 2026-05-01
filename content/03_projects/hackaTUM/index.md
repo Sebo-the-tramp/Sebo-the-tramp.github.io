@@ -1,6 +1,6 @@
 ---
 title: "HackaTUM 2022"
-description: Hackathon at the Technische Universität München
+description: Hackathon project developed at the Technical University of Munich.
 slug: HackaTUM-2022
 date: 2022-11-18T20:21:13+02:00
 image: cover.jpg
@@ -22,16 +22,11 @@ links:
 
 Pokemon Geo is our geo-tagging game built during HackaTUM 2022 (Huawei Challenge) based on OpenStreetMap (https://www.openstreetmap.org) and Mapillary (https://www.mapillary.com).
 
-In our app, the user is interacting with the real world by solving "issues". While taking a walk, the player can take photos, tackle time-based challenges, compete in an online leaderboard and much more. At the same time, this helps OpenStreetMap improve their tags.
+In the app, users interact with the real world by solving "issues". While taking a walk, players can take photos, tackle time-based challenges, compete on a leaderboard, and help improve OpenStreetMap tags.
 
 We built our User Interface with Flutter, our backend with Flask and trained our photo classification model with PyTorch.
 
-We hope you have fun playing our game and we wish you a wonderful day!
-
-Gotta catch ‘em issues.
-
-This hackathon was a very fun one because I did not know anybody once I got there. I had to find a team and a challenge. I was really stressed and worried.
-In the end it turned out great! I met a lot of people and I had a lot of fun, if you want to know more just check the VLOG on youtube.
+This hackathon was a useful exercise in quickly forming a team, choosing a challenge, and shipping a working prototype under time pressure. A short video recap is available in the links above.
 
 Following are some of the photos:
 

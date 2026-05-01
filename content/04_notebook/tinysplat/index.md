@@ -856,4 +856,4 @@ Thank you for reading, this was part 1 of the series on Gaussian splatting. Let 
 
 Stay tuned for the next part where we will densify the Gaussians and make the training faster and more efficient.
 
-Also 3D Gaussians is coming soon hopefully!
+I plan to extend this series to 3D Gaussians in a future note.

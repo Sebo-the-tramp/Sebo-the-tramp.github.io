@@ -1,7 +1,7 @@
 ---
 
-title: Blog
-description: Just me, a simple human being wondering around the universe, trying to understand a small bit of the whole
+title: Writing
+description: Notes on research, projects, and the process of learning.
 comments: false
 readingTime: false
 license: false
@@ -9,10 +9,9 @@ draft: false
 
 menu:
     main:
-        name: Blog
-        weight: 2
+        name: Writing
+        weight: 6
         params:
             icon: book
     
 ---
-

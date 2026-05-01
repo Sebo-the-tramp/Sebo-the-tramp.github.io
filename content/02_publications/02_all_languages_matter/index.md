@@ -1,18 +1,21 @@
 ---
-description: All Languages Matter Evaluating LMMs on Culturally Diverse 100 Languages
-slug: all_languages matter
+title: "All Languages Matter"
+description: "Evaluating LMMs on culturally diverse visual reasoning across 100 languages."
+slug: all-languages-matter
 date: 2024-11-25T20:21:13+02:00
 image: all.png
 draft: false
+aliases:
+    - /02_publications/all_languages%20matter/
     
 tags:
     - Publications
 
 comments: false
 links:
-  - title: Link to the paper
-    description: Arxiv link of the paper
-    website: https://www.thinkmind.org/articles/healthinfo_2024_2_60_90043.pdf
+  - title: Paper
+    description: arXiv preprint
+    website: https://arxiv.org/abs/2411.16508
 
 ---
 
@@ -20,7 +23,7 @@ links:
 
 **All Languages Matter: Evaluating LMMs on Culturally Diverse 100 Languages**
 
-*{Many authors}*
+*Ashmal Vayani et al. (co-author: Sebastian Cavada)*
 
 ## Abstract
 

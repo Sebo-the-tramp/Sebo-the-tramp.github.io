@@ -1,5 +1,6 @@
 ---
-description: CAD-Assistant Tool-Augmented VLLMs as Generic CAD Task Solvers
+title: "CAD-Assistant"
+description: "Tool-augmented VLLMs as generic CAD task solvers."
 slug: cad_assistant
 date: 2024-12-18T20:21:13+02:00
 image: cad.png
@@ -10,8 +11,8 @@ tags:
 
 comments: false
 links:
-  - title: Link to the paper
-    description: Arxiv link of the paper
+  - title: Paper
+    description: arXiv preprint
     website: https://arxiv.org/abs/2412.13810
 
 ---

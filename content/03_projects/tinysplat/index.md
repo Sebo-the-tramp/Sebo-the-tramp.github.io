@@ -1,6 +1,6 @@
 ---
 title: "TinySplat"
-description: A tiny explanation of Gaussian Splatting 
+description: A concise explanation of Gaussian Splatting.
 slug: tiny-splat
 date: 2024-10-01T10:21:13+02:00
 image: tinysplat_small.jpg
@@ -41,7 +41,7 @@ links:
 
 # Tinysplat
 
-During my the journey to understand Gaussian Splatting, I created Tinysplat as a hands-on project to explore its foundational concepts. By breaking down the complex process into more manageable parts, I aimed to simplify and clarify the underlying mechanisms. In this post, I’ll share the insights and discoveries I’ve made along the way, shedding light on the essentials of Gaussian Splatting through the lens of my experience with Tinysplat.
+During my journey to understand Gaussian Splatting, I created Tinysplat as a hands-on project to explore its foundational concepts. By breaking the process into smaller parts, I aimed to clarify the underlying mechanisms and make the technique easier to reason about.
 
 ## What is Gaussian Splatting?
 
@@ -51,7 +51,7 @@ The 2 most important pieces of this concept are: Gaussian and Splatting.
 
 ### Gaussians
 
-Gaussians is a shorthand for Gaussian distribution, which we are familiar from statistics in 1 dimension. Hold tight because in this process the dimensions of the Gaussian distribution will go up to 2 and 3. The most intuitive way to think of a Gaussian in 3 dimensions (with a lot of abuse in notation) is to think about it as a balloon. Of this balloon we can control different proprieties such as the rotation, the color, the size, by inflating it more or less etc.
+Gaussians are shorthand for Gaussian distributions, which are familiar from statistics in one dimension. In Gaussian Splatting, the dimensionality increases to 2D and 3D. The most intuitive way to think of a Gaussian in three dimensions, with some abuse of notation, is as a balloon whose properties can be controlled: rotation, color, size, and opacity.
 Turns out that in the Gaussian Splatting process, we build the environment by merging together many of these balloons of different dimensions and colors at different positions in the space. Take a look at the following image:
 
 !["The first Gaussian flower - an abstract way of thinking about Gaussian splatting"](flower.jpeg)
@@ -90,7 +90,7 @@ The journey of creating a realistic scene is split into 2 parts:
 
 Gaussian splatting works better if we have already a rough idea of what the scene looks like. Imagine having some rough sketch of what you want, it is going to be easier to realize your masterpiece. In the same way, Gaussian Splatting works best when our initial sketch is a Point Cloud. A point cloud is exactly a way to define a rough sketch of the scene.
 
-The most common way to obtain is to run an algorithm called Structure from Motion. In other words given images of the scene from different positions it will triangulate the points and create a 3D representation which is close enough to reality. These methods are still improving and there is no best approach but it depends on many factors such as dimensions, motions etc. In the end this is still an open research question, therefore many more options (hopefully) are coming every month.
+The most common way to obtain this initialization is to run an algorithm called Structure from Motion. Given images of the scene from different viewpoints, it triangulates points and creates an approximate 3D representation. These methods are still improving, and the best approach depends on factors such as scene scale, camera motion, and image quality.
 
 Here you can have a look of what that means. The red "things" (camera frustums), represent the rotation and position of the cameras in space, whilst the points (which should be colored), they represent the 4D space that was reconstructed. It is called "sparse" reconstruction because as you might have noticed, it is missing a lot of points, but the 3D high level idea can be interpreted by a human at least.
 

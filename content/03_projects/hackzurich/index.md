@@ -1,6 +1,6 @@
 ---
-title: "HackZurich 2022 -  (🏆 WINNER)"
-description: Hackathon in Zurich, the biggest hackathon in Europe
+title: "HackZurich 2022 - Winner"
+description: Hackathon project developed at HackZurich, Europe's largest hackathon.
 slug: HackZurich-2022
 date: 2022-09-18T20:21:13+02:00
 image: cover.jpg
@@ -22,7 +22,7 @@ links:
 
 Out of the Blue is a versatile tool that allows anyone to obtain a detailed 4D model based on a 2D blueprint, unlocking a set of new services that vary from creating a perfect digital twin of the house (that supports smart automated routines to reduce risks) to an optimized instrument for crisis containment which could be a keystone tool into the daily work of firefighters.
 
-HackZurich is the biggest hackathon in Europe. It was a priviledge for me to be selected among the participants. Again I knew nobody, but in the end I met some old friends from other hackathons, we teamed up, we won and most importantly we had so much fun. Check out the VLOG on youtube.
+HackZurich is Europe's largest hackathon. I joined without a pre-formed team, collaborated with participants I met during the event, and contributed to a winning project under tight time constraints. A short video recap is available in the links above.
 
 Following are some of the photos:
 

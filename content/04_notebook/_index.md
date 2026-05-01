@@ -1,11 +1,11 @@
 ---
 title: "Notebook"
 slug: "notes"
-description: "These are some notes taken during my studies Might they be a good resources for students"
+description: "Technical notes and study material from computer vision, 3D reconstruction, and machine learning courses."
 draft: false
 menu:
     main:
-        weight: 4
+        weight: 5
         params: 
             icon: uni
 ---
