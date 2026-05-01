@@ -4,7 +4,7 @@ description: Leaving
 slug: day_01
 date: 2025-04-23T10:08:13+02:00
 image: day_01.png
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:

@@ -4,7 +4,7 @@ description: Preparing for my 12 days experiment
 slug: day_00 
 date: 2025-04-22T10:08:13+02:00
 image: day_00.png
-draft: false
+draft: true
 categories:
     - Thoughts
 tags:
