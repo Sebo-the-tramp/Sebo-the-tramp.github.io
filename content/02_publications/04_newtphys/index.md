@@ -3,7 +3,7 @@ title: "NewtPhys"
 description: "A physics-grounded benchmark for evaluating foundation models on Newtonian reasoning."
 slug: newtphys
 date: 2026-04-20T10:00:00+02:00
-draft: false
+draft: true
 image: newtphys.png
 
 tags:
