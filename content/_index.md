@@ -104,6 +104,7 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News
 
+- **2026**: **Training-Free Fine-Grained Semantic Segmentations in Low Data Regimes: A FungiTastic Baseline** accepted at the 13th Workshop on Fine-Grained Visual Categorization, CVPR 2026. [Paper](https://arxiv.org/abs/2605.22492)
 - **2026**: Started as a Research Intern at CovisionLab, working on diffusion-driven synthesis and robustness evaluation for perception models.
 - **2025**: Collaborated with Inria Paris on **NewtPhys**, a physics-grounded benchmark for evaluating foundation models on Newtonian reasoning.
 - **2025**: **CAD-Assistant: Tool-Augmented VLLMs as Generic CAD Task Solvers** accepted at [ICCV 2025](https://iccv.thecvf.com/). [Paper](https://arxiv.org/abs/2412.13810)
