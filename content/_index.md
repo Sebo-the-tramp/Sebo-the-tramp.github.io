@@ -47,6 +47,11 @@ links:
     alt: YouTube channel
 
 affiliations:
+  - name: Lund University
+    role: Incoming PhD Student
+    url: https://www.lunduniversity.lu.se/
+    image: ./logos/lund-university.svg
+    class: lund
   - name: INRIA
     role: Collaborator, Astra-Vision group
     url: https://www.inria.fr/
@@ -74,16 +79,12 @@ affiliations:
     role: B.Sc. Computer Science
     url: https://www.unibz.it/
     image: ./logos/unibz.svg
-  - name: Universität Osnabrück
-    role: Erasmus, Cognitive Science
-    url: https://www.uni-osnabrueck.de/
-    image: ./logos/osnabrueck.svg
 
 ---
 
 I am a computer vision researcher working on 3D scene reconstruction and generation, geometry-grounded foundation models, world models, and Gaussian Splatting. My current research focuses on how machines can perceive space beyond point clouds and pixels: reconstructing geometry, grounding it semantically, and reasoning about dynamic scenes at scale.
 
-I recently completed a Master of Research in Computer Vision at MBZUAI, supervised by Prof. Ian Reid. I have conducted research with Astra-Vision at Inria Paris, CVI2 at the University of Luxembourg, FBK E3DA, and CovisionLab. Across these experiences, I have worked on 3D foundation models, camera-aware reconstruction, CAD-oriented multimodal agents, TinyML vision pipelines, and physics-grounded benchmarks for foundation models.
+I recently completed a Master of Research in Computer Vision at MBZUAI, supervised by Prof. Ian Reid. I will be joining Lund University for a PhD on large-scale 3D reconstruction and navigation, combining geometric computer vision with machine learning to build accurate, reliable visual maps. I have conducted research with Astra-Vision at Inria Paris, CVI2 at the University of Luxembourg, FBK E3DA, and CovisionLab. Across these experiences, I have worked on 3D foundation models, camera-aware reconstruction, CAD-oriented multimodal agents, TinyML vision pipelines, and physics-grounded benchmarks for foundation models.
 
 My longer-term goal is to build perception systems that combine 3D structure, language-based reasoning, and efficient representations in ways that can generalize beyond narrow reconstruction settings.
 
@@ -104,6 +105,7 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News
 
+- **2026**: **Lundmaxxing!** I will be joining [Lund University](https://www.lunduniversity.lu.se/) for a PhD on large-scale 3D reconstruction and navigation, combining geometric computer vision, natural geometric constraints, and machine learning for accurate and reliable visual maps.
 - **2026**: **Training-Free Fine-Grained Semantic Segmentations in Low Data Regimes: A FungiTastic Baseline** accepted at the 13th Workshop on Fine-Grained Visual Categorization, CVPR 2026. [Paper](https://arxiv.org/abs/2605.22492)
 - **2026**: Started as a Research Intern at CovisionLab, working on diffusion-driven synthesis and robustness evaluation for perception models.
 - **2025**: Collaborated with Inria Paris on **NewtPhys**, a physics-grounded benchmark for evaluating foundation models on Newtonian reasoning.
