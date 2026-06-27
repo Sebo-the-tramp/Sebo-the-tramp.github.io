@@ -1,6 +1,6 @@
 ---
 title: About
-description: Computer vision researcher focused on 3D scene reconstruction, geometry-grounded foundation models, world models, and Gaussian Splatting.
+description: Sebastian Cavada is a computer vision researcher focused on 3D scene reconstruction, geometry-grounded foundation models, world models, and Gaussian Splatting.
 comments: false
 readingTime: false
 license: false
@@ -31,12 +31,12 @@ links:
     image: ./logo.svg
     alt: GitHub profile
   - title: CVI2
-    description: Computer Vision, Imaging and Machine Intelligence research group at the University of Luxembourg, where I interned on CAD, VLLMs, and vision-language models.
+    description: Computer Vision, Imaging and Machine Intelligence research group at the University of Luxembourg, where Sebastian interned on CAD, VLLMs, and vision-language models.
     website: https://cvi2.uni.lu/
     image: ./uni.svg
     alt: CVI2 research group
   - title: E3DA
-    description: Energy Efficient Embedded Digital Architectures unit at Fondazione Bruno Kessler, where I interned on AI and TinyML.
+    description: Energy Efficient Embedded Digital Architectures unit at Fondazione Bruno Kessler, where Sebastian interned on AI and TinyML.
     website: https://e3da.fbk.eu/
     image: ./e3da.gif
     alt: FBK E3DA research group
@@ -47,11 +47,6 @@ links:
     alt: YouTube channel
 
 affiliations:
-  - name: Lund University
-    role: Incoming PhD Student
-    url: https://www.lunduniversity.lu.se/
-    image: ./logos/lund-university.svg
-    class: lund
   - name: INRIA
     role: Collaborator, Astra-Vision group
     url: https://www.inria.fr/
@@ -82,11 +77,9 @@ affiliations:
 
 ---
 
-I am a computer vision researcher working on 3D scene reconstruction and generation, geometry-grounded foundation models, world models, and Gaussian Splatting. My current research focuses on how machines can perceive space beyond point clouds and pixels: reconstructing geometry, grounding it semantically, and reasoning about dynamic scenes at scale.
+Sebastian Cavada is a computer vision researcher working on 3D scene reconstruction and generation, geometry-grounded foundation models, world models, and Gaussian Splatting. His research focuses on perception systems that reconstruct, ground, and reason about dynamic 3D scenes beyond point clouds and pixels.
 
-I recently completed a Master of Research in Computer Vision at MBZUAI, supervised by Prof. Ian Reid. I will be joining Lund University for a PhD on large-scale 3D reconstruction and navigation, combining geometric computer vision with machine learning to build accurate, reliable visual maps. I have conducted research with Astra-Vision at Inria Paris, CVI2 at the University of Luxembourg, FBK E3DA, and CovisionLab. Across these experiences, I have worked on 3D foundation models, camera-aware reconstruction, CAD-oriented multimodal agents, TinyML vision pipelines, and physics-grounded benchmarks for foundation models.
-
-My longer-term goal is to build perception systems that combine 3D structure, language-based reasoning, and efficient representations in ways that can generalize beyond narrow reconstruction settings.
+After completing an M.Res. in Computer Vision at MBZUAI under Prof. Ian Reid, Sebastian has conducted research with Astra-Vision at Inria Paris, CVI2 at the University of Luxembourg, FBK E3DA, and CovisionLab. His work spans 3D foundation models, camera-aware reconstruction, CAD-oriented multimodal agents, TinyML vision pipelines, physics-grounded benchmarks, and reliable visual mapping for large environments.
 
 <!-- ### Hackathons and Competitions:
 I thrive in collaborative environments, which is why I frequently participate in hackathons. One highlight was HackZurich, Europe’s largest hackathon, where my team developed “Out of the Blue,” a tool transforming 2D blueprints into detailed 4D models. This project not only showcased our technical skills but also emphasized our ability to innovate under pressure. Another significant event was the Pioneers 4.0 Hackathon in the UAE, where my team created an optimization solution for tea production, winning first place and securing an internship with LIPTON tea. 🌍✨
@@ -105,7 +98,6 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News
 
-- **2026**: **Lundmaxxing!** I will be joining [Lund University](https://www.lunduniversity.lu.se/) for a PhD on large-scale 3D reconstruction and navigation, combining geometric computer vision, natural geometric constraints, and machine learning for accurate and reliable visual maps.
 - **2026**: **Training-Free Fine-Grained Semantic Segmentations in Low Data Regimes: A FungiTastic Baseline** accepted at the 13th Workshop on Fine-Grained Visual Categorization, CVPR 2026. [Paper](https://arxiv.org/abs/2605.22492)
 - **2026**: Started as a Research Intern at CovisionLab, working on diffusion-driven synthesis and robustness evaluation for perception models.
 - **2025**: Collaborated with Inria Paris on **NewtPhys**, a physics-grounded benchmark for evaluating foundation models on Newtonian reasoning.
