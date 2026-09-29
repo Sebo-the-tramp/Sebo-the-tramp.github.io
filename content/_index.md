@@ -52,10 +52,6 @@ affiliations:
     url: https://www.lunduniversity.lu.se/
     image: ./logos/lund-university.svg
     class: lund
-  - name: CavadaLabs Srl
-    role: Advisor
-    url: https://cavadalabs.com/
-    class: cavadalabs
   - name: INRIA
     role: Collaborator, Astra-Vision group
     url: https://www.inria.fr/
