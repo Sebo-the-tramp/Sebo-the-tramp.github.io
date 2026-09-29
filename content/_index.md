@@ -47,6 +47,15 @@ links:
     alt: YouTube channel
 
 affiliations:
+  - name: Lund University
+    role: Incoming PhD Student, November 2026
+    url: https://www.lunduniversity.lu.se/
+    image: ./logos/lund-university.svg
+    class: lund
+  - name: CavadaLabs Srl
+    role: Advisor/CTO
+    url: https://cavadalabs.com/
+    class: cavadalabs
   - name: INRIA
     role: Collaborator, Astra-Vision group
     url: https://www.inria.fr/
@@ -79,7 +88,7 @@ affiliations:
 
 Sebastian Cavada is a computer vision researcher working on 3D scene reconstruction and generation, geometry-grounded foundation models, world models, and Gaussian Splatting. His research focuses on perception systems that reconstruct, ground, and reason about dynamic 3D scenes beyond point clouds and pixels.
 
-After completing an M.Res. in Computer Vision at MBZUAI under Prof. Ian Reid, Sebastian has conducted research with Astra-Vision at Inria Paris, CVI2 at the University of Luxembourg, FBK E3DA, and CovisionLab. His work spans 3D foundation models, camera-aware reconstruction, CAD-oriented multimodal agents, TinyML vision pipelines, physics-grounded benchmarks, and reliable visual mapping for large environments.
+After completing an M.Res. in Computer Vision at MBZUAI under Prof. Ian Reid, Sebastian will begin a PhD at Lund University on 1 November 2026, focusing on learning geometric representations for 3D reconstruction. He has conducted research with Astra-Vision at Inria Paris, CVI2 at the University of Luxembourg, FBK E3DA, and CovisionLab. His work spans 3D foundation models, camera-aware reconstruction, CAD-oriented multimodal agents, TinyML vision pipelines, and physics-grounded benchmarks. Sebastian is also Advisor/CTO at CavadaLabs Srl, where he works on private AI systems.
 
 <!-- ### Hackathons and Competitions:
 I thrive in collaborative environments, which is why I frequently participate in hackathons. One highlight was HackZurich, Europe’s largest hackathon, where my team developed “Out of the Blue,” a tool transforming 2D blueprints into detailed 4D models. This project not only showcased our technical skills but also emphasized our ability to innovate under pressure. Another significant event was the Pioneers 4.0 Hackathon in the UAE, where my team created an optimization solution for tea production, winning first place and securing an internship with LIPTON tea. 🌍✨
@@ -98,6 +107,8 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News
 
+- **2026**: Joining [Lund University](https://www.lunduniversity.lu.se/) on 1 November for a PhD in learning geometric representations, with a focus on 3D reconstruction.
+- **2026**: Joined [CavadaLabs Srl](https://cavadalabs.com/) as Advisor/CTO, working on private AI systems.
 - **2026**: **Training-Free Fine-Grained Semantic Segmentations in Low Data Regimes: A FungiTastic Baseline** accepted at the 13th Workshop on Fine-Grained Visual Categorization, CVPR 2026. [Paper](https://arxiv.org/abs/2605.22492)
 - **2026**: Started as a Research Intern at CovisionLab, working on diffusion-driven synthesis and robustness evaluation for perception models.
 - **2025**: Collaborated with Inria Paris on **NewtPhys**, a physics-grounded benchmark for evaluating foundation models on Newtonian reasoning.
