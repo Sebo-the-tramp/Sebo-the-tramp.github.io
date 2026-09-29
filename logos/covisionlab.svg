@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32.136" height="32.136" viewBox="0 0 32.136 32.136">
+  <defs>
+    <linearGradient id="linear-gradient" x1="-0.001" y1="0.998" x2="0.845" y2="0.157" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#c167ff"/>
+      <stop offset="1" stop-color="blue"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient-2" x1="0.155" y1="0.843" x2="1.001" y2="0.002" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Covision_Icon_RGB" data-name="Covision Icon RGB" transform="translate(-0.05)">
+    <path id="Pfad_54" data-name="Pfad 54" d="M90.776,4.319V0H67.28V4.32h23.5v23.5H95.1V4.319Z" transform="translate(-62.909)" fill="url(#linear-gradient)"/>
+    <path id="Pfad_55" data-name="Pfad 55" d="M4.37,67.22H.05v23.5H4.37v4.32h23.5V90.715H4.37Z" transform="translate(0 -62.9)" fill="url(#linear-gradient-2)"/>
+  </g>
+</svg>
