@@ -8,8 +8,6 @@
                     {{ $src = .RelPermalink }}
                 {{ end }}
                 <img src="{{ $src }}" alt="{{ $affiliation.name }}" loading="lazy">
-            {{ else }}
-                <span class="home-affiliation__text">{{ $affiliation.name }}</span>
             {{ end }}
         </a>
     {{ end }}
