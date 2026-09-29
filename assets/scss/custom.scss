@@ -39,19 +39,6 @@
     opacity: 1;
 }
 
-.home-affiliation--cavadalabs {
-    width: 148px;
-    color: inherit;
-    text-decoration: none;
-}
-
-.home-affiliation__text {
-    font-size: 16px;
-    font-weight: 700;
-    line-height: 1.1;
-    text-align: center;
-}
-
 .home-affiliation:hover {
     opacity: 1;
     transform: translateY(-1px);
@@ -88,7 +75,4 @@
         width: 92px;
     }
 
-    .home-affiliation--cavadalabs {
-        width: 126px;
-    }
 }
