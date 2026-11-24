@@ -1,0 +1,23 @@
+<header class="survey-card survey-heading">
+    <div class="survey-heading-row">
+        <div>
+            <a class="survey-section-title" href="{{ "survey/papers.html" | relURL }}">Feed-forward 3D survey</a>
+            <h1 class="article-title">{{ .page.Title }}</h1>
+        </div>
+        <div class="survey-header-actions">
+            <a href="{{ "" | relURL }}">Homepage</a>
+        </div>
+    </div>
+    {{ with .page.Site.Data.survey.updated }}
+        <p class="survey-updated">Last updated <time datetime="{{ . }}">{{ $.page.Site.Data.survey.updated_label }}</time></p>
+    {{ end }}
+    <nav class="survey-tabs" aria-label="Survey views">
+        {{ $active := .active }}
+        {{ range slice (dict "key" "papers" "label" "Papers" "path" "survey/papers.html")
+                       (dict "key" "new-papers" "label" "New papers" "path" "survey/new-papers.html")
+                       (dict "key" "datasets" "label" "Datasets" "path" "survey/datasets.html")
+                       (dict "key" "timeline" "label" "Timeline" "path" "survey/timeline.html") }}
+            <a href="{{ .path | relURL }}"{{ if eq .key $active }} aria-current="page"{{ end }}>{{ .label }}</a>
+        {{ end }}
+    </nav>
+</header>

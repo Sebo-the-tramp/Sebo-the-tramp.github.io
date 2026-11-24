@@ -7,6 +7,15 @@
 #icon = "home"
 #newtab = true
 
+[[main]]
+identifier = "survey"
+name = "3D Survey"
+url = "/survey/papers.html"
+weight = 4
+
+[main.params]
+icon = "3d"
+
 [[social]]
 identifier = "github"
 name = "GitHub"
@@ -14,6 +23,23 @@ url = "https://github.com/Sebo-the-tramp"
 
 [social.params]
 icon = "brand-github"
+
+[[social]]
+identifier = "linkedin"
+name = "LinkedIn"
+url = "https://www.linkedin.com/in/sebastiancavada/"
+
+[social.params]
+icon = "brand-linkedin"
+
+[[social]]
+identifier = "scholar"
+name = "Google Scholar"
+url = "https://scholar.google.com/citations?user=NBH8onQAAAAJ"
+
+[social.params]
+icon = "uni"
+
 
 [[social]]
 identifier = "twitter"
@@ -24,25 +50,9 @@ url = "https://mobile.twitter.com/_cavada"
 icon = "brand-twitter"
 
 [[social]]
-identifier = "instagram"
-name = "Instagram"
-url = "https://www.instagram.com/sebo_the_tramp/"
-
-[social.params]
-icon = "brand-instagram"
-
-[[social]]
 identifier = "youtube"
 name = "Youtube"
 url = "https://www.youtube.com/channel/UCe2CkR9ldskNh_mVSwpeiLw"
 
 [social.params]
 icon = "brand-youtube"
-
-[[social]]
-identifier = "twitch"
-name = "Twitch"
-url = "https://www.twitch.tv/dark_harlock"
-
-[social.params]
-icon = "twitch"

@@ -1,0 +1,4 @@
+<option value="">All</option>
+{{ range seq 1 4 }}
+<option value="{{ $.prefix }}{{ . }}">Above {{ . }}</option>
+{{ end }}

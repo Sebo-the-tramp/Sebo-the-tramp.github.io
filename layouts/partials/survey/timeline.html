@@ -1,0 +1,9 @@
+<p>Collected papers by first arXiv submission month. Select a bar to see its papers.</p>
+<div id="filters" class="survey-filters" hidden>
+    <label>Relevance <select id="timeline-relevance">{{ partial "survey/thresholds.html" (dict "prefix" "") }}</select></label>
+</div>
+<div id="histogram-frame" hidden><svg id="histogram" aria-label="Paper count by submission month"></svg></div>
+<p id="timeline-count" aria-live="polite" hidden></p>
+<p id="timeline-empty" hidden>⬜ No matching papers with a submission month.</p>
+<noscript><p><a href="{{ "survey/papers.html" | relURL }}">Browse papers</a>.</p></noscript>
+<script id="timeline-data" type="application/json">{{ .timeline | jsonify | safeJS }}</script>

@@ -1,8 +1,8 @@
 ---
 title: "Projects"
 date: 2022-03-06
-slug: "projects"
-description: "The projects I built over time"
+slug: "challenges"
+description: "Selected research, engineering, hackathon, and startup projects."
 menu:
     main:
     

@@ -1,0 +1,40 @@
+{{ $data := .entry }}
+<p class="survey-links">
+    {{ with $data.url }}<a href="{{ . }}">Open dataset ↗</a>{{ else }}<span>⬜ Dataset link unavailable</span>{{ end }}
+    {{ with $data.publication }}<a href="{{ . }}">Published paper ↗</a>{{ end }}
+</p>
+{{ with $data.description }}<p>{{ . }}{{ with $data.description_source }} · <a href="{{ . }}">Source</a>{{ end }}</p>{{ end }}
+{{ with $data.edited_at }}<p>✏️ Human edited <time datetime="{{ . }}">{{ . }}</time></p>{{ end }}
+<dl class="survey-metadata">
+    {{ if ne $data.size_gb nil }}<dt>Listed size</dt><dd>{{ $data.size_label }} GB · {{ $data.size_scope }}</dd>{{ end }}
+    {{ with $data.sizes }}<dt>Download size</dt><dd>{{ delimit . " · " }}</dd>{{ end }}
+    {{ with $data.origin }}<dt>Origin</dt><dd>{{ . }}</dd>{{ end }}
+    {{ with $data.depth }}<dt>Depth</dt><dd>{{ . }}</dd>{{ end }}
+    {{ with $data.sensors }}<dt>Sensors</dt><dd>{{ . }}</dd>{{ end }}
+</dl>
+{{ with $data.dimensions }}
+<h2>Dimensions</h2>
+<ul>{{ range . }}<li>{{ .value }} · {{ .scope }} · <a href="{{ .source }}">Source</a></li>{{ end }}</ul>
+{{ end }}
+{{ with $data.data_types }}
+<h2>Data types</h2>
+<ul>{{ range . }}<li>{{ .value }} · <a href="{{ .source }}">Source</a></li>{{ end }}</ul>
+{{ end }}
+{{ with $data.sources }}
+<h2>Sources</h2>
+<ul>{{ range . }}<li><a href="{{ . }}">{{ (urls.Parse .).Host }}</a></li>{{ end }}</ul>
+{{ end }}
+<h2>Linked papers</h2>
+{{ if $data.papers }}
+<div class="survey-table-wrap"><table class="survey-table">
+    <thead><tr><th scope="col">Paper</th><th scope="col">Submitted</th><th scope="col">Relevance</th><th scope="col">Roles</th></tr></thead>
+    <tbody>
+        {{ range $data.papers }}
+            {{ $paper := index $.papers .id }}
+            <tr><td><a href="{{ printf "survey/papers/%s.html" .id | relURL }}">{{ $paper.title }}</a></td>
+                <td class="survey-number">{{ $paper.month | default "—" }}</td>
+                <td class="survey-number">{{ $paper.score | default "—" }}</td><td>{{ .roles }}</td></tr>
+        {{ end }}
+    </tbody>
+</table></div>
+{{ else }}<p>⬜ No papers linked yet.</p>{{ end }}

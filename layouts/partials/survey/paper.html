@@ -1,0 +1,48 @@
+{{ with .authors }}<p class="survey-byline">{{ . }}</p>{{ end }}
+<p class="survey-links">
+    <a href="{{ .arxiv }}">arXiv ↗</a>
+    {{ with .pdf }}<a href="{{ . }}">PDF ↗</a>{{ end }}
+    {{ with .citation_url }}<a href="{{ . }}">{{ lang.FormatNumber 0 $.citations }} OpenAlex citations ↗</a>{{ end }}
+    {{ with .score }}<span>{{ $.decision }} · Relevance {{ . }}/5</span>{{ end }}
+</p>
+{{ with .abstract }}<h2>Abstract</h2><p>{{ . }}</p>{{ end }}
+{{ if .screening }}
+<h2>Abstract screening</h2>
+<dl class="survey-metadata">
+    {{ range $label, $key := dict "Reason" "reason" "Confidence" "confidence" "Evidence" "evidence"
+        "Contribution type" "contribution_type" "Inference" "inference" "Method name" "method_name"
+        "Task" "task" "Inputs" "inputs" "Outputs" "outputs" "Datasets used" "datasets_used"
+        "Datasets introduced" "datasets_introduced" }}
+        {{ with index $.screening $key }}<dt>{{ $label }}</dt><dd>{{ if reflect.IsSlice . }}{{ delimit . ", " }}{{ else }}{{ . }}{{ end }}</dd>{{ end }}
+    {{ end }}
+    {{ with .model }}<dt>Model</dt><dd>{{ . }}</dd>{{ end }}
+    {{ with .prompt }}<dt>Prompt version</dt><dd>{{ . }}</dd>{{ end }}
+    {{ with .screened_at }}<dt>Screened at</dt><dd>{{ . }}</dd>{{ end }}
+</dl>
+{{ end }}
+<h2>Datasets</h2>
+{{ if .extraction }}
+    {{ $sources := dict "html" "📄 Full text (HTML)" "pdf" "📄 Full text (PDF)" "abstract" "⚠️ Abstract only" }}
+    {{ with index $sources .extraction }}<p>{{ . }}</p>{{ end }}
+    {{ if .datasets }}
+    <div class="survey-table-wrap"><table class="survey-table">
+        <thead><tr><th scope="col">Dataset</th><th scope="col">Role</th><th scope="col">Evidence</th></tr></thead>
+        <tbody>
+            {{ range .datasets }}
+            <tr><td><a href="{{ printf "survey/datasets/%s.html" .anchor | relURL }}">{{ .name }}</a></td>
+                <td>{{ .role }}</td><td>{{ .evidence }}</td></tr>
+            {{ end }}
+        </tbody>
+    </table></div>
+    {{ else }}<p>⬜ No dataset use verified in the available text.</p>{{ end }}
+{{ else }}<p>⏳ Dataset extraction pending.</p>{{ end }}
+<details>
+    <summary>Metadata and progress</summary>
+    <ol>{{ range .steps }}<li>{{ . }}</li>{{ end }}</ol>
+    <dl class="survey-metadata">
+        {{ range .metadata }}<dt>{{ .label }}</dt><dd>{{ .value }}</dd>{{ end }}
+    </dl>
+    {{ if .sources }}<h3>Discovery sources</h3>
+    <ul>{{ range .sources }}<li>{{ .source }} · {{ .expression }}</li>{{ end }}</ul>
+    {{ end }}
+</details>

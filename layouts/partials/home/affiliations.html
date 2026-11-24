@@ -1,0 +1,14 @@
+<section class="home-affiliations" aria-label="Affiliations">
+    {{ range .Params.affiliations }}
+        {{ $affiliation := . }}
+        <a class="home-affiliation{{ with $affiliation.class }} home-affiliation--{{ . }}{{ end }}" href="{{ $affiliation.url }}" target="_blank" rel="noopener" title="{{ $affiliation.name }} - {{ $affiliation.role }}">
+            {{ with $affiliation.image }}
+                {{ $src := . }}
+                {{ with ($.Resources.GetMatch (printf "%s" (. | safeURL))) }}
+                    {{ $src = .RelPermalink }}
+                {{ end }}
+                <img src="{{ $src }}" alt="{{ $affiliation.name }}" loading="lazy">
+            {{ end }}
+        </a>
+    {{ end }}
+</section>

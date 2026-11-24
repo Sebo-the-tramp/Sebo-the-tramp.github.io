@@ -1,0 +1,45 @@
+<p class="survey-count">{{ len .datasets }} datasets · Dataset usage extracted from {{ .datasets_checked }} papers</p>
+<div id="filters" class="survey-filters" hidden>
+    <label>Dataset <input id="dataset-filter" type="search"></label>
+    <label>Paper relevance <select id="dataset-relevance">{{ partial "survey/thresholds.html" (dict "prefix" "") }}</select></label>
+</div>
+<div class="survey-table-wrap">
+<table class="survey-table survey-dataset-table">
+    <thead><tr>
+        <th scope="col">Dataset</th>
+        <th scope="col" aria-sort="descending">Papers</th><th scope="col">Website</th><th scope="col">Size (GB)</th>
+        <th scope="col">Depth</th><th scope="col">Origin</th><th scope="col">Sensors</th>
+        <th scope="col">Paper preview</th>
+    </tr>
+    <tr><th scope="row" colspan="3">Total listed size (GB)</th>
+        <th id="dataset-size-total" title="{{ .sizes_listed }} datasets with a listed size">{{ .size_total }}</th>
+        <th colspan="4"></th></tr>
+    </thead>
+    <tbody>
+        {{ range .dataset_order }}
+            {{ $entry := index $.datasets . }}
+            {{ $detail := printf "survey/datasets/%s.html" . | relURL }}
+            <tr id="{{ . }}" data-scores="{{ $entry.scores }}" data-names="{{ $entry.names }}" data-size-gb="{{ if ne $entry.size_gb nil }}{{ $entry.size_gb }}{{ end }}">
+                <td><a href="{{ $detail }}">{{ $entry.name }}</a></td>
+                <td class="survey-number" data-paper-count>{{ len $entry.papers }}</td>
+                <td>{{ with $entry.url }}<a href="{{ . }}">website</a>{{ else }}—{{ end }}</td>
+                <td class="survey-number">{{ $entry.size_label }}</td>
+                <td>{{ $entry.depth | default "—" }}</td>
+                <td>{{ $entry.origin | default "—" }}</td>
+                <td>{{ $entry.sensors | default "—" }}</td>
+                <td>
+                    {{ if $entry.papers }}
+                    {{ $first := index $entry.papers 0 }}
+                    {{ $paper := index $.papers $first.id }}
+                    <div class="survey-preview">
+                        <a title="{{ $paper.title }}" href="{{ printf "survey/papers/%s.html" $first.id | relURL }}">{{ $paper.title }}</a>
+                        {{ if gt (len $entry.papers) 1 }}<a href="{{ $detail }}">Show all →</a>{{ end }}
+                    </div>
+                    {{ else }}—{{ end }}
+                </td>
+            </tr>
+        {{ end }}
+    </tbody>
+</table>
+</div>
+<p id="no-datasets" hidden>⬜ No matching dataset links.</p>
