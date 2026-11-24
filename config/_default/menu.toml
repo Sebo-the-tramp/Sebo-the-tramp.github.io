@@ -7,6 +7,15 @@
 #icon = "home"
 #newtab = true
 
+[[main]]
+identifier = "survey"
+name = "3D Survey"
+url = "/survey/papers.html"
+weight = 4
+
+[main.params]
+icon = "3d"
+
 [[social]]
 identifier = "github"
 name = "GitHub"

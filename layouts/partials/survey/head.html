@@ -1,0 +1,10 @@
+{{ with resources.Get "css/survey.css" | minify }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+{{ end }}
+{{ $view := . }}
+{{ if eq $view "new-papers" }}{{ $view = "papers" }}{{ end }}
+{{ if in (slice "papers" "datasets" "timeline") $view }}
+    {{ with resources.Get (printf "js/survey/%s.js" $view) | minify }}
+        <script src="{{ .RelPermalink }}" defer></script>
+    {{ end }}
+{{ end }}

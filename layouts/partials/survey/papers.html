@@ -1,0 +1,63 @@
+{{ $data := .data }}
+{{ $order := $data.paper_order }}
+{{ if .recent }}
+    {{ $order = $data.new_paper_order }}
+    <p class="survey-count">Papers first submitted in the past 7 days (UTC) · {{ len $order }}</p>
+{{ else }}
+    <p class="survey-count">
+        ✅ {{ lang.FormatNumber 0 $data.screened }} / {{ lang.FormatNumber 0 (len $data.papers) }} papers screened
+        {{ if lt $data.screened (len $data.papers) }} · ⏳ {{ sub (len $data.papers) $data.screened }} pending{{ end }}
+        · <a href="?relevance=above-4">⭐ {{ $data.central }} above 4</a>
+        · 📚 {{ $data.datasets_checked }} checked for datasets
+    </p>
+{{ end }}
+<details class="survey-legend">
+    <summary>Relevance and progress</summary>
+    <p><strong>Relevance</strong> · 1 Unrelated · 2 Tangential · 3 Adjacent or review · 4 Directly relevant · 5 Central</p>
+    <p><strong>Progress</strong> · 1 Discovered · 2 Metadata saved · 3 LLM screened · 4 HTML saved (optional)</p>
+</details>
+<div id="filters" class="survey-filters" hidden>
+    <label>Paper or arXiv ID <input id="title-filter" type="search"></label>
+    {{ if not .recent }}
+    <label>Year <select id="year-filter"><option value="">All</option>{{ range $data.years }}<option>{{ . }}</option>{{ end }}</select></label>
+    <label>Month <select id="month-filter"><option value="">All</option>{{ range $data.months }}<option>{{ . }}</option>{{ end }}</select></label>
+    {{ end }}
+    <label>Relevance <select id="relevance-filter">
+        {{ partial "survey/thresholds.html" (dict "prefix" "above-") }}
+        {{ range seq 5 -1 1 }}<option>{{ . }}</option>{{ end }}
+        <option value="pending">⏳ Pending</option>
+    </select></label>
+</div>
+<p id="match-count" aria-live="polite" hidden></p>
+<div class="survey-table-wrap">
+<table class="survey-table">
+    <thead><tr>
+        <th scope="col" data-sort="paper"><button type="button">Paper</button></th>
+        <th scope="col" data-sort="submitted"><button type="button">Submitted</button></th>
+        <th scope="col" data-sort="relevance" aria-sort="descending"><button type="button">Relevance</button></th>
+        <th scope="col" data-sort="citations"><button type="button">Citations</button></th>
+        <th scope="col">Progress</th><th scope="col"><span class="survey-sr">Details</span></th>
+    </tr></thead>
+    <tbody>
+    {{ range $order }}
+        {{ $paper := index $data.papers . }}
+        {{ $step := index $paper.steps (int (sub (default 1 $paper.progress) 1)) }}
+        <tr data-arxiv-id="{{ . }}">
+            <td><a href="{{ $paper.arxiv }}">{{ $paper.title }}</a></td>
+            <td class="survey-number" data-month="{{ $paper.month }}" data-date="{{ $paper.submitted }}">{{ if $.recent }}{{ substr $paper.submitted 0 10 }}{{ else }}{{ $paper.month | default "—" }}{{ end }}</td>
+            <td class="survey-number" data-score="{{ with $paper.score }}{{ . }}{{ end }}">
+                {{ if $paper.score }}
+                    <span title="{{ $paper.decision }}{{ with $paper.confidence }} · {{ . }} confidence{{ end }}">{{ $paper.score }}</span>
+                {{ else }}<span title="LLM screening pending">⏳</span>{{ end }}
+            </td>
+            <td class="survey-number" data-count="{{ if ge $paper.citations 0 }}{{ $paper.citations }}{{ end }}">
+                {{ if ge $paper.citations 0 }}{{ lang.FormatNumber 0 $paper.citations }}{{ else }}—{{ end }}
+            </td>
+            <td class="survey-number"><span title="{{ $step }}">{{ if $paper.progress }}✅{{ else }}⏳{{ end }} {{ $paper.progress }}/4</span></td>
+            <td><a class="survey-detail" href="{{ printf "survey/papers/%s.html" . | relURL }}">Details</a></td>
+        </tr>
+    {{ end }}
+    </tbody>
+</table>
+</div>
+<p id="no-matches"{{ if $order }} hidden{{ end }}>⬜ No matching papers.</p>

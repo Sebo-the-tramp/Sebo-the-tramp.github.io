@@ -1,0 +1,10 @@
+{{ $papers := "survey/papers.html" | relURL }}
+<!doctype html>
+<html lang="{{ .Site.LanguageCode }}">
+<meta charset="utf-8">
+<title>Feed-forward 3D survey</title>
+<link rel="canonical" href="{{ "survey/papers.html" | absURL }}">
+<meta http-equiv="refresh" content="0; url={{ $papers }}">
+<script>location.replace({{ $papers | jsonify | safeJS }} + location.search + location.hash);</script>
+<p><a href="{{ $papers }}">Open the Papers page</a></p>
+</html>

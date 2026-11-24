@@ -1,0 +1,25 @@
+{{ define "body-class" }}survey-page{{ end }}
+{{ define "head" }}{{ partial "survey/head.html" .Params.survey_view }}{{ end }}
+{{ define "left-sidebar" }}{{ "" }}{{ end }}
+{{ define "main" }}
+    {{ $data := .Site.Data.survey }}
+    {{ $view := .Params.survey_view }}
+    {{ $active := $view }}
+    {{ if eq $view "paper" }}{{ $active = "papers" }}{{ end }}
+    {{ if eq $view "dataset" }}{{ $active = "datasets" }}{{ end }}
+    {{ partial "survey/header.html" (dict "page" . "active" $active) }}
+    <section class="survey-card">
+        {{ if in (slice "papers" "new-papers") $view }}
+            {{ partial "survey/papers.html" (dict "data" $data "recent" (eq $view "new-papers")) }}
+        {{ else if eq $view "datasets" }}
+            {{ partial "survey/datasets.html" $data }}
+        {{ else if eq $view "timeline" }}
+            {{ partial "survey/timeline.html" $data }}
+        {{ else if eq $view "paper" }}
+            {{ partial "survey/paper.html" (index $data.papers .Params.survey_key) }}
+        {{ else if eq $view "dataset" }}
+            {{ partial "survey/dataset.html" (dict "entry" (index $data.datasets .Params.survey_key) "papers" $data.papers) }}
+        {{ end }}
+    </section>
+    {{ partialCached "footer/footer.html" . }}
+{{ end }}
