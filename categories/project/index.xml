@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Project on Sebastian Cavada</title><link>https://sebo-the-tramp.github.io/categories/project/</link><description>Recent content in Project on Sebastian Cavada</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 02 Nov 2024 10:21:13 +0200</lastBuildDate><atom:link href="https://sebo-the-tramp.github.io/categories/project/index.xml" rel="self" type="application/rss+xml"/><item><title>A guide to COLMAP</title><link>https://sebo-the-tramp.github.io/03_projects/colmap-part1/</link><pubDate>Sat, 02 Nov 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/03_projects/colmap-part1/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/03_projects/colmap-part1/cover.png" alt="Featured image of post A guide to COLMAP" />&lt;h1 id="colmap---a-guide-for-optimal-results">COLMAP - a guide for optimal results
+&lt;/h1>&lt;h2 id="intro">Intro
+&lt;/h2>&lt;p>So I spent the last 2 months trying out how to properly use and optimize COLMAP. Unfortunately most informations are buried in github issues, pull requests. You can get 70% from the official deocumentation, but most of the remaining I had to get it from trial and error and countless hors of searching trough GitHub trying to figure out if people had the same problem as I did.&lt;/p>
+&lt;p>I found out so far that there are 2 main methods to improve results and can be directly impact the reconstruction without complicated tweaks in the code.&lt;/p>
+&lt;ol>
+&lt;li>Better input. (garbage in, garbage out)&lt;/li>
+&lt;li>Settings finetuning for reconstruction&lt;/li>
+&lt;/ol>
+&lt;p>I&amp;rsquo;ll mainly talk about this two and maybe with some BONUS.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/03_projects/colmap-part1/meme1.png"
+width="608"
+height="684"
+srcset="https://sebo-the-tramp.github.io/03_projects/colmap-part1/meme1_hu10654309975242616656.png 480w, https://sebo-the-tramp.github.io/03_projects/colmap-part1/meme1_hu14567556585693798149.png 1024w"
+loading="lazy"
+alt="Yes that was me"
+class="gallery-image"
+data-flex-grow="88"
+data-flex-basis="213px"
+>&lt;/p>
+&lt;h3 id="context">Context
+&lt;/h3>&lt;p>I am particularly interested in Large scale reconstructions from only images and visual clues. I think I chose the hardest path, but that is what I like. COLMAP has impressive results on small scale reconstruction, but when the number of images increase, and the kms that the reconstruction spans, there is where the real trubles are. For context I want to reconstruct around 1KM of my CAMPUS, and that has some challenges, plus the campus is very similar and many people lose themselves because of similarities, so I imagine why COLMAP has some shortcomings.&lt;/p>
+&lt;h2 id="better-input">Better Input
+&lt;/h2>&lt;p>COLMAP relies on SIFT to extract features. During my countless tests, I found that to be quite reliable in standard settings, and using more sophisticated feature matchers, only increased complexity without a worthy reward. So I will stick to it.&lt;/p>
+&lt;p>What really mattered in the end, was to get the perfect time of the day and be able to capture with exactly the perfect lighting conditions. That improved the reconstruction drastically. Also I had to pick a time of the day where not many people are around because that will confuse the feature matching algorithm.&lt;/p>
+&lt;p>I ended up waking up at 6.30 AM and walk around with 2 gopros and an helmet to get the perfect results. A little bit later and the sun would create the flares that will mess up with the features and ruine all the process.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Fisrt advice:&lt;/strong> choose the best light conditions you possibly can get&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;strong>Second advice:&lt;/strong> avoid crowds and moving objects to avoid heavy postprocessing and iterate on the ideas faster&lt;/p>
+&lt;/blockquote>
+&lt;p>Another thing that probably I casually discovered, is that if I walk a straight
+line in front of me, the reconstruction is going to be suboptimal. Instead if I zig-zag, through the path, the result tend to be more accurate. At first the motivation for such a behaviour was unknown, but after carefully reading and understand the limitation of structure-from-motion, it was clearer that the problem becomes ill posed when following a co-linear motion.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Third advice:&lt;/strong> have a &amp;ldquo;zig-zag&amp;rdquo; movement while you capture the environment to avoid reconstruction &lt;strong>imprecisions&lt;/strong> or &lt;strong>failures&lt;/strong>&lt;/p>
+&lt;/blockquote>
+&lt;p>I&amp;rsquo;ll try to add more as I learn but for now this is it.&lt;/p>
+&lt;h2 id="finetuning-settings">Finetuning settings
+&lt;/h2>&lt;p>I really had to fight hard for this one. I tried to use the more robust and &lt;strong>slower&lt;/strong> method of more discriminative feature matching:&lt;/p>
+&lt;p>&lt;code>--SiftExtraction.estimate_affine_shape=true and --SiftExtraction.domain_size_pooling=true. In addition, you should enable guided feature matching using: --SiftMatching.guided_matching=true.&lt;/code> from &lt;a class="link" href="https://colmap.github.io/faq.html#:~:text=%2D%2DSiftExtraction.estimate_affine_shape%3Dtrue%20and%20%2D%2DSiftExtraction.domain_size_pooling%3Dtrue.%20In%20addition%2C%20you%20should%20enable%20guided%20feature%20matching%20using%3A%20%2D%2DSiftMatching.guided_matching%3Dtrue." target="_blank" rel="noopener"
+>here&lt;/a>&lt;/p>
+&lt;p>It works but on extreme cases and at an enormous price, as it doesn&amp;rsquo;t even use the GPU. So I ended up sticking with the &amp;ldquo;Standard&amp;rdquo; procedure. I also only use sequential matching as videos benefits a lot from such processing strategy.&lt;/p>
+&lt;p>An average reconstuction is done as following:&lt;/p>
+&lt;ol>
+&lt;li>Convert the video into a sequence of images&lt;/li>
+&lt;li>Run COLMAP&lt;/li>
+&lt;li>Enjoy (60% of the times)&lt;/li>
+&lt;/ol>
+&lt;p>My goal is to improve the likelyhood of success.&lt;/p>
+&lt;h3 id="1-image-processing">1. Image processing
+&lt;/h3>&lt;p>(Usually I deal with multiple cameras, that is why I heve the folder 00/ standing for the camera ID)&lt;/p>
+&lt;p>First I create a folder and then run the following command. You can choose the FPS, experimentally I saw that 3 is the best, sometimes 2 is also good if the movement pace is slow (e.g. human walk) otherwise you can try 4 if there are holes in the reconstruction or errors, most of the times that should fix. If it doesn&amp;rsquo;t try 5 but most likely you need to go to the previous step and reiterate there.
+(always talking for human walking velocity, if using bike or car, that is a whole differnt story)&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">mkdir -p ./00/images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ffmpeg -hwaccel auto -i ./video/GX010041.MP4 -vf &lt;span class="s2">&amp;#34;fps=4,scale=iw:ih&amp;#34;&lt;/span> -q:v &lt;span class="m">8&lt;/span> ./00/images/%06d.png
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="2-run-colmap">2. Run COLMAP
+&lt;/h2>&lt;p>After a lot of iteration the script I found to be the most succesfull is the following:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># RUN RECONSTRUCTION&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> &lt;span class="m">00&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Running Feature Extractor&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap feature_extractor --database_path ../database.db --image_path ../images --SiftExtraction.estimate_affine_shape 1 --SiftExtraction.domain_size_pooling 1 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap feature_extractor --database_path ./database.db --image_path ./images --ImageReader.single_camera_per_folder &lt;span class="m">1&lt;/span> --ImageReader.default_focal_length_factor 0.5 --ImageReader.camera_model OPENCV
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # echo &amp;#34;Running feature matching...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap exhaustive_matcher --database_path ./database.db --SiftMatching.max_distance 1 --SiftMatching.guided_matching 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap sequential_matcher --database_path ./database.db --SiftMatching.max_distance &lt;span class="m">1&lt;/span> --SiftMatching.guided_matching &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # echo &amp;#34;Reconstructing 3D model...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap mapper --database_path ./database.db --image_path ./images --output_path ./
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # glomap mapper --database_path ./database.db --image_path ../image_0 --output_path ./glo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Showing result&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap gui --import_path ./0 --database_path ./database.db --image_path ./images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap gui --import_path ./geo-registered-model --database_path ./database.db --image_path ./images&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>You basically CD into your folder, find already images folder and run:&lt;/p>
+&lt;ol>
+&lt;li>feature extraction -&amp;gt; standard&lt;/li>
+&lt;li>sequential matcher -&amp;gt; faster but only matching images that are close in &amp;ldquo;time&amp;rdquo;&lt;/li>
+&lt;li>reconstruct the model&lt;/li>
+&lt;li>Show the model. Usually is saved to 0. but if not, check how many other folder are created 0,1,2 etc&amp;hellip; based on how many reconstruction has been done.&lt;/li>
+&lt;/ol>
+&lt;p>Enjoy! now with a 90% chance of success!&lt;/p>
+&lt;p>Let me know if you have other questions, and in the future I might release some comparison between GLOMAP and COLMAP if you are interested.&lt;/p></description></item><item><title>A guide to COLMAP</title><link>https://sebo-the-tramp.github.io/p/colmap-part1/</link><pubDate>Sat, 02 Nov 2024 10:21:13 +0200</pubDate><guid>https://sebo-the-tramp.github.io/p/colmap-part1/</guid><description>&lt;img src="https://sebo-the-tramp.github.io/p/colmap-part1/cover.png" alt="Featured image of post A guide to COLMAP" />&lt;h1 id="colmap---a-guide-for-optimal-results">COLMAP - a guide for optimal results
+&lt;/h1>&lt;h2 id="intro">Intro
+&lt;/h2>&lt;p>So I spent the last 2 months trying out how to properly use and optimize COLMAP. Unfortunately most informations are buried in github issues, pull requests. You can get 70% from the official deocumentation, but most of the remaining I had to get it from trial and error and countless hors of searching trough GitHub trying to figure out if people had the same problem as I did.&lt;/p>
+&lt;p>I found out so far that there are 2 main methods to improve results and can be directly impact the reconstruction without complicated tweaks in the code.&lt;/p>
+&lt;ol>
+&lt;li>Better input. (garbage in, garbage out)&lt;/li>
+&lt;li>Settings finetuning for reconstruction&lt;/li>
+&lt;/ol>
+&lt;p>I&amp;rsquo;ll mainly talk about this two and maybe with some BONUS.&lt;/p>
+&lt;p>&lt;img src="https://sebo-the-tramp.github.io/p/colmap-part1/meme1.png"
+width="608"
+height="684"
+srcset="https://sebo-the-tramp.github.io/p/colmap-part1/meme1_hu10654309975242616656.png 480w, https://sebo-the-tramp.github.io/p/colmap-part1/meme1_hu14567556585693798149.png 1024w"
+loading="lazy"
+alt="Yes that was me"
+class="gallery-image"
+data-flex-grow="88"
+data-flex-basis="213px"
+>&lt;/p>
+&lt;h3 id="context">Context
+&lt;/h3>&lt;p>I am particularly interested in Large scale reconstructions from only images and visual clues. I think I chose the hardest path, but that is what I like. COLMAP has impressive results on small scale reconstruction, but when the number of images increase, and the kms that the reconstruction spans, there is where the real trubles are. For context I want to reconstruct around 1KM of my CAMPUS, and that has some challenges, plus the campus is very similar and many people lose themselves because of similarities, so I imagine why COLMAP has some shortcomings.&lt;/p>
+&lt;h2 id="better-input">Better Input
+&lt;/h2>&lt;p>COLMAP relies on SIFT to extract features. During my countless tests, I found that to be quite reliable in standard settings, and using more sophisticated feature matchers, only increased complexity without a worthy reward. So I will stick to it.&lt;/p>
+&lt;p>What really mattered in the end, was to get the perfect time of the day and be able to capture with exactly the perfect lighting conditions. That improved the reconstruction drastically. Also I had to pick a time of the day where not many people are around because that will confuse the feature matching algorithm.&lt;/p>
+&lt;p>I ended up waking up at 6.30 AM and walk around with 2 gopros and an helmet to get the perfect results. A little bit later and the sun would create the flares that will mess up with the features and ruine all the process.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Fisrt advice:&lt;/strong> choose the best light conditions you possibly can get&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;strong>Second advice:&lt;/strong> avoid crowds and moving objects to avoid heavy postprocessing and iterate on the ideas faster&lt;/p>
+&lt;/blockquote>
+&lt;p>Another thing that probably I casually discovered, is that if I walk a straight
+line in front of me, the reconstruction is going to be suboptimal. Instead if I zig-zag, through the path, the result tend to be more accurate. At first the motivation for such a behaviour was unknown, but after carefully reading and understand the limitation of structure-from-motion, it was clearer that the problem becomes ill posed when following a co-linear motion.&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;strong>Third advice:&lt;/strong> have a &amp;ldquo;zig-zag&amp;rdquo; movement while you capture the environment to avoid reconstruction &lt;strong>imprecisions&lt;/strong> or &lt;strong>failures&lt;/strong>&lt;/p>
+&lt;/blockquote>
+&lt;p>I&amp;rsquo;ll try to add more as I learn but for now this is it.&lt;/p>
+&lt;h2 id="finetuning-settings">Finetuning settings
+&lt;/h2>&lt;p>I really had to fight hard for this one. I tried to use the more robust and &lt;strong>slower&lt;/strong> method of more discriminative feature matching:&lt;/p>
+&lt;p>&lt;code>--SiftExtraction.estimate_affine_shape=true and --SiftExtraction.domain_size_pooling=true. In addition, you should enable guided feature matching using: --SiftMatching.guided_matching=true.&lt;/code> from &lt;a class="link" href="https://colmap.github.io/faq.html#:~:text=%2D%2DSiftExtraction.estimate_affine_shape%3Dtrue%20and%20%2D%2DSiftExtraction.domain_size_pooling%3Dtrue.%20In%20addition%2C%20you%20should%20enable%20guided%20feature%20matching%20using%3A%20%2D%2DSiftMatching.guided_matching%3Dtrue." target="_blank" rel="noopener"
+>here&lt;/a>&lt;/p>
+&lt;p>It works but on extreme cases and at an enormous price, as it doesn&amp;rsquo;t even use the GPU. So I ended up sticking with the &amp;ldquo;Standard&amp;rdquo; procedure. I also only use sequential matching as videos benefits a lot from such processing strategy.&lt;/p>
+&lt;p>An average reconstuction is done as following:&lt;/p>
+&lt;ol>
+&lt;li>Convert the video into a sequence of images&lt;/li>
+&lt;li>Run COLMAP&lt;/li>
+&lt;li>Enjoy (60% of the times)&lt;/li>
+&lt;/ol>
+&lt;p>My goal is to improve the likelyhood of success.&lt;/p>
+&lt;h3 id="1-image-processing">1. Image processing
+&lt;/h3>&lt;p>(Usually I deal with multiple cameras, that is why I heve the folder 00/ standing for the camera ID)&lt;/p>
+&lt;p>First I create a folder and then run the following command. You can choose the FPS, experimentally I saw that 3 is the best, sometimes 2 is also good if the movement pace is slow (e.g. human walk) otherwise you can try 4 if there are holes in the reconstruction or errors, most of the times that should fix. If it doesn&amp;rsquo;t try 5 but most likely you need to go to the previous step and reiterate there.
+(always talking for human walking velocity, if using bike or car, that is a whole differnt story)&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">mkdir -p ./00/images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ffmpeg -hwaccel auto -i ./video/GX010041.MP4 -vf &lt;span class="s2">&amp;#34;fps=4,scale=iw:ih&amp;#34;&lt;/span> -q:v &lt;span class="m">8&lt;/span> ./00/images/%06d.png
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="2-run-colmap">2. Run COLMAP
+&lt;/h2>&lt;p>After a lot of iteration the script I found to be the most succesfull is the following:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># RUN RECONSTRUCTION&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">cd&lt;/span> &lt;span class="m">00&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Running Feature Extractor&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap feature_extractor --database_path ../database.db --image_path ../images --SiftExtraction.estimate_affine_shape 1 --SiftExtraction.domain_size_pooling 1 &lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap feature_extractor --database_path ./database.db --image_path ./images --ImageReader.single_camera_per_folder &lt;span class="m">1&lt;/span> --ImageReader.default_focal_length_factor 0.5 --ImageReader.camera_model OPENCV
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # echo &amp;#34;Running feature matching...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap exhaustive_matcher --database_path ./database.db --SiftMatching.max_distance 1 --SiftMatching.guided_matching 1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap sequential_matcher --database_path ./database.db --SiftMatching.max_distance &lt;span class="m">1&lt;/span> --SiftMatching.guided_matching &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # echo &amp;#34;Reconstructing 3D model...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap mapper --database_path ./database.db --image_path ./images --output_path ./
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># # glomap mapper --database_path ./database.db --image_path ../image_0 --output_path ./glo&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Showing result&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">colmap gui --import_path ./0 --database_path ./database.db --image_path ./images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># colmap gui --import_path ./geo-registered-model --database_path ./database.db --image_path ./images&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>You basically CD into your folder, find already images folder and run:&lt;/p>
+&lt;ol>
+&lt;li>feature extraction -&amp;gt; standard&lt;/li>
+&lt;li>sequential matcher -&amp;gt; faster but only matching images that are close in &amp;ldquo;time&amp;rdquo;&lt;/li>
+&lt;li>reconstruct the model&lt;/li>
+&lt;li>Show the model. Usually is saved to 0. but if not, check how many other folder are created 0,1,2 etc&amp;hellip; based on how many reconstruction has been done.&lt;/li>
+&lt;/ol>
+&lt;p>Enjoy! now with a 90% chance of success!&lt;/p>
+&lt;p>Let me know if you have other questions, and in the future I might release some comparison between GLOMAP and COLMAP if you are interested.&lt;/p></description></item></channel></rss>
