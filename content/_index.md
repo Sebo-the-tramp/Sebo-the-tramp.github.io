@@ -102,7 +102,7 @@ I am deeply invested in creating content around fitness and exploring the potent
 
 ## News
 
-- **2026**: Started a PhD in 3D computer vision at [Lund University](https://www.lunduniversity.lu.se/) with [Viktor Larsson](https://vlarsson.github.io/).
+- **2026**: Started a PhD in 3D computer vision at [Lund University](https://www.lunduniversity.lu.se/) with [Viktor Larsson](https://vlarsson.github.io/) and [Anders Heyden](https://portal.research.lu.se/sv/persons/anders-heyden/).
 - **2026**: Joined [CavadaLabs Srl](https://cavadalabs.com/) as Advisor.
 - **2026**: **Training-Free Fine-Grained Semantic Segmentations in Low Data Regimes: A FungiTastic Baseline** accepted at the 13th Workshop on Fine-Grained Visual Categorization, CVPR 2026. [Paper](https://arxiv.org/abs/2605.22492)
 - **2026**: Started as a Research Intern at CovisionLab, working on diffusion-driven synthesis and robustness evaluation for perception models.
